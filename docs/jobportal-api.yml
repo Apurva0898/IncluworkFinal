@@ -114,6 +114,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jobseekers/{userID}/applications:
+    get:
+      tags:
+        - Job Seekers
+      summary: View all job applications by a job seeker
+      description: "Retrieve a list of all job applications submitted by a specific job seeker."
+      parameters:
+        - name: userID
+          in: path
+          description: "Unique identifier of the job seeker whose applications are being requested."
+          required: true
+          schema:
+            type: string
+            example: "user123"
+      responses:
+        '200':
+          description: List of job applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobApplication'
+        '404':
+          description: Applications not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     JobSeeker:
