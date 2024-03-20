@@ -1,0 +1,272 @@
+openapi: 3.0.0
+info:
+  title: Job Portal API
+  version: 1.0.0
+  description: >
+    This API provides endpoints for managing job seekers, job applications, employer profiles, and admin functions. It supports creating, viewing, updating, and deleting job seeker profiles, job listings, employer profiles, and reviews. Additionally, it offers admin capabilities to manage user accounts and update job application statuses.
+
+paths:
+  /jobseekers:
+    post:
+      tags:
+        - Job Seekers
+      summary: Create a job seeker profile
+      description: "Allows the creation of a new job seeker profile with personal and professional details."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobSeeker'
+      responses:
+        '201':
+          description: Profile created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobSeeker'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jobseekers/{userID}:
+    get:
+      tags:
+        - Job Seekers
+      summary: View a job seeker profile
+      description: "Retrieve the profile details of a specific job seeker using their unique userID."
+      parameters:
+        - name: userID
+          in: path
+          description: "Unique identifier of the job seeker."
+          required: true
+          schema:
+            type: string
+            example: "user123"
+      responses:
+        '200':
+          description: Profile data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobSeeker'
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Job Seekers
+      summary: Update a job seeker profile
+      description: "Update the details of an existing job seeker's profile."
+      parameters:
+        - name: userID
+          in: path
+          description: "Unique identifier of the job seeker to update."
+          required: true
+          schema:
+            type: string
+            example: "user123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobSeeker'
+      responses:
+        '200':
+          description: Profile updated
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Job Seekers
+      summary: Delete a job seeker profile
+      description: "Permanently remove a job seeker's profile from the system."
+      parameters:
+        - name: userID
+          in: path
+          description: "Unique identifier of the job seeker to delete."
+          required: true
+          schema:
+            type: string
+            example: "user123"
+      responses:
+        '204':
+          description: Profile deleted
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    JobSeeker:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Unique identifier for the job seeker."
+          example: "user123"
+        name:
+          type: string
+          description: "Name of the job seeker."
+          example: "John Doe"
+        email:
+          type: string
+          description: "Email address of the job seeker."
+          example: "johndoe@example.com"
+        qualifications:
+          type: array
+          items:
+            type: string
+          description: "List of qualifications held by the job seeker."
+          example: ["B.Sc. in Computer Science", "M.Sc. in Data Science"]
+    JobApplication:
+      type: object
+      properties:
+        applicationID:
+          type: string
+          description: "Unique identifier for the job application."
+          example: "app123"
+        jobID:
+          type: string
+          description: "Identifier of the job listing being applied for."
+          example: "job123"
+        applicantID:
+          type: string
+          description: "Identifier of the job seeker applying for the job."
+          example: "user123"
+        status:
+          type: string
+          description: "Current status of the job application."
+          example: "pending"
+        appliedOn:
+          type: string
+          format: date-time
+          description: "The date and time when the application was submitted."
+          example: "2024-01-01T12:00:00Z"
+    JobListing:
+      type: object
+      properties:
+        jobID:
+          type: string
+          description: "Unique identifier for the job listing."
+          example: "job123"
+        title:
+          type: string
+          description: "Title of the job listing."
+          example: "Software Engineer"
+        description:
+          type: string
+          description: "Detailed description of the job."
+          example: "Develop and maintain software applications."
+        qualifications:
+          type: array
+          items:
+            type: string
+          description: "List of required qualifications for the job."
+          example: ["B.Sc. in Computer Science"]
+        location:
+          type: string
+          description: "Location where the job is based."
+          example: "New York, NY"
+    EmployerProfile:
+      type: object
+      properties:
+        employerID:
+          type: string
+          description: "Unique identifier for the employer."
+          example: "emp123"
+        name:
+          type: string
+          description: "Name of the employer or company."
+          example: "Tech Innovations Inc."
+        description:
+          type: string
+          description: "Brief description of the employer or company."
+          example: "A leading technology company specializing in innovative products."
+        industry:
+          type: string
+          description: "Industry sector the employer operates in."
+          example: "Technology"
+    EmployerReview:
+      type: object
+      properties:
+        reviewID:
+          type: string
+          description: "Unique identifier for the review."
+          example: "review123"
+        employerID:
+          type: string
+          description: "Identifier of the employer being reviewed."
+          example: "emp123"
+        reviewerID:
+          type: string
+          description: "Identifier of the user posting the review."
+          example: "user456"
+        rating:
+          type: integer
+          description: "Rating given to the employer."
+          example: 4
+        comment:
+          type: string
+          description: "Textual comment about the employer."
+          example: "Great company culture and work-life balance."
+    UserAccount:
+      type: object
+      properties:
+        userID:
+          type: string
+          description: "Unique identifier for the user account."
+          example: "user789"
+        username:
+          type: string
+          description: "Username associated with the account."
+          example: "techguru"
+        roles:
+          type: array
+          items:
+            type: string
+          description: "Roles assigned to the user account."
+          example: ["admin", "jobseeker"]
+    JobApplicationStatusUpdate:
+      type: object
+      properties:
+        applicationID:
+          type: string
+          description: "Identifier of the job application being updated."
+          example: "app123"
+        status:
+          type: string
+          description: "New status to be assigned to the job application."
+          example: "approved"
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: "HTTP status code corresponding to the error."
+          example: 400
+        message:
+          type: string
+          description: "Description of the error encountered."
+          example: "Bad request parameters."
+
+
+
