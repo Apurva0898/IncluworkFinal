@@ -119,37 +119,63 @@ classDiagram
 ```
 
 **Entities:**
+
 **User:** Represents a user of the system, which can be either a job seeker or an employer. It contains attributes such as UserID, Name, Email, Password, and Gender.
+
 **JobSeeker:** Represents a job seeker, containing attributes like DisabilityProof, Skills, and JobPreferences.
+
 **Employer:** Represents an employer, containing attributes like CompanyName, CompanyProfile, InclusivityRating, and AccommodationFacilities.
+
 **Job:** Represents a job listing, containing attributes like JobID, EmployerID, Title, Description, Location, PartTime_FullTime, Industry, AccessibilityFeatures, Requirements, and Responsibilities.
+
 **JobApplication:** Represents an application submitted by a job seeker for a particular job listing. It contains attributes like ApplicationID, ApplicationDate, and Status.
+
 **Review:** Represents a review submitted by a user (typically a job seeker) for an employer. It includes attributes like ReviewID, EmployerID, UserID, Rating, Comment, and Date.
+
 **AccessibilityFeature:** Represents a feature related to accessibility that can be associated with a job listing. It contains attributes like FeatureID and Description.
+
 **Admin:** Represents an administrator of the system, with functions to manage applications, disability proofs, and user profiles.
 
 **Value Objects:**
+
 **UserID, JobID, ApplicationID, ReviewID, FeatureID:** These are unique identifiers for users, jobs, job applications, reviews, and accessibility features, respectively.
+
 **Name, Email, Password, Gender, DisabilityProof, CompanyName, CompanyProfile:** These are attributes that hold values related to user and employer profiles, job listings, and reviews.
+
 **Relationships and Relationship Types:**
+
 **User to JobSeeker/Employer:** Inheritance relationship, denoted by the "<|--" arrow. Indicates that a User can be either a JobSeeker or an Employer.
+
 **User to Job:** Association relationship, denoted by the "--" arrow. Indicates that a User (JobSeeker or Employer) can apply to multiple Jobs.
+
 **Job to JobApplication:** Association relationship, denoted by the "--" arrow. Indicates that a Job can have multiple JobApplications.
+
 **User to Review:** Association relationship, denoted by the "--" arrow. Indicates that a User (JobSeeker) can write multiple Reviews for Employers.
+
 **Employer to Job:** Association relationship, denoted by the "--" arrow. Indicates that an Employer can post multiple Jobs.
+
 **JobApplication to JobSeeker:** Composition relationship, denoted by the "*--" arrow. Indicates that a JobApplication is composed of one JobSeeker, meaning that the existence of a JobApplication depends on the existence of a JobSeeker.
+
 **Review to Employer:** Association relationship, denoted by the "--" arrow. Indicates that an Employer can receive multiple Reviews.
 
 **Cardinality:**
+
 **User to JobSeeker/Employer:** One-to-many relationship. One User can be associated with either one JobSeeker or one Employer.
+
 **User to Job:** One-to-many relationship. One User (JobSeeker or Employer) can apply to multiple Jobs.
+
 **Job to JobApplication:** One-to-many relationship. One Job can have multiple JobApplications.
+
 **User to Review:** One-to-many relationship. One User (JobSeeker) can write multiple Reviews for Employers.
+
 **Employer to Job:** One-to-many relationship. One Employer can post multiple Jobs.
+
 **JobApplication to JobSeeker:** One-to-one relationship. Each JobApplication is associated with exactly one JobSeeker.
+
 **Review to Employer:** One-to-many relationship. One Employer can receive multiple Reviews.
 
 **Explanation:**
+
 Entities represent the main objects in the system, each with its own set of attributes and behaviors.
 Value objects are attributes that hold specific values associated with the entities.
 Relationships depict how entities are related to each other, indicating the associations, compositions, or inheritances between them.
