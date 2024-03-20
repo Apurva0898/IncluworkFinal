@@ -142,7 +142,7 @@ classDiagram
 
 **Name, Email, Password, Gender, DisabilityProof, CompanyName, CompanyProfile:** These are attributes that hold values related to user and employer profiles, job listings, and reviews.
 
-## Relationships and Relationship Types
+### Relationships and Relationship Types
 
 **User to JobSeeker/Employer:** Inheritance relationship, denoted by the "<|--" arrow. Indicates that a User can be either a JobSeeker or an Employer.
 
@@ -158,7 +158,7 @@ classDiagram
 
 **Review to Employer:** Association relationship, denoted by the "--" arrow. Indicates that an Employer can receive multiple Reviews.
 
-## Cardinality
+### Cardinality
 
 **User to JobSeeker/Employer:** One-to-many relationship. One User can be associated with either one JobSeeker or one Employer.
 
