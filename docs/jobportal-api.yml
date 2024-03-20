@@ -426,6 +426,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jobapplications:
+    get:
+      tags:
+        - Admin
+      summary: Retrieve all job applications
+      description: |
+        This endpoint retrieves a list of all job applications.
+      responses:
+        '200':
+          description: A list of job applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    jobApplicationID:
+                      type: string
+                      description: The unique identifier for the job application.
+                    applicantName:
+                      type: string
+                      description: The name of the applicant.
+                    positionApplied:
+                      type: string
+                      description: The position applied for.
+                    applicationDate:
+                      type: string
+                      format: date
+                      description: The date when the application was submitted.
+        '404':
+          description: No job applications found.
   /admin/jobapplications/{applicationID}:
     put:
       tags:
