@@ -246,6 +246,7 @@ Endpoint: GET /jobapplications
 Endpoint: PUT /admin/jobapplications/{applicationID}
 
 **Feature: User Profile Management**
+
 **User Story:** As an admin, I want to delete any user profile that violates platform policies or upon user request to maintain a safe and professional environment.
 Endpoint: DELETE /admin/users/{userID}
 
