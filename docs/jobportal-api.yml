@@ -223,6 +223,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jobapplications:
+    post:
+      tags:
+        - Job Seekers
+      summary: Apply for a job listing
+      description: "Submit a job application for a specific job listing."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobApplication'
+      responses:
+        '201':
+          description: Application submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobApplication'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jobapplications/{applicationID}:
+    delete:
+      tags:
+        - Job Seekers
+      summary: Withdraw a job application
+      description: "Withdraw an already submitted job application."
+      parameters:
+        - name: applicationID
+          in: path
+          description: "Unique identifier of the job application to withdraw."
+          required: true
+          schema:
+            type: string
+            example: "app123"
+      responses:
+        '204':
+          description: Application withdrawn
+        '404':
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 components:
   schemas:
