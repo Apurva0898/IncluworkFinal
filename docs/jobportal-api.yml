@@ -143,6 +143,87 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /jobs:
+    post:
+      tags:
+        - Employers
+      summary: Post a new job listing
+      description: "Create a new job listing with details about the role."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobListing'
+      responses:
+        '201':
+          description: Job listing created
+          content:
+            application/json:
+              schema:
+                                $ref: '#/components/schemas/JobListing'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - Employers
+      summary: Get available job listings
+      description: "Retrieve a list of all current job listings available in the system."
+      responses:
+        '200':
+          description: List of job listings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobListing'
+        '404':
+          description: No job listings found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jobs/{jobID}:
+    put:
+      tags:
+        - Employers
+      summary: Edit a job listing
+      description: "Update the details of an existing job listing."
+      parameters:
+        - name: jobID
+          in: path
+          description: "Unique identifier of the job listing to update."
+          required: true
+          schema:
+            type: string
+            example: "job123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobListing'
+      responses:
+        '200':
+          description: Job listing updated
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Job listing not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   schemas:
     JobSeeker:
