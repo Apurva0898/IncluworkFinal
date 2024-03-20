@@ -161,7 +161,7 @@ paths:
           content:
             application/json:
               schema:
-                                $ref: '#/components/schemas/JobListing'
+                $ref: '#/components/schemas/JobListing'
         '400':
           description: Bad request
           content:
@@ -223,55 +223,92 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /jobapplications:
+  /employers:
     post:
       tags:
-        - Job Seekers
-      summary: Apply for a job listing
-      description: "Submit a job application for a specific job listing."
+        - Employers
+      summary: Create an employer company profile
+      description: "Allows employers to create a profile detailing the company information."
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/JobApplication'
+              $ref: '#/components/schemas/EmployerProfile'
       responses:
         '201':
-          description: Application submitted
+          description: Employer profile created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JobApplication'
+                $ref: '#/components/schemas/EmployerProfile'
         '400':
           description: Bad request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /jobapplications/{applicationID}:
-    delete:
+  /employers/{employerID}:
+    get:
       tags:
-        - Job Seekers
-      summary: Withdraw a job application
-      description: "Withdraw an already submitted job application."
+        - Employers
+      summary: View an employer's profile
+      description: "Retrieve the profile details of a specific employer using their unique employerID."
       parameters:
-        - name: applicationID
+        - name: employerID
           in: path
-          description: "Unique identifier of the job application to withdraw."
+          description: "Unique identifier of the employer."
           required: true
           schema:
             type: string
-            example: "app123"
+            example: "emp123"
       responses:
-        '204':
-          description: Application withdrawn
+        '200':
+          description: Employer profile data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerProfile'
         '404':
-          description: Application not found
+          description: Employer profile not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-
+    put:
+      tags:
+        - Employers
+      summary: Update an employer company profile
+      description: "Update the details of an existing employer's profile."
+      parameters:
+        - name: employerID
+          in: path
+          description: "Unique identifier of the employer to update."
+          required: true
+          schema:
+            type: string
+            example: "emp123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployerProfile'
+      responses:
+        '200':
+          description: Employer profile updated
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Employer profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     JobSeeker:
