@@ -358,6 +358,110 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /admin/users:
+    post:
+      tags:
+        - Admin
+      summary: Create user accounts and assign roles
+      description: "Admin endpoint to create user accounts and assign roles within the system."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAccount'
+      responses:
+        '201':
+          description: User account created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAccount'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - Admin
+      summary: View all users
+      description: "Retrieve a list of all user accounts registered in the system."
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserAccount'
+        '404':
+          description: No users found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /admin/users/{userID}:
+    delete:
+      tags:
+        - Admin
+      summary: Delete any user profile
+      description: "Admin capability to delete any user profile from the system."
+      parameters:
+        - name: userID
+          in: path
+          description: "Unique identifier of the user profile to delete."
+          required: true
+          schema:
+            type: string
+            example: "admin123"
+      responses:
+        '204':
+          description: User profile deleted
+        '404':
+          description: User profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /admin/jobapplications/{applicationID}:
+    put:
+      tags:
+        - Admin
+      summary: Update the status of job applications
+      description: "Admin endpoint to update the status of any job application in the system."
+      parameters:
+        - name: applicationID
+          in: path
+          description: "Unique identifier of the job application to update."
+          required: true
+          schema:
+            type: string
+            example: "appadmin123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobApplicationStatusUpdate'
+      responses:
+        '200':
+          description: Application status updated
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
 components:
   schemas:
     JobSeeker:
