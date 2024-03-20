@@ -309,6 +309,55 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /reviews:
+    post:
+      tags:
+        - Job Seekers
+      summary: Create a review for an employer
+      description: "Allows users to submit a review for an employer, providing feedback on their experience."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployerReview'
+      responses:
+        '201':
+          description: Review created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerReview'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /reviews/{reviewID}:
+    delete:
+      tags:
+        - Job Seekers
+      summary: Delete a review posted for an employer
+      description: "Remove a review previously submitted for an employer."
+      parameters:
+        - name: reviewID
+          in: path
+          description: "Unique identifier of the review to delete."
+          required: true
+          schema:
+            type: string
+            example: "review123"
+      responses:
+        '204':
+          description: Review deleted
+        '404':
+          description: Review not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     JobSeeker:
