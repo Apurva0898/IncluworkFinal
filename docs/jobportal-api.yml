@@ -117,14 +117,14 @@ paths:
   /jobseekers/{userID}/applications:
     get:
       tags:
-        - Job Seekers
+        - Job Applications
       summary: View all job applications by a job seeker
       description: "Retrieve a list of all job applications submitted by a specific job seeker."
       parameters:
         - name: userID
           in: path
-          description: "Unique identifier of the job seeker whose applications are being requested."
           required: true
+          description: "Unique identifier of the job seeker whose applications are being requested."
           schema:
             type: string
             example: "user123"
@@ -139,6 +139,123 @@ paths:
                   $ref: '#/components/schemas/JobApplication'
         '404':
           description: Applications not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - Job Applications
+      summary: Submit a new job application with documents
+      description: "Create and submit a new job application by a job seeker for a specific job listing, including resume and medical proof."
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          description: "Unique identifier of the job seeker submitting the application."
+          schema:
+            type: string
+            example: "user123"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - jobID
+                - medicalProof
+              properties:
+                jobID:
+                  type: string
+                  description: "Unique identifier of the job listing being applied for."
+                  example: "job456"
+                medicalProof:
+                  type: string
+                  format: binary
+                  description: "Upload medical proof to verify differently abled status."
+                resume:
+                  type: string
+                  format: binary
+                  description: "Upload your resume as part of the job application."
+      responses:
+        '201':
+          description: Job application submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobApplication'
+        '400':
+          description: Invalid input, object invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Job seeker or job not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jobseekers/{userID}/applications/{applicationID}:
+    get:
+      tags:
+        - Job Applications
+      summary: View a specific job application
+      description: "Retrieve detailed information about a specific job application submitted by a job seeker."
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          description: "Unique identifier of the job seeker associated with the application."
+          schema:
+            type: string
+            example: "user123"
+        - name: applicationID
+          in: path
+          required: true
+          description: "Unique identifier of the job application to be viewed."
+          schema:
+            type: string
+            example: "app456"
+      responses:
+        '200':
+          description: Detailed job application information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobApplication'
+        '404':
+          description: Job application not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Job Applications
+      summary: Delete an existing job application
+      description: "Permanently delete a job application associated with a specific job seeker from the database."
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          description: "Unique identifier of the job seeker associated with the application."
+          schema:
+            type: string
+            example: "user123"
+        - name: applicationID
+          in: path
+          required: true
+          description: "Unique identifier of the job application to be deleted."
+          schema:
+            type: string
+            example: "app123"
+      responses:
+        '204':
+          description: Job application deleted successfully
+        '404':
+          description: Job application not found
           content:
             application/json:
               schema:
@@ -223,6 +340,208 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /employers:
+    post:
+      tags:
+        - Employers
+      summary: Create an employer company profile
+      description: "Allows employers to create a profile detailing the company information."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployerProfile'
+      responses:
+        '201':
+          description: Employer profile created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerProfile'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /employers/{employerID}:
+    get:
+      tags:
+        - Employers
+      summary: View an employer's profile
+      description: "Retrieve the profile details of a specific employer using their unique employerID."
+      parameters:
+        - name: employerID
+          in: path
+          description: "Unique identifier of the employer."
+          required: true
+          schema:
+            type: string
+            example: "emp123"
+      responses:
+        '200':
+          description: Employer profile data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerProfile'
+        '404':
+          description: Employer profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Employers
+      summary: Update an employer company profile
+      description: "Update the details of an existing employer's profile."
+      parameters:
+        - name: employerID
+          in: path
+          description: "Unique identifier of the employer to update."
+          required: true
+          schema:
+            type: string
+            example: "emp123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployerProfile'
+      responses:
+        '200':
+          description: Employer profile updated
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Employer profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /reviews:
+    post:
+      tags:
+        - Job Seekers
+      summary: Create a review for an employer
+      description: "Allows users to submit a review for an employer, providing feedback on their experience."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployerReview'
+      responses:
+        '201':
+          description: Review created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerReview'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /reviews/{reviewID}:
+    delete:
+      tags:
+        - Job Seekers
+      summary: Delete a review posted for an employer
+      description: "Remove a review previously submitted for an employer."
+      parameters:
+        - name: reviewID
+          in: path
+          description: "Unique identifier of the review to delete."
+          required: true
+          schema:
+            type: string
+            example: "review123"
+      responses:
+        '204':
+          description: Review deleted
+        '404':
+          description: Review not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /admin/users:
+    post:
+      tags:
+        - Admin
+      summary: Create user accounts and assign roles
+      description: "Admin endpoint to create user accounts and assign roles within the system."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAccount'
+      responses:
+        '201':
+          description: User account created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAccount'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - Admin
+      summary: View all users
+      description: "Retrieve a list of all user accounts registered in the system."
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserAccount'
+        '404':
+          description: No users found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /admin/users/{userID}:
+    delete:
+      tags:
+        - Admin
+      summary: Delete any user profile
+      description: "Admin capability to delete any user profile from the system."
+      parameters:
+        - name: userID
+          in: path
+          description: "Unique identifier of the user profile to delete."
+          required: true
+          schema:
+            type: string
+            example: "admin123"
+      responses:
+        '204':
+          description: User profile deleted
+        '404':
+          description: User profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /jobapplications:
     post:
       tags:
@@ -271,6 +590,108 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /signup:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      description: "Allows new users to register by providing necessary details such as email, password, and other relevant information."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: "User's email address."
+                  example: "user@example.com"
+                password:
+                  type: string
+                  format: password
+                  description: "User's chosen password."
+                  example: "securePassword123"
+                name:
+                  type: string
+                  description: "User's full name."
+                  example: "John Doe"
+              required:
+                - email
+                - password
+                - name
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User registered successfully."
+        '400':
+          description: Invalid input or user already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request data or user already exists."
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate a user
+      description: "Allows users to log in by providing their registered email and password."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: "User's registered email address."
+                  example: "user@example.com"
+                password:
+                  type: string
+                  format: password
+                  description: "User's password."
+                  example: "securePassword123"
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  message:
+                    type: string
+                    example: "Login successful."
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid email or password."
 
 components:
   schemas:
