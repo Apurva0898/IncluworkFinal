@@ -9,7 +9,16 @@ const jwtAuth = (req, res, next) => {
       res.status(401).json(info);
       return;
     }
-    req.user = user;
+    // Modifying the user object attached to the request
+    // Renaming _id to id and converting it to a string
+    req.user = {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      type: user.type,
+      contactNumber: user.contactNumber
+    };
+    console.log(req.user);
     next();
   })(req, res, next);
 };
