@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "name": "incluwork",
+  "name": "IncluWork",
   "type": "collection",
   "ignore": [
     "node_modules",
