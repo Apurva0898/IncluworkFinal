@@ -1,4 +1,4 @@
-import { fetchAllUsers } from "../services/userService";
+import { fetchAllUsers } from '../services/userService.js';
 
 export const getAllUsers = async (req, res) => {
     try {

@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllUsers } from "../controllers/usercontroller";
+import { getAllUsers } from "../controllers/userController.js";
 import jwtAuth from "../lib/jwtAuth.js";
 
 
