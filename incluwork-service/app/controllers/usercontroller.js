@@ -60,3 +60,55 @@ export const deleteJobSeeker = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+//Controller functions for employer profile
+
+export const getEmployerProfile = async (req, res) => {
+    try {
+        // Check if the user type is employer
+        if (req.user.type !== 'employer') {
+            return res.status(403).send('Access denied: User is not an employer');
+        }
+ 
+        const employer = await userService.findEmployerById(req.user.id);
+        if (!employer) {
+            return res.status(404).send('Employer not found');
+        }
+        res.json(employer);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+ 
+export const updateEmployerProfile = async (req, res) => {
+    try {
+        // Check if the user type is employer
+        if (req.user.type !== 'employer') {
+            return res.status(403).send('Access denied: User is not an employer');
+        }
+ 
+        // Check if the email field is present in the request body
+        if (req.body.email) {
+            return res.status(400).send('Updating the email address is not allowed');
+        }
+ 
+        const updatedEmployer = await userService.updateEmployerProfile(req.user.id, req.body);
+        res.json(updatedEmployer);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+};
+ 
+export const deleteEmployerProfile = async (req, res) => {
+    try {
+        // Check if the user type is employer
+        if (req.user.type !== 'employer') {
+            return res.status(403).send('Access denied: User is not an employer');
+        }
+ 
+        await userService.deleteEmployer(req.user.id);
+        res.status(204).send('Employer profile deleted successfully');
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};

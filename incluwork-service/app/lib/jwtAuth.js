@@ -18,7 +18,7 @@ const jwtAuth = (req, res, next) => {
       type: user.type,
       contactNumber: user.contactNumber
     };
-    console.log(req.user);
+
     next();
   })(req, res, next);
 };
