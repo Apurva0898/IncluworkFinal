@@ -15,11 +15,14 @@ export const getAllUsers = async (req, res) => {
  
 //To fetch a specific job seeker's profile
 export const getJobSeekerProfile = async (req, res) => {
-    console.log(req.user);
+
     const  id  = req.user.id;
-    console.log(id);
- 
     try {
+         // Check if the user type is jobseeker
+         if (req.user.type !== 'jobseeker') {
+            return res.status(403).send('Access denied: User is not a jobseeker');
+        }
+
         const jobSeeker = await userService.findJobSeekerById(id);
         if (!jobSeeker) {
             return res.status(404).json({ message: "Job seeker not found" });
@@ -31,12 +34,21 @@ export const getJobSeekerProfile = async (req, res) => {
 };
  
 //Updating a job seeker profile
-export const updateJobSeeker = async (req, res) => {
+export const updateJobSeekerProfile = async (req, res) => {
     const id = req.user.id; // Using user ID from JWT
     const updateData = req.body;
- 
+    
+    // Check if the user type is jobseeker
+    if (req.user.type !== 'jobseeker') {
+        return res.status(403).send('Access denied: User is not a jobseeker');
+    }
+    
+    // Check if the email field is present in request body
+    if (req.body.email) {
+        return res.status(400).send('Updating the email address is not allowed');
+    }
     try {
-        const updatedJobSeeker = await userService.updateJobSeekerById(id, updateData);
+        const updatedJobSeeker = await userService.updateJobSeekerProfile(id, updateData);
         if (!updatedJobSeeker) {
             return res.status(404).json({ message: "Job seeker not found" });
         }
