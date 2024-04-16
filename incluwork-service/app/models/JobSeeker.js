@@ -54,7 +54,9 @@ let schema = new mongoose.Schema(
             enum: challengesEnum,
         },
     },
-    {collation: {locale: "en"}}
+
+    {collation: {locale: "en"},
+    versionKey:false}
 );
 
 const JobSeeker = mongoose.model("JobSeeker", schema);
