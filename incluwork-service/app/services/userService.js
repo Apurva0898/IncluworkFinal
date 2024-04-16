@@ -1,3 +1,4 @@
+
 import User from "../models/User.js";
 import JobSeeker from "../models/JobSeeker.js";
 
@@ -15,39 +16,94 @@ export const fetchAllUsers = async () => {
 
 // Fetching a job seeker profile
 export const findJobSeekerById = async (id) => {
-    const jobSeeker = await JobSeeker.findOne({ userId: id });
-    if (!jobSeeker ) {
-        return null;  // Ensures that the job seeker's user ID matches the ID from the token
-    }
-    // Fetch the associated user information
+
+    try{
+
+         // Fetch the associated user information
     const user = await User.findById(id);
     if (!user) {
-        return null;  // Optionally handle this differently if user should always exist
+        throw new Error('User not found'); 
     }
+    
+    //Fetch job seeker associated with the user
+    const jobSeeker = await JobSeeker.findOne({ userId: id });
+    if (!jobSeeker ) {
+        throw new Error('Profile not found for this user'); // Ensures that the job seeker's user ID matches the ID from the token
+    }
+    
 
-    // Combine the information into a single object at the same level
-    const combinedDetails = {
-        ...jobSeeker.toObject(),  // Convert MongoDB model to a plain object
-        name: user.name,           // Directly adding user fields to the top level
+    // Combining the information into a single object at the same level
+    const combinedUserDetails = {
+        id: user.id,
+        name: user.name,
         email: user.email,
         contactNumber: user.contactNumber,
-        type: user.type
+        type: user.type,
+        education: jobSeeker.education.map(edu => ({
+            institutionName: edu.institutionName,
+            courseName: edu.courseName,
+            startYear: edu.startYear,
+            endYear: edu.endYear
+        })),
+        skills: jobSeeker.skills,
+        resume: jobSeeker.resume,
+        medicalProof: jobSeeker.medicalProof,
+        challenges: jobSeeker.challenges
     };
 
-    // Remove  redundant or sensitive fields 
-    delete combinedDetails.userId;  
-    delete combinedDetails.__v;  // Remove version key
-    delete combinedDetails.userId;  // Optional: Remove if you don't want to expose this
+      return combinedUserDetails;
 
-
-    return combinedDetails;
-
+    } catch (error) {
+        throw error; // Rethrow the error to be handled by the calling function
+    }
+   
 };
+
  
 // Updating job seeker profile
- export const updateJobSeekerById = async (id, updateData) => {
-     return await JobSeeker.findByIdAndUpdate(id, updateData, { new: true });
- };
+ export const updateJobSeekerProfile = async (id, updateData) => {
+    const userDataFields = ['name', 'contactNumber'];  // Fields that belong to the User model
+    const jobSeekerDataFields = ['education', 'skills', 'resume', 'medicalProof', 'challenges'];  // Fields that belong to the JobSeeker model
+    
+    const userData = {};
+    userDataFields.forEach(field => {
+        if (updateData[field] !== undefined) userData[field] = updateData[field];
+    });
+
+    const jobSeekerData = {};
+    jobSeekerDataFields.forEach(field => {
+        if (updateData[field] !== undefined) jobSeekerData[field] = updateData[field];
+    });
+
+    // Update User if there's any user data to update
+    if (Object.keys(userData).length > 0) {
+        await User.findByIdAndUpdate(id, userData, { new: true });
+    }
+
+    // Update JobSeeker if there's any job seeker data to update
+    let updatedJobSeeker = null;
+    if (Object.keys(jobSeekerData).length > 0) {
+        updatedJobSeeker = await JobSeeker.findOneAndUpdate({ userId: id }, jobSeekerData, { new: true });
+    }
+
+    // Fetch the latest full records to include in the response
+    const updatedUser = await User.findById(id);
+
+    // Merge updated information
+    const jobSeekerProfile = {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        contactNumber: updatedUser.contactNumber,
+        education: updatedJobSeeker?.education,
+        skills: updatedJobSeeker?.skills,
+        resume: updatedJobSeeker?.resume,
+        medicalProof: updatedJobSeeker?.medicalProof,
+        challenges: updatedJobSeeker?.challenges
+    };
+
+    return jobSeekerProfile;
+
+};
  
 // Deleting a job seeker profile
  export const deleteJobSeekerById = async (id) => {
