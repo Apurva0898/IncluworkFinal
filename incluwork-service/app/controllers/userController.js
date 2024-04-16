@@ -59,15 +59,20 @@ export const updateJobSeekerProfile = async (req, res) => {
 };
  
 //Deleting a job seeker profile
-export const deleteJobSeeker = async (req, res) => {
+export const deleteJobSeekerProfile = async (req, res) => {
     const id = req.user.id; // Using user ID from JWT
- 
+   
     try {
-        const deleted = await userService.deleteJobSeekerById(id);
-        if (!deleted) {
-            return res.status(404).json({ message: "Job seeker not found" });
-        }
-        res.status(204).send();
+        // Check if the user type is jobseeker
+         if (req.user.type !== 'jobseeker') {
+               return res.status(403).send('Access denied: User is not a jobseeker');
+         }
+        // const deleted = await userService.deleteJobSeeker(id);
+        // if (!deleted) {
+        //     return res.status(404).json({ message: "Job seeker not found" });
+        // }
+        await userService.deleteJobSeeker(id);
+        res.status(200).send('Job Seeker profile deleted successfully');
     } catch (error) {
         res.status(500).json({ message: "Internal server error" });
     }

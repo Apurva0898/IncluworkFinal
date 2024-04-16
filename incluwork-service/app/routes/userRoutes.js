@@ -16,8 +16,8 @@ router.get('/jobseekers',jwtAuth, userController.getJobSeekerProfile);
 // Update the job seeker profile of the logged in user
 router.patch('/jobseekers',jwtAuth, userController.updateJobSeekerProfile);
 
-// Update the job seeker profile of the logged in user
-router.delete('/jobseekers',jwtAuth, userController.deleteJobSeeker);
+// Delete the job seeker profile of the logged in user
+router.delete('/jobseekers',jwtAuth, userController.deleteJobSeekerProfile);
 
 // Routes for employer profile
 // Get the employer profile of the authenticated user

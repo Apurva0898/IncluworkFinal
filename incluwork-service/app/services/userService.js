@@ -106,9 +106,25 @@ export const findJobSeekerById = async (id) => {
 };
  
 // Deleting a job seeker profile
- export const deleteJobSeekerById = async (id) => {
-     return await JobSeeker.findByIdAndDelete(id);
- };
+export const deleteJobSeeker = async (id) => {
+    try {
+        const deletedJobSeeker = await JobSeeker.findOneAndDelete({ userId: id});
+        if (!deletedJobSeeker) {
+            throw new Error('Job seeker not found');
+        }
+
+        // Deleting the user associated with the job seeker
+        // If you choose to delete the User record as well:
+        
+        const deletedUser = await User.findByIdAndDelete(id);
+        if (!deletedUser) {
+            throw new Error('User not found');
+        }
+        
+    } catch (error) {
+        throw error; // Rethrow the error to be handled by the caller
+    }
+};
  
  
  export const findEmployerById = async (id) => {
