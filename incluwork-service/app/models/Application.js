@@ -28,7 +28,10 @@ const ApplicationSchema = new mongoose.Schema({
     enum: ['pending','applied', 'accepted', 'rejected', 'withdrawn'],
     default: 'pending'
   }
-});
+},
+    {
+      versionKey:false
+    });
 
 const Application = mongoose.model('Application', ApplicationSchema);
 
