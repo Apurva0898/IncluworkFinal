@@ -7,9 +7,9 @@ import adminRouter from './adminRoutes.js';
 const initializeRoutes = (app) => {
     app.use('/incluwork', authRouter);
     app.use('/incluwork', userRouter);
-    app.use('/incluwork',ratingsRouter);
-    app.use('/incluwork',jobRouter);
-    app.use('/incluwork',adminRouter);
+    app.use('/incluwork', ratingsRouter);
+    app.use('/incluwork', jobRouter);
+    app.use('/incluwork', adminRouter);
 }
 
 export default initializeRoutes;

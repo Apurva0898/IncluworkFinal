@@ -24,5 +24,3 @@ export const fetchAllUsers = async () => {
         throw err;
     }
 };
-
-// Other service functions can be defined similarly using export const

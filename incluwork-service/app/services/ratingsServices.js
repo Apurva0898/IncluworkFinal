@@ -22,7 +22,6 @@ try {
         return newRating;
     }
 } catch (error) {
-    console.log(error);
     throw new Error('Failed to post rating');
 }
 }
@@ -35,7 +34,6 @@ export const getRatings = async (jobId,jobSeekerId) => {
 
         return jobRatings;
     } catch (error) {
-        console.log(error);
         throw new Error('Failed to get job ratings');
     }
 }
