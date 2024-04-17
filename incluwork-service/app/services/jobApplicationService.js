@@ -20,19 +20,14 @@ export const createjobApplication = async (jobseekerid,applicationData) => {
             userId: jobseekerid,  // Setting the userId field
             employerId: employerId
         };
-        // const newApplication = new Application(fullApplicationData);
-        // console.log(newApplication);
-        // const savedApplication= await newApplication.save();
-        console.log(fullApplicationData);
+        
         // Create a new application directly
         const savedApplication = await Application.create(fullApplicationData);
 
-        console.log('savedApplication         '+savedApplication);
         // Rename _id to applicationId in the response
         const { _id, ...application } = savedApplication.toObject();
         const renamedApplication = { jobapplicationId: _id,...application  };
 
-        console.log(renamedApplication);
         return renamedApplication;
     } catch (error) {
         throw new Error('Error creating the application: ' + error.message);

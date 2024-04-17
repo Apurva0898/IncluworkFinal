@@ -25,7 +25,8 @@ export const getAllJobs = async (req, res) => {
             return res.status(403).send({ error: "Access denied: User is not an employer"});
         }
 
-        const jobs = await jobService.getAllJobs();
+        const employerId = req.user.id;
+        const jobs = await jobService.getAllJobs(employerId);
         res.json(jobs);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -40,7 +41,8 @@ export const getJobById = async (req, res) => {
             return res.status(403).send({ error: "Access denied: User is not an employer"});
         }
 
-        const job = await jobService.getJobById(req.params.id);
+        const employerId = req.user.id;
+        const job = await jobService.getJobById(employerId, req.params.id);
         
         res.json(job);
     } catch (error) {

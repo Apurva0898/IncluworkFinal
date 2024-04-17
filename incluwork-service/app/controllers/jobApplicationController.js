@@ -3,7 +3,7 @@ import * as jobApplicationService from '../services/jobApplicationService.js';
 export const createjobApplication = async (req, res) => {
     try {
 
-        // Check if the user type is employer
+        // Check if the user type is jobseeker
         if (req.user.type !== 'jobseeker') {
             return res.status(403).send({ error: "Access denied: User is not a jobseeker"});
         }

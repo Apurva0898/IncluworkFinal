@@ -21,10 +21,15 @@ export const createJob = async (employerId, jobData) => {
     }
 }
  
-// Get all jobs
-export const getAllJobs = async () => {
+// Get all job listings posted by an Employer
+export const getAllJobs = async (employerId) => {
     try {
-        const jobs = await Job.find();
+        // Fetch jobs posted by an employer
+        const jobs = await Job.find({ employerId });
+
+        if (jobs.length === 0) {
+            throw new Error('No jobs found for this employer');
+        }
 
         // Transform each job object to rename _id to jobId using the rest operator
         const jobList = jobs.map(job => ({
@@ -48,10 +53,10 @@ export const getAllJobs = async () => {
     }
 }
  
-// Get job by ID
-export const getJobById = async (jobId) => {
+// Get job listing by Id as an Employer
+export const getJobById = async (employerId, jobId) => {
     try {
-        const job = await Job.findById(jobId);
+        const job = await Job.findOne({ _id: jobId, employerId });
 
         if (!job) {
             throw new Error('Job not found');
