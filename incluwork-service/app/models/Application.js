@@ -1,22 +1,23 @@
 import mongoose from "mongoose";
-import JobSeeker from './JobSeeker';
+import JobSeeker from './JobSeeker.js';
+import Job from './Job.js';
 
 
-const ApplicationSchema = new mongoose.Schema({
-  applicationId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    unique: true
-  },
+const applicationSchema = new mongoose.Schema({
   jobId: {
-    type: mongoose.Schema.Types.jobId,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'Job' 
   },
   userId: {
-    type: mongoose.Schema.Types.userId,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'JobSeeker' 
+  },
+  employerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Employer' 
   },
   applicationDate: {
     type: Date,
@@ -33,6 +34,6 @@ const ApplicationSchema = new mongoose.Schema({
       versionKey:false
     });
 
-const Application = mongoose.model('Application', ApplicationSchema);
+const Application = mongoose.model('Application', applicationSchema);
 
 export default Application;
