@@ -1,6 +1,7 @@
 
 import User from "../models/User.js";
 import JobSeeker from "../models/JobSeeker.js";
+import Employer from "../models/Employer.js";
 
 export const fetchAllUsers = async () => {
     try {
