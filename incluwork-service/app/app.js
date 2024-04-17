@@ -11,7 +11,7 @@ const initialize = (app) => {
     app.use(express.json());
     app.use(express.urlencoded());
     app.use(passport.initialize());
-    mongoose.connect("mongodb+srv://incluwork:fXgu5sojq3Zy6aKf@incluworkcluster.gui16wl.mongodb.net/incluworkdb?retryWrites=true&w=majority&appName=IncluWorkCluster");
+    mongoose.connect(process.env.MONGO_CONNECTION);
     initializeRoutes(app);
 }
 
