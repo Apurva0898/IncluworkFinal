@@ -106,3 +106,54 @@ export const deleteJob = async (jobId) => {
         throw new Error('Could not delete job');
     }
 }
+
+// Fetch all jobs as a job seeker
+export const fetchAllJobs = async () => {
+    try {
+        const jobs = await Job.find();
+
+        // Transform each job object to rename _id to jobId using the rest operator
+        const job = jobs.map(job => ({
+            jobId: job._id,
+            title: job.title,
+            employerId: job.employerId,
+            location: job.location,
+            jobType: job.jobType,
+            accessibilityFeatures: job.accessibilityFeatures,
+            requiredSkills: job.requiredSkills,
+            maxPositions: job.maxPositions,
+            acceptedCandidates: job.acceptedCandidates,
+            salary: job.salary,
+            dateOfJoining: job.dateOfJoining,
+            dateOfPosting: job.dateOfPosting
+        }));
+        
+        return job;
+    } catch (error) {
+        throw new Error('Could not fetch jobs');
+    }
+}
+
+// Fetch job by ID as a job seeker
+export const fetchJobById = async (jobId) => {
+    try {
+        const job = await Job.findById(jobId);
+
+        if (!job) {
+            throw new Error('Job not found');
+        }
+
+        // Modify the returned object to show _id as jobId
+        const modifiedJob = {
+            jobId: job._id,
+            ...job.toObject() // Spread the rest of the job object
+        };
+
+        // Delete the original _id field from the modifiedJob
+        delete modifiedJob._id;
+        
+        return modifiedJob;
+    } catch (error) {
+        throw new Error('Could not fetch job by jobId');
+    }
+}
