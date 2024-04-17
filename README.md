@@ -118,7 +118,7 @@ classDiagram
     Admin o-- User : manages
 ```
 
-**Entities:**
+### Entities
 
 **User:** Represents a user of the system, which can be either a job seeker or an employer. It contains attributes such as UserID, Name, Email, Password, and Gender.
 
@@ -136,13 +136,13 @@ classDiagram
 
 **Admin:** Represents an administrator of the system, with functions to manage applications, disability proofs, and user profiles.
 
-**Value Objects:**
+### Value Objects
 
 **UserID, JobID, ApplicationID, ReviewID, FeatureID:** These are unique identifiers for users, jobs, job applications, reviews, and accessibility features, respectively.
 
 **Name, Email, Password, Gender, DisabilityProof, CompanyName, CompanyProfile:** These are attributes that hold values related to user and employer profiles, job listings, and reviews.
 
-**Relationships and Relationship Types:**
+### Relationships and Relationship Types
 
 **User to JobSeeker/Employer:** Inheritance relationship, denoted by the "<|--" arrow. Indicates that a User can be either a JobSeeker or an Employer.
 
@@ -158,7 +158,7 @@ classDiagram
 
 **Review to Employer:** Association relationship, denoted by the "--" arrow. Indicates that an Employer can receive multiple Reviews.
 
-**Cardinality:**
+### Cardinality
 
 **User to JobSeeker/Employer:** One-to-many relationship. One User can be associated with either one JobSeeker or one Employer.
 
@@ -183,58 +183,83 @@ Cardinality defines the multiplicity of the relationships, specifying how many i
 
 ## REST API resources and the User stories
 
-**Feature: Job Seeker Profile Management**
-**User Story:** As a job seeker, I want to create my profile to apply for job listings.
-Endpoint: POST /jobseekers
-**User Story:** As a job seeker, I want to view my profile to review or update my personal information and qualifications.
-Endpoint: GET /jobseekers/{userID}
-**User Story:** As a job seeker, I want to update my profile to keep my personal information and qualifications current.
-Endpoint: PUT /jobseekers/{userID}
-**User Story:** As a job seeker, I want to delete my profile if I no longer need to use the platform.
-Endpoint: DELETE /jobseekers/{userID}
-**Feature:** Job Application Tracking
-**User Story:** As a job seeker, I want to view all my job applications to track their status and manage my job search effectively.
-Endpoint: GET /jobseekers/{userID}/applications
+### Feature: Job Seeker Profile Management
 
-**Feature: Job Listings Management**
-**User Story:** As an employer, I want to post a new job listing to find qualified candidates for my open positions.
-Endpoint: POST /jobs
-**User Story:** As a user, I want to view available job listings to find positions that match my skills and interests.
-Endpoint: GET /jobs
-**User Story:** As an employer, I want to edit the details of my job listing to ensure it is accurate and up-to-date.
-Endpoint: PUT /jobs/{jobID}
-**Feature: Job Application Process**
-**User Story:** As a job seeker, I want to withdraw my job application if I am no longer interested in the job or have accepted another offer.
-Endpoint: DELETE /jobapplications/{applicationID}
-**User Story:** As a job seeker, I want to apply for a job listing to pursue employment opportunities.
-Endpoint: POST /jobapplications
+- **User Story:** As a job seeker, I want to create my profile to apply for job listings.
+  - Endpoint: POST /jobseekers
 
-**Feature: Employer Profile Management**
-**User Story:** As an employer, I want to create my company profile to attract potential candidates and showcase my company culture and values.
-Endpoint: POST /employers
-**User Story:** As a user, I want to view an employer's profile to learn more about the company and its employment opportunities.
-Endpoint: GET /employers/{employerID}
-**User Story:** As an employer, I want to update my company profile to keep information current and appealing to job seekers.
-Endpoint: PUT /employers/{userID}
-**Feature: Review Management**
-**User Story:** As a user, I want to delete a review I posted for an employer if my opinion has changed or the review is no longer relevant.
-Endpoint: DELETE /reviews/{reviewID}
-**User Story:** As a user, I want to create a review for an employer to share my employment experience and help others make informed decisions.
-Endpoint: POST /reviews
+- **User Story:** As a job seeker, I want to view my profile to review or update my personal information and qualifications.
+  - Endpoint: GET /jobseekers/{userID}
 
-**Feature: User and Role Management**
-**User Story:** As an admin, I want to create user accounts and assign roles to streamline the onboarding process and ensure users have appropriate access.
-Endpoint: POST /admin/users
-**Feature: Application Oversight**
-**User Story:** As an admin, I want to view all job applications to oversee the job application process and ensure it runs smoothly.
-Endpoint: GET /jobapplications
-**User Story:** As an admin, I want to update the status of job applications to reflect changes in their review process or outcomes.
-Endpoint: PUT /admin/jobapplications/{applicationID}
-**Feature: User Profile Management**
-**User Story:** As an admin, I want to delete any user profile that violates platform policies or upon user request to maintain a safe and professional environment.
-Endpoint: DELETE /admin/users/{userID}
-**User Story:** As an admin, I want to view all users to monitor the platform's user base and ensure compliance with platform policies.
-Endpoint: GET /admin/users
+- **User Story:** As a job seeker, I want to update my profile to keep my personal information and qualifications current.
+  - Endpoint: PUT /jobseekers/{userID}
+
+- **User Story:** As a job seeker, I want to delete my profile if I no longer need to use the platform.
+  - Endpoint: DELETE /jobseekers/{userID}
+
+### Feature: Job Application Tracking
+
+- **User Story:** As a job seeker, I want to view all my job applications to track their status and manage my job search effectively.
+  - Endpoint: GET /jobseekers/{userID}/applications
+
+### Feature: Job Listings Management
+
+- **User Story:** As an employer, I want to post a new job listing to find qualified candidates for my open positions.
+  - Endpoint: POST /jobs
+
+- **User Story:** As a user, I want to view available job listings to find positions that match my skills and interests.
+  - Endpoint: GET /jobs
+
+- **User Story:** As an employer, I want to edit the details of my job listing to ensure it is accurate and up-to-date.
+  - Endpoint: PUT /jobs/{jobID}
+
+### Feature: Job Application Process
+
+- **User Story:** As a job seeker, I want to withdraw my job application if I am no longer interested in the job or have accepted another offer.
+  - Endpoint: DELETE /jobapplications/{applicationID}
+
+- **User Story:** As a job seeker, I want to apply for a job listing to pursue employment opportunities.
+  - Endpoint: POST /jobapplications
+
+### Feature: Employer Profile Management
+
+- **User Story:** As an employer, I want to create my company profile to attract potential candidates and showcase my company culture and values.
+  - Endpoint: POST /employers
+
+- **User Story:** As a user, I want to view an employer's profile to learn more about the company and its employment opportunities.
+  - Endpoint: GET /employers/{employerID}
+
+- **User Story:** As an employer, I want to update my company profile to keep information current and appealing to job seekers.
+  - Endpoint: PUT /employers/{userID}
+
+### Feature: Review Management
+
+- **User Story:** As a user, I want to delete a review I posted for an employer if my opinion has changed or the review is no longer relevant.
+  - Endpoint: DELETE /reviews/{reviewID}
+
+- **User Story:** As a user, I want to create a review for an employer to share my employment experience and help others make informed decisions.
+  - Endpoint: POST /reviews
+
+### Feature: User and Role Management
+
+- **User Story:** As an admin, I want to create user accounts and assign roles to streamline the onboarding process and ensure users have appropriate access.
+  - Endpoint: POST /admin/users
+
+### Feature: Application Oversight
+
+- **User Story:** As an admin, I want to view all job applications to oversee the job application process and ensure it runs smoothly.
+  - Endpoint: GET /jobapplications
+
+- **User Story:** As an admin, I want to update the status of job applications to reflect changes in their review process or outcomes.
+  - Endpoint: PUT /admin/jobapplications/{applicationID}
+
+### Feature: User Profile Management
+
+- **User Story:** As an admin, I want to delete any user profile that violates platform policies or upon user request to maintain a safe and professional environment.
+  - Endpoint: DELETE /admin/users/{userID}
+
+- **User Story:** As an admin, I want to view all users to monitor the platform's user base and ensure compliance with platform policies.
+  - Endpoint: GET /admin/users
 
 
 
