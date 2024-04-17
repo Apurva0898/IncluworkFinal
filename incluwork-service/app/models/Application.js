@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import JobSeeker from './JobSeeker.js';
 import Job from './Job.js';
 
-
 const applicationSchema = new mongoose.Schema({
   jobId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -13,6 +12,11 @@ const applicationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'JobSeeker' 
+  },
+  employerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Employer'
   },
   employerId: {
     type: mongoose.Schema.Types.ObjectId,

@@ -6,7 +6,6 @@ import JobSeeker from "../models/JobSeeker.js";
 
 export const fetchAllEmployers = async () => {
     try {
-        // console.log('1111');
         const employers = await Employer.find();
         return employers;
     } catch (error) {

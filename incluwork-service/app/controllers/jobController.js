@@ -25,7 +25,8 @@ export const getAllJobs = async (req, res) => {
             return res.status(403).send({ error: "Access denied: User is not an employer"});
         }
 
-        const jobs = await jobService.getAllJobs();
+        const employerId = req.user.id;
+        const jobs = await jobService.getAllJobs(employerId);
         res.json(jobs);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -40,7 +41,8 @@ export const getJobById = async (req, res) => {
             return res.status(403).send({ error: "Access denied: User is not an employer"});
         }
 
-        const job = await jobService.getJobById(req.params.id);
+        const employerId = req.user.id;
+        const job = await jobService.getJobById(employerId, req.params.id);
         
         res.json(job);
     } catch (error) {
@@ -73,6 +75,37 @@ export const deleteJob = async (req, res) => {
         
         await jobService.deleteJob(req.params.id);
         return res.status(204).send(); 
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+}
+
+// Fetch all jobs as a job seeker
+export const fetchAllJobs = async (req, res) => {
+    try {
+        // Check if the user type is jobseeker
+        if (req.user.type !== 'jobseeker') {
+            return res.status(403).send({ error: "Access denied: User is not an jobseeker"});
+        }
+
+        const jobs = await jobService.fetchAllJobs();
+        res.json(jobs);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+// Fectch job by ID as a job seeker
+export const fetchJobById = async (req, res) => {
+    try {
+        // Check if the user type is jobseeker
+        if (req.user.type !== 'jobseeker') {
+            return res.status(403).send({ error: "Access denied: User is not a job seeker"});
+        }
+
+        const job = await jobService.fetchJobById(req.params.id);
+        
+        res.json(job);
     } catch (error) {
         res.status(404).json({ error: error.message });
     }

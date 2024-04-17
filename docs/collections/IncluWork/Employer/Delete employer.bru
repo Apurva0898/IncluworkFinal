@@ -4,8 +4,12 @@ meta {
   seq: 3
 }
 
-get {
-  url: 
+delete {
+  url: http://localhost:3000/incluwork/employers
   body: none
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjFmMWEwYTA3NDI2Y2ZiMDY1MmRmNTAiLCJpYXQiOjE3MTMzMTQzMTR9.hqqkXGuh0m61dHAkWH7EXdY2iLLluPlyfRWHtirODsI
 }
