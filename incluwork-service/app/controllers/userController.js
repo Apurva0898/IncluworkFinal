@@ -84,12 +84,12 @@ export const getEmployerProfile = async (req, res) => {
     try {
         // Check if the user type is employer
         if (req.user.type !== 'employer') {
-            return res.status(403).send('Access denied: User is not an employer');
+            return res.status(403).send({ error: "Access denied: User is not an employer"});
         }
  
         const employer = await userService.findEmployerById(req.user.id);
         if (!employer) {
-            return res.status(404).send('Employer not found');
+            return res.status(404).send({ error: "Employer not found"});
         }
         res.json(employer);
     } catch (error) {
@@ -101,12 +101,12 @@ export const updateEmployerProfile = async (req, res) => {
     try {
         // Check if the user type is employer
         if (req.user.type !== 'employer') {
-            return res.status(403).send('Access denied: User is not an employer');
+            return res.status(403).send({ error: "Access denied: User is not an employer"});
         }
  
         // Check if the email field is present in the request body
         if (req.body.email) {
-            return res.status(400).send('Updating the email address is not allowed');
+            return res.status(400).send({ error: "Updating the email address is not allowed"});
         }
  
         const updatedEmployer = await userService.updateEmployerProfile(req.user.id, req.body);
@@ -120,12 +120,12 @@ export const deleteEmployerProfile = async (req, res) => {
     try {
         // Check if the user type is employer
         if (req.user.type !== 'employer') {
-            return res.status(403).send('Access denied: User is not an employer');
+            return res.status(403).json({ error: "Access denied: User is not an employer"});
         }
  
         await userService.deleteEmployer(req.user.id);
-        res.status(204).send('Employer profile deleted successfully');
+        return res.status(204).send(); 
     } catch (error) {
-        res.status(500).send(error.message);
+        return res.status(500).json({ error: error.message });
     }
 };

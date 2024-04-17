@@ -1,14 +1,14 @@
 import express from "express";
 import jwtAuth from "../lib/jwtAuth.js";
-import {updateJob,deleteJob} from "../controllers/jobController.js";
-
-
+import * as jobController from "../controllers/jobController.js";
 
 const router = express.Router();
 
-
-router.patch("/joblistings/:id", jwtAuth, updateJob);
-router.delete("/joblistings/:id", jwtAuth, deleteJob);
+router.post("/joblistings", jwtAuth, jobController.createJob);
+router.get("/joblistings", jwtAuth, jobController.getAllJobs);
+router.get("/joblistings/:id", jwtAuth, jobController.getJobById);
+router.patch("/joblistings/:id", jwtAuth, jobController.updateJob);
+router.delete("/joblistings/:id", jwtAuth, jobController.deleteJob);
 
 
 export default router;
