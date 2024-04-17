@@ -12,7 +12,7 @@ const SignupPage = () => {
 
     return (
         <div className="signup-page">
-            <h1>Sign Up</h1>
+            <h1>Sign Up for {selectedOption.charAt(0).toUpperCase() + selectedOption.slice(1)}</h1>
             <div className="signup-options">
                 <button
                     className={selectedOption === 'employer' ? 'selected' : ''}

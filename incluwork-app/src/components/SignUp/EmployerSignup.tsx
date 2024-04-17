@@ -103,7 +103,6 @@ const RegisterForm = () => {
 
     return (
         <React.Fragment>
-            <h2>Employer Register Form</h2>
             <form onSubmit={handleSubmit} action={'http'}>
                 <TextField
                     type="text"
