@@ -1,0 +1,37 @@
+.signup-page {
+    text-align: center;
+}
+
+.signup-options {
+    margin-bottom: 20px;
+}
+
+.signup-options button {
+    width: 200px; /* Adjust width as needed */
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.signup-options button.selected {
+    background-color: #3498db; /* Selected background color */
+    color: #fff; /* Text color for selected button */
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+}
+
+.button-container > button {
+    width: 15%; /* Adjust the width of buttons */
+}
+
+.button-container > button:first-child {
+    margin-right: 50%; /* Push the first button to the left */
+}
+
+
