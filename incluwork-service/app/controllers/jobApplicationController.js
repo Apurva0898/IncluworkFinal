@@ -16,3 +16,13 @@ export const createjobApplication = async (req, res) => {
     }
 };
 
+//Fetching all job applications for specific job seeker
+export const getJobApplications = async (req, res) => {
+    try {
+        const jobseekerId = req.user.id; 
+        const jobApplications = await jobApplicationService.getJobApplicationsByUserId(jobseekerId);
+        res.status(200).json({ success: true, data: jobApplications });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};

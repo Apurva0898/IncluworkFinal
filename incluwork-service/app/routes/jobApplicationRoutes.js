@@ -6,6 +6,7 @@ const router = express.Router();
 
 //Route to create job application
 router.post("/jobapplications",jwtAuth, jobApplicationController.createjobApplication);
+router.get("/jobapplications",jwtAuth, jobApplicationController.getJobApplications);
 
 
 export default router;

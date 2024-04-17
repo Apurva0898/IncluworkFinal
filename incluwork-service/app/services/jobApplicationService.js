@@ -21,6 +21,7 @@ export const createjobApplication = async (jobseekerid,applicationData) => {
             employerId: employerId
         };
         
+        console.log(fullApplicationData);
         // Create a new application directly
         const savedApplication = await Application.create(fullApplicationData);
 
@@ -31,6 +32,17 @@ export const createjobApplication = async (jobseekerid,applicationData) => {
         return renamedApplication;
     } catch (error) {
         throw new Error('Error creating the application: ' + error.message);
+    }
+};
+
+// Getting job applications for the particular job seeker
+export const getJobApplicationsByUserId = async (jobseekerId) => {
+    try {
+        // Find all job applications where the userId matches the logged-in user's ID
+        const jobApplications = await Application.find({ userId: jobseekerId});
+        return jobApplications;
+    } catch (error) {
+        throw new Error("Error retrieving job applications");
     }
 };
 
