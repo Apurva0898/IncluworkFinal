@@ -5,7 +5,17 @@ meta {
 }
 
 post {
-  url: 
-  body: none
-  auth: none
+  url: http://localhost:3000/incluwork/jobapplications
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjFmMDE2N2E3ZjQ5MzY1MzUxMDI4MWMiLCJpYXQiOjE3MTMzMzM2ODl9.6COPQpPcxwxg3GPkJReGaQYk1AesDHzFQqyGEzuwAYM
+}
+
+body:json {
+  {
+    "jobId": "661f7a871a9977bcd4f429f6"
+  }
 }

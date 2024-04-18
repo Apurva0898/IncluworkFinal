@@ -117,13 +117,15 @@ export const deleteJobSeeker = async (id) => {
         }
 
         // Deleting the user associated with the job seeker
-        // If you choose to delete the User record as well:
-        
+
         const deletedUser = await User.findByIdAndDelete(id);
         if (!deletedUser) {
             throw new Error('User not found');
         }
-        
+
+        // Delete all applications associated with the job seeker
+        const deletedApplications = await Application.deleteMany({ userId: id });
+       
     } catch (error) {
         throw error; // Rethrow the error to be handled by the caller
     }

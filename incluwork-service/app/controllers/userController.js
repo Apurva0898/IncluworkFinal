@@ -67,12 +67,10 @@ export const deleteJobSeekerProfile = async (req, res) => {
          if (req.user.type !== 'jobseeker') {
                return res.status(403).send('Access denied: User is not a jobseeker');
          }
-        // const deleted = await userService.deleteJobSeeker(id);
-        // if (!deleted) {
-        //     return res.status(404).json({ message: "Job seeker not found" });
-        // }
-        await userService.deleteJobSeeker(id);
-        res.status(200).send('Job Seeker profile deleted successfully');
+        // Delete job seeker, user account, and associated job applications
+        const result = await userService.deleteJobSeeker(id);
+        res.status(204).send(result);
+        
     } catch (error) {
         res.status(500).json({ message: "Internal server error" });
     }
