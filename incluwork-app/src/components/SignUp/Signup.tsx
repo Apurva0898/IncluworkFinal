@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import EmployerSignup from './EmployerSignup.tsx';
 import JobSeekerSignup from './JobSeekerSignup.tsx';
 import './../../css/Signup.css'; // Import CSS file for styling
 
+
 const SignupPage = () => {
-    const [selectedOption, setSelectedOption] = useState('');
+    const [selectedOption, setSelectedOption] = useState('employer');
 
     const handleOptionSelect = (option) => {
         setSelectedOption(option);
