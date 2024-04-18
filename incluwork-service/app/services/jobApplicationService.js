@@ -46,4 +46,28 @@ export const getJobApplicationsByUserId = async (jobseekerId) => {
     }
 };
 
+// Get all applications submitted to an Employer's jobs
+export const getJoblistingApplications = async (employerId) => {
+    try {
+        // Fetch applications submitted to jobs posted by the employer
+        const applications = await Application.find({ employerId });
+        
+        if (applications.length === 0) {
+            throw new Error('No applications found for this employer');
+        }
+
+        // Transform each application object to include necessary details
+        const applicationList = applications.map(application => ({
+            applicationId: application._id,
+            jobId: application.jobId,
+            userId: application.userId,
+            applicationDate: application.applicationDate,
+            status: application.status
+        }));
+        
+        return applicationList;
+    } catch (error) {
+        throw new Error('Could not fetch applications');
+    }
+}
 
