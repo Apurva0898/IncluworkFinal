@@ -1,7 +1,7 @@
 import express from 'express';
 import * as adminController from '../controllers/adminController.js';
 import jwtAuth from '../lib/jwtAuth.js';
-import * as userController from "../controllers/usercontroller.js";
+import * as userController from "../controllers/userController.js";
 
 
 const router = express.Router();
