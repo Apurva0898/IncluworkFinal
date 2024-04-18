@@ -11,6 +11,8 @@ router.get("/employers", jwtAuth, adminController.getAllEmployers);
 //Route to get all users
 router.get("/users", jwtAuth, userController.getAllUsers);
 
+router.get('/jobs', jwtAuth,adminController.getAllJobs);
+
 
 
 export default router;
