@@ -34,14 +34,13 @@ const accommodationFacilitiesEnum = [
 const jobSchema = new mongoose.Schema({
   jobId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
   },
   title: {
     type: String,
     required: true
   },
   employerId: {
-    type: mongoose.Schema.Types.userId,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'Employer'
   },
@@ -83,6 +82,8 @@ const jobSchema = new mongoose.Schema({
     type: Date,
     required: true
   }
+},{
+  versionKey:false
 });
  
 const Job = mongoose.model('Job', jobSchema);

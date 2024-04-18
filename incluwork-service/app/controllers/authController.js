@@ -6,7 +6,13 @@ export const signUp = (req, res) => {
 
     createUser(data)
         .then(token => res.json(token))
-        .catch(err => res.status(400).json(err));
+        .catch(err => {
+            if (err.message.includes('Email is already in use')) {
+                res.status(409).json({ error: 'Email is already in use' });
+            } else {
+                res.status(400).json({ error: err.message });
+            }
+        });
 };
 
 export const login = (req, res, next) => {

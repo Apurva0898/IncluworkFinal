@@ -1,6 +1,9 @@
 
 import User from "../models/User.js";
 import JobSeeker from "../models/JobSeeker.js";
+import Employer from "../models/Employer.js";
+import Job from "../models/Job.js";
+import Application from "../models/Application.js";
 
 export const fetchAllUsers = async () => {
     try {
@@ -195,19 +198,38 @@ export const deleteJobSeeker = async (id) => {
   
      return employerProfile;
  };
-  
- export const deleteEmployer = async (id) => {
-     try {
-         const deletedEmployer = await Employer.findOneAndDelete({ userId: id });
-         if (!deletedEmployer) {
-             throw new Error('Employer not found');
-         }
-  
-         const deletedUser = await User.findByIdAndDelete(id);
-         if (!deletedUser) {
-             throw new Error('User not found');
-         }
-     } catch (error) {
-         throw error; // Rethrow the error to be handled by the caller
-     }
- };
+
+export const deleteEmployer = async (employerId) => {
+    try {
+        // Find the employer by userId
+        const employer = await Employer.findOne({ userId: employerId });
+
+        if (!employer) {
+            throw new Error('Employer not found');
+        }
+
+        // Find all jobs associated with the employer
+        const jobs = await Job.find({ employerId });
+
+        // Delete all job applications associated with those jobs
+        const jobIds = jobs.map(job => job._id);
+        await Application.deleteMany({ jobId: { $in: jobIds } });
+
+        // Delete all jobs associated with the employer
+        await Job.deleteMany({ employerId });
+
+        // Delete the employer
+        await Employer.findOneAndDelete({ userId: employerId });
+
+        // Delete the associated user
+        const deletedUser = await User.deleteOne({ _id: employerId });
+
+        if (!deletedUser) {
+            throw new Error('User not found');
+        }
+
+        return { message: "Employer profile and the associated jobs and job applications are deleted successfully" };
+    } catch (error) {
+        throw new Error('Could not delete employer profile');
+    }
+}

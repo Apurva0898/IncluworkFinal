@@ -46,15 +46,16 @@ let schema = new mongoose.Schema(
         },
         medicalProof: {
             type: String,
-            required: true,
         },
         challenges: {
-            type: String,
+            type: [String],
             required: true,
             enum: challengesEnum,
         },
     },
-    {collation: {locale: "en"}}
+
+    {collation: {locale: "en"},
+    versionKey:false}
 );
 
 const JobSeeker = mongoose.model("JobSeeker", schema);
