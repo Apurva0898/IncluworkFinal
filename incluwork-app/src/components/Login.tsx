@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './../css/Login.css';
@@ -8,7 +8,7 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
 
         const formData = {
@@ -38,7 +38,17 @@ const LoginForm = () => {
             localStorage.setItem('type', type);
 
             // Redirect to the success page or any other page as needed
-            navigate('/Signup');
+            if(token && type){
+                if(type==='employer'){
+                    navigate('/employer');
+                }
+                else if(type==='jobseeker') {
+                    navigate('/jobseeker');
+                }
+                else{
+                    navigate('/Signup');
+                }
+            }
         } catch (error) {
             console.error('Error:', error);
         }
