@@ -21,7 +21,7 @@ export const createjobApplication = async (jobseekerid,applicationData) => {
             employerId: employerId
         };
         
-        console.log(fullApplicationData);
+       
         // Create a new application directly
         const savedApplication = await Application.create(fullApplicationData);
 
