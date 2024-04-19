@@ -27,10 +27,13 @@ let schema = new mongoose.Schema(
       type: String,
       validate: {
         validator: function (v) {
-          return v !== "" ? /\+\d{1,3}\d{10}/.test(v) : true;
+          // Remove any non-numeric characters
+          const numericValue = v.replace(/\D/g, '');
+          // Check if the numeric value contains exactly 10 digits
+          return numericValue.length === 10;
         },
-        msg: "Phone number is invalid!",
-      },
+        msg: "Phone number must contain exactly 10 digits!",
+      }
     },
   },
   { collation: { locale: "en" } ,

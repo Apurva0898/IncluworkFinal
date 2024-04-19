@@ -46,10 +46,9 @@ let schema = new mongoose.Schema(
         },
         medicalProof: {
             type: String,
-            required: true,
         },
         challenges: {
-            type: String,
+            type: [String],
             required: true,
             enum: challengesEnum,
         },

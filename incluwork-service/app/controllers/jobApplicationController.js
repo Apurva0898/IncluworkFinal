@@ -16,3 +16,30 @@ export const createjobApplication = async (req, res) => {
     }
 };
 
+//Fetching all job applications for specific job seeker
+export const getJobApplications = async (req, res) => {
+    try {
+        const jobseekerId = req.user.id; 
+        const jobApplications = await jobApplicationService.getJobApplicationsByUserId(jobseekerId);
+        res.status(200).json({ success: true, data: jobApplications });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+// Fetch all applications for job listings of specific employer
+export const getJoblistingApplications = async (req, res) => {
+    try {
+        // Check if the user type is employer
+        if (req.user.type !== 'employer') {
+            return res.status(403).send({ error: "Access denied: User is not an employer"});
+        }
+
+        const employerId = req.user.id;
+        const applications = await jobApplicationService.getJoblistingApplications(employerId);
+        
+        res.json(applications);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+}

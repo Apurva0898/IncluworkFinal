@@ -21,6 +21,7 @@ export const createjobApplication = async (jobseekerid,applicationData) => {
             employerId: employerId
         };
         
+       
         // Create a new application directly
         const savedApplication = await Application.create(fullApplicationData);
 
@@ -34,4 +35,39 @@ export const createjobApplication = async (jobseekerid,applicationData) => {
     }
 };
 
+// Getting job applications for the particular job seeker
+export const getJobApplicationsByUserId = async (jobseekerId) => {
+    try {
+        // Find all job applications where the userId matches the logged-in user's ID
+        const jobApplications = await Application.find({ userId: jobseekerId});
+        return jobApplications;
+    } catch (error) {
+        throw new Error("Error retrieving job applications");
+    }
+};
+
+// Get all applications submitted to an Employer's jobs
+export const getJoblistingApplications = async (employerId) => {
+    try {
+        // Fetch applications submitted to jobs posted by the employer
+        const applications = await Application.find({ employerId });
+        
+        if (applications.length === 0) {
+            throw new Error('No applications found for this employer');
+        }
+
+        // Transform each application object to include necessary details
+        const applicationList = applications.map(application => ({
+            applicationId: application._id,
+            jobId: application.jobId,
+            userId: application.userId,
+            applicationDate: application.applicationDate,
+            status: application.status
+        }));
+        
+        return applicationList;
+    } catch (error) {
+        throw new Error('Could not fetch applications');
+    }
+}
 
