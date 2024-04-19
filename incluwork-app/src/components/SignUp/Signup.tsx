@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { SetStateAction, useState} from 'react';
 import EmployerSignup from './EmployerSignup.tsx';
 import JobSeekerSignup from './JobSeekerSignup.tsx';
 import './../../css/Signup.css'; // Import CSS file for styling
@@ -7,7 +7,7 @@ import './../../css/Signup.css'; // Import CSS file for styling
 const SignupPage = () => {
     const [selectedOption, setSelectedOption] = useState('employer');
 
-    const handleOptionSelect = (option) => {
+    const handleOptionSelect = (option: SetStateAction<string>) => {
         setSelectedOption(option);
     };
 
