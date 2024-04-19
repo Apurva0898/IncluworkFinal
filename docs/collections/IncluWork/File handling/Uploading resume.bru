@@ -5,7 +5,11 @@ meta {
 }
 
 post {
-  url: 
-  body: none
+  url: http://localhost:3000/incluwork/resume
+  body: multipartForm
   auth: none
+}
+
+body:multipart-form {
+  file: @file(C:\Users\malin\Downloads\MaliniSankaran_Resume (2).pdf)
 }
