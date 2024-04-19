@@ -88,7 +88,8 @@ export const fetchAllJobs = async (req, res) => {
             return res.status(403).send({ error: "Access denied: User is not an jobseeker"});
         }
 
-        const jobs = await jobService.fetchAllJobs();
+        const jobseekerId = req.user.id;
+        const jobs = await jobService.fetchJobsForJobSeeker(jobseekerId);
         res.json(jobs);
     } catch (error) {
         res.status(500).json({ error: error.message });

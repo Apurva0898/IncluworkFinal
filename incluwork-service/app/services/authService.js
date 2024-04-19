@@ -44,7 +44,7 @@ export const createUser = async (data) => {
 
         await userDetails.save();
 
-        return { token: createToken(user._id), type: user.type };
+        return { token: createToken(user._id), type: user.type,id:user._id };
     } catch (err) {
         // Check if the error message is 'Email is already in use'
         if (err.message === 'Email is already in use') {
@@ -68,7 +68,7 @@ export const loginUser = (email, password) => {
                 return reject({ status: 401, message: info.message });
             }
 
-            return resolve({ token: createToken(user._id), type: user.type });
+            return resolve({ token: createToken(user._id), type: user.type,id:user._id });
         })({ body: { email, password } }); // Mock req object for passport
     });
 };

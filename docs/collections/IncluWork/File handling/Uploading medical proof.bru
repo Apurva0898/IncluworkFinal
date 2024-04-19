@@ -1,0 +1,15 @@
+meta {
+  name: Uploading medical proof
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/incluwork/proof
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  file: @file(C:\Users\malin\Downloads\Evidence_of_Disability_VisualJohnDoe.pdf)
+}

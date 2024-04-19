@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './../css/Login.css';
 
+
+
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         const formData = {
@@ -33,16 +36,60 @@ const LoginForm = () => {
 
             const token = data.token;
             const type = data.type;
-            // Store the token in localStorage or session storage for future use
+            const userId = data.id;
+
+            // Store the token, type, and user ID in localStorage
             localStorage.setItem('token', token);
             localStorage.setItem('type', type);
+            localStorage.setItem('userid', userId);
 
-            // Redirect to the success page or any other page as needed
-            navigate('/Signup');
+            if (token && type) {
+                if (type === 'employer') {
+                    navigate('/employer');
+                } else if (type === 'jobseeker') {
+                    const userData = await getUserData(userId, token);
+                    console.log('User Data:', userData);
+
+                    if (userData && userData.resume && userData.medicalProof) {
+                        navigate('/jobseeker');
+                    } else {
+                        navigate('/upload');
+                    }
+                } else {
+                    navigate('/Signup');
+                }
+            }
         } catch (error) {
             console.error('Error:', error);
+            // Show alert for incorrect password
+            setShowAlert(true);
         }
     };
+
+    const getUserData = async (userId: string, token: string) => {
+        const url = `http://localhost:3000/incluwork/jobseekers?id=${userId}`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            return null;
+
+        }
+    };
+
 
     return (
         <div className="login-page">
@@ -89,6 +136,7 @@ const LoginForm = () => {
                         fullWidth
                         sx={{ mb: 2 }}
                     />
+                    {showAlert && <p style={{ color: 'red' }}>Incorrect password. Please try again.</p>}
                     <div className="button-container">
                         <Button variant="outlined" color="secondary" type="submit">
                             Login
