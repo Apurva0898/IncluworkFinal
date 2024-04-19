@@ -1,10 +1,19 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Container, Grid, Paper, Typography, Button} from '@mui/material';
+import {useNavigate} from "react-router-dom";
 
 const JobseekerUpload: React.FC = () => {
     const [medicalFile, setMedicalFile] = useState<File | null>(null);
     const [resumeFile, setResumeFile] = useState<File | null>(null);
-
+    const navigate=useNavigate();
+    useEffect(() => {
+        // Check if 'type' is not set or if it's not 'employer'
+        if (localStorage.getItem('type') === null || localStorage.getItem('type') !== 'jobseeker') {
+            console.log('User is not authenticated as Jobseeker. Redirecting...');
+            localStorage.clear(); // Clear localStorage (remove all items)
+            navigate('/unauthorized'); // Navigate user to '/unauthorized' page
+        }
+    }, [navigate]);
     const handleMedicalFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
