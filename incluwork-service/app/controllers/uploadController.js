@@ -4,6 +4,10 @@ import path from 'path';
 
 //Controller code for uploading resume
 export const uploadResume = async (req, res) => {
+
+    if (req.user.type !== "jobseeker") {
+        return res.status(403).json({ message: "Access denied: User is not a jobseeker" });
+    }
     const { file } = req;
     if (!file) {
       return res.status(400).json({ message: "No file uploaded" });
@@ -26,6 +30,9 @@ export const uploadResume = async (req, res) => {
 //Controller code for uploading medical proof
 export const uploadProof = async (req, res) => {
 
+    if (req.user.type !== "jobseeker") {
+        return res.status(403).json({ message: "Access denied: User is not a jobseeker" });
+    }
     const { file } = req;
     if (!file) {
       return res.status(400).json({ message: "No file uploaded" });
