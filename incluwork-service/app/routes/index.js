@@ -5,6 +5,7 @@ import jobRouter from './jobRoutes.js';
 import adminRouter from './adminRoutes.js';
 import jobApplicationRouter from './jobApplicationRoutes.js';
 import uploadRouter from './uploadRoutes.js';
+import downloadRouter from './downloadRoutes.js';
 
 const initializeRoutes = (app) => {
     app.use('/incluwork', authRouter);
@@ -14,6 +15,7 @@ const initializeRoutes = (app) => {
     app.use('/incluwork', adminRouter);
     app.use('/incluwork', jobApplicationRouter);
     app.use('/incluwork', uploadRouter);
+    app.use('/incluwork', downloadRouter);
 }
 
 export default initializeRoutes;
