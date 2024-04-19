@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Container, Grid, Paper, Typography, Button} from '@mui/material';
 import {useNavigate} from "react-router-dom";
 
+
 const JobseekerUpload: React.FC = () => {
     const [medicalFile, setMedicalFile] = useState<File | null>(null);
     const [resumeFile, setResumeFile] = useState<File | null>(null);
@@ -28,17 +29,42 @@ const JobseekerUpload: React.FC = () => {
         }
     };
 
-    const handleUpload = () => {
-        // Handle upload logic for medicalFile and resumeFile
+    const handleUpload = async () => {
         if (medicalFile) {
-            // Upload medicalFile to server
-            console.log('Uploading medical document:', medicalFile.name);
+            await uploadFile(medicalFile, '/medicalproof'); // Upload medical file to /proof endpoint
         }
         if (resumeFile) {
-            // Upload resumeFile to server
-            console.log('Uploading resume:', resumeFile.name);
+            await uploadFile(resumeFile, '/resume'); // Upload resume file to /resume endpoint
+        }
+        alert('files are uploaded successfully');
+        navigate('/jobseeker');
+    };
+
+    const uploadFile = async (file: File | Blob, endpoint: string) => {
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:3000/incluwork${endpoint}`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    // 'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            console.log(`File ${file instanceof File ? file.name : 'Blob'} uploaded successfully to ${endpoint}`);
+
+        } catch (error) {
+            console.error(`Error uploading file ${file instanceof File ? file.name : 'Blob'}:`, error);
         }
     };
+
 
     return (
         <Container maxWidth="lg">
