@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './../css/Login.css';
@@ -6,9 +6,10 @@ import './../css/Login.css';
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
 
         const formData = {
@@ -26,6 +27,7 @@ const LoginForm = () => {
             });
 
             if (!response.ok) {
+                // alert('Incorrect password');
                 throw new Error('Network response was not ok');
             }
 
@@ -38,9 +40,21 @@ const LoginForm = () => {
             localStorage.setItem('type', type);
 
             // Redirect to the success page or any other page as needed
-            navigate('/Signup');
+            if(token && type){
+                if(type==='employer'){
+                    navigate('/employer');
+                }
+                else if(type==='jobseeker') {
+                    navigate('/jobseeker');
+                }
+                else{
+                    navigate('/Signup');
+                }
+            }
         } catch (error) {
             console.error('Error:', error);
+            // Show alert for incorrect password
+            setShowAlert(true);
         }
     };
 
@@ -89,6 +103,7 @@ const LoginForm = () => {
                         fullWidth
                         sx={{ mb: 2 }}
                     />
+                    {showAlert && <p style={{ color: 'red' }}>Incorrect password. Please try again.</p>}
                     <div className="button-container">
                         <Button variant="outlined" color="secondary" type="submit">
                             Login

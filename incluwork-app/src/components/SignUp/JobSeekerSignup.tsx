@@ -6,7 +6,7 @@ import './../../css/Signup.css';
 const RegisterForm = () => {
 
     const currentYear = new Date().getFullYear();
-    const startYears = Array.from(new Array(currentYear - 1980 + 1), (val, index) => 1980 + index).reverse();
+    const startYears = Array.from(new Array(currentYear - 1980 + 1), (_val, index) => 1980 + index).reverse();
 
     const [name, setName] = useState('');
     const [contactNumber, setContactNumber] = useState('');
@@ -22,10 +22,11 @@ const RegisterForm = () => {
     const challengesEnum = ['Visual Impairment', 'Hearing Impairment', 'Speech Impairment', 'Dual Sensory Impairment ', 'Vestibular Impairment', 'Paralysis', 'Arthritis', 'Down Syndrome', 'Ehlers-Danlos Syndrome', 'Orthopedic Disabilities'];
 
 
-    const handleStartYearChange = (event) => {
+    const handleStartYearChange = (event: { target: { value: any; }; }) => {
         const selectedStartYear = event.target.value;
         setStartYear(selectedStartYear);
-        const updatedEndYears = Array.from(new Array(currentYear - selectedStartYear + 1), (val, index) => selectedStartYear + index).reverse();
+        const updatedEndYears = Array.from(new Array(currentYear - selectedStartYear + 1), (_val, index) => selectedStartYear + index).reverse();
+        // @ts-ignore
         setEndYears(updatedEndYears);
         setEndYear(''); // Reset end year if start year changes
     };
