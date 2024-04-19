@@ -8,8 +8,6 @@ import uploadRouter from './uploadRoutes.js';
 import downloadRouter from './downloadRoutes.js';
 import internalEndpointsRouter from './internalRoutes.js';
 
-
-
 const initializeRoutes = (app) => {
     app.use('/incluwork', authRouter);
     app.use('/incluwork', userRouter);
@@ -20,8 +18,6 @@ const initializeRoutes = (app) => {
     app.use('/incluwork', uploadRouter);
     app.use('/incluwork', downloadRouter);
     app.use('/incluwork', internalEndpointsRouter);
-    app.use('/incluwork', uploadRouter);
-
 }
 
 export default initializeRoutes;
