@@ -4,6 +4,7 @@ import Login from './components/Login';
 import Signup from './components/SignUp/Signup.tsx';
 import Employer from './components/HomePages/Employer.tsx';
 import Jobseeker from './components/HomePages/Jobseeker.tsx';
+import Navbar from "./components/Common/Navbar.tsx";
 import Unauthorized from './components/Common/Unauthorized.tsx'
 
 
@@ -14,7 +15,7 @@ function App() {
     return (
         <Router>
             <div>
-                {/*<Navbar/>*/}
+                <Navbar/>
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/login" element={<Login/>}/>

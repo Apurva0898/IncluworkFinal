@@ -1,9 +1,9 @@
 import  { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from "../Common/Navbar.tsx";
 
 const EmployerHome = () => {
     const navigate = useNavigate();
-
     useEffect(() => {
         // Check if 'type' is not set or if it's not 'employer'
         if (localStorage.getItem('type') === null || localStorage.getItem('type') !== 'employer') {

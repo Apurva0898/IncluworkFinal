@@ -6,6 +6,7 @@ import './../css/Login.css';
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
@@ -26,6 +27,7 @@ const LoginForm = () => {
             });
 
             if (!response.ok) {
+                // alert('Incorrect password');
                 throw new Error('Network response was not ok');
             }
 
@@ -51,6 +53,8 @@ const LoginForm = () => {
             }
         } catch (error) {
             console.error('Error:', error);
+            // Show alert for incorrect password
+            setShowAlert(true);
         }
     };
 
@@ -99,6 +103,7 @@ const LoginForm = () => {
                         fullWidth
                         sx={{ mb: 2 }}
                     />
+                    {showAlert && <p style={{ color: 'red' }}>Incorrect password. Please try again.</p>}
                     <div className="button-container">
                         <Button variant="outlined" color="secondary" type="submit">
                             Login
