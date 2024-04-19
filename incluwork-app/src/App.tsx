@@ -5,7 +5,8 @@ import Signup from './components/SignUp/Signup.tsx';
 import Employer from './components/HomePages/Employer.tsx';
 import Jobseeker from './components/HomePages/Jobseeker.tsx';
 import Navbar from "./components/Common/Navbar.tsx";
-import Unauthorized from './components/Common/Unauthorized.tsx'
+import Unauthorized from './components/Common/Unauthorized.tsx';
+import Upload from './components/SignUp/JobseekerUpload.tsx';
 
 
 
@@ -23,6 +24,7 @@ function App() {
                     <Route path="/employer" element={<Employer/>}/>
                     <Route path="/jobseeker" element={<Jobseeker/>}/>
                     <Route path="/unauthorized" element={<Unauthorized/>}/>
+                    <Route path="/upload" element={<Upload/>}/>
                 </Routes>
             </div>
         </Router>
