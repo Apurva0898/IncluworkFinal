@@ -1,4 +1,6 @@
 import Job from './../models/Job.js';
+import JobSeeker from './../models/JobSeeker.js';
+import Mapping from './../models/Mapping.js';
 
 export const createJob = async (employerId, jobData) => {
     try {
@@ -112,13 +114,29 @@ export const deleteJob = async (jobId) => {
     }
 }
 
-// Fetch all jobs as a job seeker
-export const fetchAllJobs = async () => {
+// Fetch all jobs as a job seeker based on their specific challenge
+export const fetchJobsForJobSeeker = async (jobSeekerId) => {
     try {
-        const jobs = await Job.find();
+        // Find the job seeker based on their ID to get their specific challenge
+        const jobSeeker = await JobSeeker.findOne({ userId: jobSeekerId });
+        if (!jobSeeker) {
+            throw new Error("Job seeker not found");
+        }
 
-        // Transform each job object to rename _id to jobId using the rest operator
-        const job = jobs.map(job => ({
+        // Using the challenge of the job seeker, fetch related job titles from the mapping table
+        const mapping = await Mapping.findOne({ challenge: jobSeeker.challenges });
+        if (!mapping) {
+            throw new Error("No job mapping found for the given challenge");
+        }
+        const suitableJobTitles = mapping.jobTitles;
+
+        // Fetch jobs that have titles in the list of suitable job titles obtained from the mapping table
+        const jobs = await Job.find({
+            title: { $in: suitableJobTitles }
+        });
+
+        // Transform each job object to format it correctly by renaming _id to jobId
+        const formattedJobs = jobs.map(job => ({
             jobId: job._id,
             title: job.title,
             employerId: job.employerId,
@@ -132,10 +150,10 @@ export const fetchAllJobs = async () => {
             dateOfJoining: job.dateOfJoining,
             dateOfPosting: job.dateOfPosting
         }));
-        
-        return job;
+
+        return formattedJobs;
     } catch (error) {
-        throw new Error('Could not fetch jobs');
+        throw new Error(`Could not fetch jobs: ${error.message}`);
     }
 }
 
