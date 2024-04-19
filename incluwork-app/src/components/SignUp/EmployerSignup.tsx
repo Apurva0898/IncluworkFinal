@@ -89,7 +89,7 @@ const RegisterForm = () => {
 
             const data = await response.json();
 
-            const token = data.token; // Adjust this based on your API response structure
+            const token = data.token;
             // Store the token in localStorage or session storage for future use
             localStorage.setItem('token', token);
             const navigate=useNavigate();
