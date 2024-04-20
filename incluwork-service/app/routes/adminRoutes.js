@@ -12,6 +12,8 @@ router.get("/employers", jwtAuth, adminController.getAllEmployers);
 router.get("/users", jwtAuth, userController.getAllUsers);
 
 router.get('/jobs', jwtAuth,adminController.getAllJobs);
+router.get('/applications', jwtAuth,adminController.getAllApplications);
+
 
 
 
