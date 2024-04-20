@@ -3,10 +3,12 @@ import { TextField, Button, MenuItem, InputLabel, FormControl, Select, SelectCha
 import { useNavigate } from "react-router-dom";
 import './../../css/Signup.css';
 
+// import {findJobSeekerById,findEmployerById} from '../../../../incluwork-service/app/services/userService'
+
 const RegisterForm = () => {
 
     const currentYear = new Date().getFullYear();
-    const startYears = Array.from(new Array(currentYear - 1980 + 1), (val, index) => 1980 + index).reverse();
+    const startYears = Array.from(new Array(currentYear - 1980 + 1), (_val, index) => 1980 + index).reverse();
 
     const [name, setName] = useState('');
     const [contactNumber, setContactNumber] = useState('');
@@ -20,12 +22,13 @@ const RegisterForm = () => {
     const [endYears, setEndYears] = useState([]);
     const [skills, setSkills] = useState<string[]>([]);
     const challengesEnum = ['Visual Impairment', 'Hearing Impairment', 'Speech Impairment', 'Dual Sensory Impairment ', 'Vestibular Impairment', 'Paralysis', 'Arthritis', 'Down Syndrome', 'Ehlers-Danlos Syndrome', 'Orthopedic Disabilities'];
+    const navigate = useNavigate();
 
-
-    const handleStartYearChange = (event) => {
+    const handleStartYearChange = (event: { target: { value: any; }; }) => {
         const selectedStartYear = event.target.value;
         setStartYear(selectedStartYear);
-        const updatedEndYears = Array.from(new Array(currentYear - selectedStartYear + 1), (val, index) => selectedStartYear + index).reverse();
+        const updatedEndYears = Array.from(new Array(currentYear - selectedStartYear + 1), (_val, index) => selectedStartYear + index).reverse();
+        // @ts-ignore
         setEndYears(updatedEndYears);
         setEndYear(''); // Reset end year if start year changes
     };
@@ -53,10 +56,10 @@ const RegisterForm = () => {
     };
 
     const handleClick = () => {
-        const navigate = useNavigate();
+
 
         // Redirect to the desired page
-        navigate('/../success');
+        navigate('/login');
     };
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -93,16 +96,27 @@ const RegisterForm = () => {
             })
             .then(data => {
                 console.log('Success:', data);
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('type', data.type);
+                localStorage.setItem('userId', data.id);
+
+                // Use localStorage items after they are set
+                if (data.type === 'jobseeker') {
+                    // Navigate to '/upload' if the user type is 'jobseeker'
+                    navigate('/upload');
+                } else if (data.type === 'employer') {
+                    // Navigate to '/employer' if the user type is 'employer'
+                    navigate('/employer');
+                } else {
+                    // Handle other user types or scenarios
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
+                // Handle errors appropriately (e.g., display error messages)
             });
-
-        const navigate = useNavigate();
-
-        // Redirect to the desired page
-        navigate('/../success');
     }
+
 
     return (
         <React.Fragment>
