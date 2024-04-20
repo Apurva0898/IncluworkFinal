@@ -2,6 +2,7 @@ import Employer from "../models/Employer.js";
 import User from "../models/User.js";
 import JobSeeker from "../models/JobSeeker.js";
 import Job from "../models/Job.js";
+import Application from "../models/Application.js";
 
 
 // Service functions for Employer model
@@ -47,6 +48,16 @@ export const getAllJobs = async () => {
         throw new Error(`Failed to retrieve jobs: ${error.message}`);
     }
 };
+
+export const getAllApplications = async () => {
+    try {
+        const applications = await Application.find();
+        return applications;
+    } catch (error) {
+        throw new Error(`Failed to retrieve applications: ${error.message}`);
+    }
+};
+
 
 
 
