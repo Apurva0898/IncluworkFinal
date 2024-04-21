@@ -1,68 +1,62 @@
 import React, {useState} from 'react';
-import {TextField, Button, MenuItem, InputLabel, FormControl, Select, SelectChangeEvent} from '@mui/material';
+import {
+    TextField,
+    Button,
+    Dialog,
+    DialogTitle,
+    List,
+    ListItem,
+    ListItemText,
+    Checkbox,
+    Chip,
+    Box
+  } from '@mui/material';
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import {signup} from './../../store/authSlice';
 import './../../css/Signup.css';
 
 
 
-const accommodationFacilitiesEnum = [
-    'Screen Reading Software',
-    'Magnification Tools',
-    'Braille Display',
-    'Large Print Materials',
-    'Tactile Markings',
-    'Auditory Cues',
-    'Sign Language Interpreter',
-    'Video Relay Services',
-    'Closed Captioning',
-    'Vibrating Devices',
-    'Text-based Communication Tools',
-    'Speech Recognition Software',
-    'Alternative Communication Devices',
-    'Haptic Communication Methods',
-    'Assistive Technology Devices',
-    'Ergonomic Equipment',
-    'Adjustable Workstations',
-    'Adaptive Technology Devices',
-    'Accessible Workspaces',
-    'Ergonomic Chairs',
-    'Adaptive Equipment',
-    'Visual Schedules',
-    'Task Checklists',
-    'Supportive Seating',
-    'Adjustable Equipment',
-    'Wheelchair Accessible Workspace',
-    'Ergonomic Keyboards',
-];
-const RegisterForm = () => {
-    const [name, setName] = useState('')
-    const [contactNumber, setContactNumber] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [companyName, setCompanyName] = useState('')
-    const [companyProfile, setCompanyProfile] = useState('')
+
+const EmployerSignup = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [name, setName] = useState('');
+    const  [email, setEmail] = useState('');
+    const  [password, setPassword] = useState('');
+    const [contactNumber, setContactNumber] = useState('');
+    const [companyName, setCompanyName] = useState('');
+    const [companyProfile, setCompanyProfile] = useState('');
     const [accommodationFacilities, setAccommodationFacilities] = useState<string[]>([]);
+    const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+    const accommodationFacilitiesEnum: string[] = [
+        'Screen reading software', 'Magnification tools', 'Audio Navigation Guides','Braille Display',
+        'Tactile Markings', 'Assistive Listening Devices', 'Captioning Software', 'Accessible Communication Tools',
+        'Sign Language Interpreters', 'Visual Cues and Graphical Representation Software', 'Visual Communication Aids',
+        'Speech Generating Devices', 'Text-to-Speech Software', 'Communication Applications', 'Assistive Technology Devices',
+        'Tactile Graphics Software', 'Remote Collaboration Tools', 'Ergonomic Workspace Setup', 'Collaborative Project Management Tools',
+        'Accessible Communication Platforms', 'Visual Cues for Orientation', 'Accessible Software Development Tools',
+        'Accessible Transportation Facilities', 'Flexible Attendance Policies', 'Ergonomic Workstation Setup',
+        'Voice-controlled Technology Devices', 'Assistive Aids', 'Flexible Work Arrangements', 'Voice-controlled Project Management Tools',
+        'Supportive Workstations and Equipment', 'Virtual Assistive Devices', 'Individualized Support Plans',
+        'Wheelchair Accessible Workspace', 'Customized Work Arrangements', 'Supportive Networks and Communities',
+        'Collaborative Task Management Tools', 'Ergonomic Keyboards', 'Rest Areas and Quiet Workspaces', 'Telecommuting Facilities', 'Individualized Accommodative Facilities'
+    ];
 
-    const handleChange = (event: SelectChangeEvent<string | string[]>) => {
-        const value = event.target.value;
-        // Ensure to handle null or undefined values
-        if (Array.isArray(value)) {
-            // Value is an array, set it directly
-            setAccommodationFacilities(value);
+    const handleChange = (value: string) => {
+        const currentIndex = accommodationFacilities.indexOf(value);
+        const newChecked = [...accommodationFacilities];
+ 
+        if (currentIndex === -1) {
+            newChecked.push(value);
         } else {
-            // Value is a string, convert it to an array
-            setAccommodationFacilities([value]);
+            newChecked.splice(currentIndex, 1);
         }
-    };
-    const handleClick = () => {
-        const navigate = useNavigate();
-
-        // Redirect to the desired page
-        navigate('/../success');
+        setAccommodationFacilities(newChecked);
     };
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
         const formData = {
             name,
             email,
@@ -74,129 +68,74 @@ const RegisterForm = () => {
             accommodationFacilities,
         };
 
-        try {
-            const response = await fetch('http://localhost:3000/incluwork/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
+        dispatch(signup(formData)).unwrap()
+            .then(response => {
+                console.log('Registration successful:', response);
+                navigate('/employer'); // Redirect on success
+            })
+            .catch(error => {
+                console.error('Registration failed:', error);
+                // Handle error appropriately
             });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-
-            const token = data.token;
-            // Store the token in localStorage or session storage for future use
-            localStorage.setItem('token', token);
-            const navigate=useNavigate();
-            // Redirect to the success page or any other page as needed
-            navigate('/Signup');
-        } catch (error) {
-            console.error('Error:', error);
-        }
     };
 
-
     return (
-        <React.Fragment>
-            <form onSubmit={handleSubmit} action={'http'}>
-                <TextField
-                    type="text"
-                    variant='outlined'
-                    color='secondary'
-                    label="Name"
-                    onChange={e => setName(e.target.value)}
-                    value={name}
-                    fullWidth
-                    required
-                    sx={{mb: 2}}
-                />
-                <TextField
-                    type="email"
-                    variant='outlined'
-                    color='secondary'
-                    label="Email"
-                    onChange={e => setEmail(e.target.value)}
-                    value={email}
-                    fullWidth
-                    required
-                    sx={{mb: 2}}
-                />
-                <TextField
-                    type="password"
-                    variant='outlined'
-                    color='secondary'
-                    label="Password"
-                    onChange={e => setPassword(e.target.value)}
-                    value={password}
-                    required
-                    fullWidth
-                    sx={{mb: 2}}
-                />
-                <TextField
-                    type="number"
-                    variant='outlined'
-                    color='secondary'
-                    label="Contact Number"
-                    onChange={e => setContactNumber(e.target.value)}
-                    value={contactNumber}
-                    required
-                    fullWidth
-                    sx={{mb: 2}}
-                />
-                <TextField
-                    type="text"
-                    variant='outlined'
-                    color='secondary'
-                    label="Company Name"
-                    onChange={e => setCompanyName(e.target.value)}
-                    value={companyName}
-                    required
-                    fullWidth
-                    sx={{mb: 2}}
-                />
-                <TextField
-                    type="text"
-                    variant='outlined'
-                    color='secondary'
-                    label="Company Profile"
-                    onChange={e => setCompanyProfile(e.target.value)}
-                    value={companyProfile}
-                    required
-                    fullWidth
-                    sx={{mb: 2}}
-                />
-                <FormControl fullWidth sx={{marginBottom: 2}}>
-                    <InputLabel id="accommodation-facilities-label">Accommodation Facilities</InputLabel>
-                    <Select
-                        labelId="accommodation-facilities-label"
-                        id="accommodation-facilities"
-                        multiple
-                        value={accommodationFacilities}
-                        onChange={handleChange}
-                        renderValue={(selected: string[]) => selected.join(', ')} // Use join on selected, which is an array
-                    >
-                        {accommodationFacilitiesEnum.map((facility: string) => (
-                            <MenuItem key={facility} value={facility}>
-                                {facility}
-                            </MenuItem>
+        <div className="signup-form">
+            <h1>Employer Signup</h1>
+            <form onSubmit={handleSubmit}>
+                <TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} fullWidth margin="normal" />
+                <TextField label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} fullWidth margin="normal" />
+                <TextField label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} fullWidth margin="normal" />
+                <TextField label="Contact Number" value={contactNumber} onChange={(e) => setContactNumber(e.target.value)} fullWidth margin="normal" />
+                <TextField label="Company Name" value={companyName} onChange={(e) => setCompanyName(e.target.value)} fullWidth margin="normal" />
+                <TextField label="Company Profile" value={companyProfile} onChange={(e) => setCompanyProfile(e.target.value)} fullWidth margin="normal" />
+                  {/* Button and Chip display */}
+                  <div style={{ marginBottom: '16px' }}>
+                    <Button onClick={() => setDialogOpen(true)} variant="outlined" color="secondary" fullWidth>
+                        Choose Accommodation Facilities
+                    </Button>
+                </div>
+                <Box display="flex" flexWrap="wrap" gap={1} marginBottom={2}>
+                    {accommodationFacilities.map(facility => (
+                        <Chip key={facility} label={facility} onDelete={() => handleChange(facility)} />
+                    ))}
+                </Box>
+               
+                {/* Dialog for selection */}
+                <Dialog onClose={() => setDialogOpen(false)} open={dialogOpen}>
+                    <DialogTitle>Accommodation Facilities</DialogTitle>
+                    <List>
+                        {accommodationFacilitiesEnum.map(facility => (
+                            <ListItem
+                                key={facility}
+                                dense
+                                button
+                                onClick={() => handleChange(facility)}
+                            >
+                                <Checkbox
+                                    edge="start"
+                                    checked={accommodationFacilities.indexOf(facility) !== -1}
+                                    tabIndex={-1}
+                                    disableRipple
+                                />
+                                <ListItemText primary={facility} />
+                            </ListItem>
                         ))}
-                    </Select>
-                </FormControl>
+                    </List>
+                </Dialog>
+                {/* Submit and navigation buttons */}
                 <div className="button-container">
                     <Button variant="outlined" color="secondary" type="submit">Register</Button>
                     <p>Already have an account? Click login</p>
-                    <Button onClick={handleClick} variant="outlined" color="secondary">LOGIN</Button>
+                    <Button onClick={() => navigate('/login')} variant="outlined" color="secondary">LOGIN</Button>
                 </div>
             </form>
+        </div>
+    );
+};
+
+export default EmployerSignup;
 
 
-        </React.Fragment>
-    )
-}
 
-export default RegisterForm;
+

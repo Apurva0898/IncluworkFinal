@@ -1,4 +1,5 @@
 import { LoginCredentials, LoginResponse } from '../models/User';
+import {SignUpData, SignupResponse} from '../models/User';
 
 const API_URL = 'http://localhost:3000/incluwork';
 
@@ -21,4 +22,26 @@ const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
   return data;
 };
 
-export default { login };
+ const signup = async (formData: SignUpData): Promise<SignupResponse> => {
+  const response = await fetch(API_URL + '/signup', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to register');
+  }
+  
+  const data: SignupResponse = await response.json();
+  console.log(data);
+
+  return data;
+};
+
+
+
+export default { login , signup};
