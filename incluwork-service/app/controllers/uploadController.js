@@ -19,7 +19,7 @@ export const uploadResume = async (req, res) => {
     }
 
   try {
-    const url = await uploadService.saveResume(file);
+    const url = await uploadService.saveResume(req.user.id, file);
     res.send({ message: "Resume uploaded successfully", url: url });
   } catch (error) {
     // console.error("Error in uploadResume controller:", error);
@@ -44,7 +44,7 @@ export const uploadProof = async (req, res) => {
     }
 
   try {
-    const url = await uploadService.saveProof(file);
+    const url = await uploadService.saveProof(req.user.id, file);
     res.send({ message: "Medical proof uploaded successfully", url: url });
   } catch (error) {
     res.status(500).json({ message: "Error while uploading" });

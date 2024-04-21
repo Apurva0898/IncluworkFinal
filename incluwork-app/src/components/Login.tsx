@@ -1,95 +1,38 @@
-import  { useState } from 'react';
+// src/components/LoginForm.js
+import React, { useState, useEffect } from 'react';
 import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import './../css/Login.css';
-
-
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, AppState } from '../store';
+import { login } from '../store/authSlice'; 
+import '../css/Login.css';
 
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showAlert, setShowAlert] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { user, isError, isLoading, isSuccess, message } = useSelector((state: AppState) => state.auth);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
-        const formData = {
-            email,
-            password,
-        };
-
-        try {
-            const response = await fetch('http://localhost:3000/incluwork/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-
-            const token = data.token;
-            const type = data.type;
-            const userId = data.id;
-
-            // Store the token, type, and user ID in localStorage
-            localStorage.setItem('token', token);
-            localStorage.setItem('type', type);
-            localStorage.setItem('userid', userId);
-
-            if (token && type) {
-                if (type === 'employer') {
-                    navigate('/employer');
-                } else if (type === 'jobseeker') {
-                    const userData = await getUserData(userId, token);
-                    console.log('User Data:', userData);
-
-                    if (userData && userData.resume && userData.medicalProof) {
-                        navigate('/jobseeker');
-                    } else {
-                        navigate('/upload');
-                    }
-                } else {
-                    navigate('/Signup');
-                }
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            // Show alert for incorrect password
-            setShowAlert(true);
-        }
+        dispatch(login({ email, password }));
     };
 
-    const getUserData = async (userId: string, token: string) => {
-        const url = `http://localhost:3000/incluwork/jobseekers?id=${userId}`;
-
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+    useEffect(() => {
+        if (isSuccess && user) {
+            // Logic to handle navigation based on user type and jobseeker's data
+            if (user.type === 'jobseeker' && user.resume && user.medicalProof) {
+                navigate('/jobseeker');
+            } else if (user.type === 'jobseeker') {
+                navigate('/upload');
+            } else {
+                navigate(`/${user.type}`);
             }
-
-            return await response.json();
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-            return null;
-
+        } else if (isError) {
+            console.error('Login Error:', message);
         }
-    };
-
+    }, [user, isSuccess, isError, navigate, message]);
 
     return (
         <div className="login-page">
@@ -132,13 +75,13 @@ const LoginForm = () => {
                         label="Password"
                         onChange={(e) => setPassword(e.target.value)}
                         value={password}
-                        required
                         fullWidth
+                        required
                         sx={{ mb: 2 }}
                     />
-                    {showAlert && <p style={{ color: 'red' }}>Incorrect password. Please try again.</p>}
+                    {isError && <p style={{ color: 'red' }}>Login Error: {message}</p>}
                     <div className="button-container">
-                        <Button variant="outlined" color="secondary" type="submit">
+                        <Button variant="outlined" color="secondary" type="submit" disabled={isLoading}>
                             Login
                         </Button>
                     </div>
