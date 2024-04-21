@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, AppState } from '../store';
+import { AppState } from '../store';
 import { login } from '../store/authSlice'; 
 import '../css/Login.css';
 
@@ -21,6 +21,9 @@ const LoginForm = () => {
 
     useEffect(() => {
         if (isSuccess && user) {
+            console.log('inside login tsx');
+            console.log(isSuccess);
+            console.log(user);
             // Logic to handle navigation based on user type and jobseeker's data
             if (user.type === 'jobseeker' && user.resume && user.medicalProof) {
                 navigate('/jobseeker');
