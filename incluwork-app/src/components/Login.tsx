@@ -21,9 +21,6 @@ const LoginForm = () => {
 
     useEffect(() => {
         if (isSuccess && user) {
-            console.log('inside login tsx');
-            console.log(isSuccess);
-            console.log(user);
             // Logic to handle navigation based on user type and jobseeker's data
             if (user.type === 'jobseeker' && user.resume && user.medicalProof) {
                 navigate('/jobseeker');

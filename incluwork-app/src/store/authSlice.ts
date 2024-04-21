@@ -2,7 +2,9 @@
 import { createSlice, createAsyncThunk, PayloadAction, SerializedError } from '@reduxjs/toolkit';
 import authService from '../services/authService';
 import jobSeekerService from '../services/jobSeekerService';
+import employerService from "../services/employerService.ts";
 import { User, LoginCredentials } from '../models/User';
+import { Employer } from '../models/Employer.ts';
 
 interface AuthState {
   user: User | null;
@@ -37,6 +39,12 @@ export const login = createAsyncThunk(
           const jobSeekerData = await jobSeekerService.getJobSeekerData(response.id, token);
           return { id: response.id, type: response.type, ...jobSeekerData };
         }
+        if (response.type === 'employer') {
+          const employerData = await employerService.getEmployerData(response.id, token);
+          console.log("employerData");
+          console.log(employerData);
+          return { id: response.id, type: response.type, ...employerData };
+        }
 
         return { id: response.id, type: response.type };
       } catch (error: any) {
@@ -63,6 +71,10 @@ export const signup = createAsyncThunk(
       if (response.type === 'jobseeker') {
         const jobSeekerData = await jobSeekerService.getJobSeekerData(response.id, response.token);
         return { id: response.id, type: response.type, ...jobSeekerData };
+      }
+      if (response.type === 'employer') {
+        const employerData = await employerService.getEmployerData(response.id, response.token);
+        return { id: response.id, type: response.type, ...employerData };
       }
 
       return { id: response.id, type: response.type };
@@ -117,7 +129,6 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload.message || 'Failed to register';
       })
-      ;
       //Login reducers
         .addCase(login.pending, (state) => {
           state.isLoading = true;

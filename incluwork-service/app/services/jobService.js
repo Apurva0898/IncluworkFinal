@@ -19,6 +19,7 @@ export const createJob = async (employerId, jobData) => {
 
         return response;
     } catch (error) {
+        console.log(error)
         throw new Error('Could not create job');
     }
 }

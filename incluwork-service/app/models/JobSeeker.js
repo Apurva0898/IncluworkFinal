@@ -64,7 +64,7 @@ let schema = new mongoose.Schema(
             type: String,
         },
         challenges: {
-            type: String,
+            type: [String],
             required: true,
             enum: challengesEnum,
         },

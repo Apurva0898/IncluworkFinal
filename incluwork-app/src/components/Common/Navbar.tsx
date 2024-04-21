@@ -71,7 +71,7 @@ const Navbar = () => {
                 case 'employer':
                     return (
                         <>
-                            <Button color="inherit" component={Link} to="/home">Home</Button>
+                            <Button color="inherit" component={Link} to="/employer">Home</Button>
                             <Button color="inherit" component={Link} to="/create-job">Create Job</Button>
                             <Button color="inherit" component={Link} to="/view-applications">View Applications</Button>
                             <Button color="inherit" component={Link} to="/employees">Employees</Button>
