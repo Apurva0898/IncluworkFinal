@@ -18,7 +18,8 @@ export const createjobApplication = async (jobseekerid,applicationData) => {
         const fullApplicationData = {
             ...applicationData,
             userId: jobseekerid,  // Setting the userId field
-            employerId: employerId
+            employerId: employerId,
+            status:'applied' // Default status to 'applied'
         };
         
        

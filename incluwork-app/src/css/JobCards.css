@@ -1,0 +1,9 @@
+
+.CardContent {
+    display: flex;
+    flex-direction: column;  /* Aligns content vertically */
+    justify-content: space-around;  /* Distributes spacing evenly */
+}
+.Chip {
+    margin: 4px;  /* Adds space around each chip */
+}

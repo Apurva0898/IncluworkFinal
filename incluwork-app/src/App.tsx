@@ -7,9 +7,21 @@ import Jobseeker from './components/HomePages/Jobseeker.tsx';
 import Navbar from "./components/Common/Navbar.tsx";
 import Unauthorized from './components/Common/Unauthorized.tsx';
 import Upload from './components/SignUp/JobseekerUpload.tsx';
+<<<<<<< Updated upstream
 import CreateJob from "./components/Employer/CreateJob.tsx";
+=======
+
+//Admin imports
+import Applications from './components/Admin/Applications.tsx';
+import User from './components/Admin/User.tsx';
+import Jobs from './components/Admin/Jobs.tsx';
+>>>>>>> Stashed changes
+
+//JobSeeker imports
+import JobCards from './components/JobSeeker/JobseekerHome.tsx';
 
 
+//Employer imports
 
 
 
@@ -26,7 +38,14 @@ function App() {
                     <Route path="/jobseeker" element={<Jobseeker/>}/>
                     <Route path="/unauthorized" element={<Unauthorized/>}/>
                     <Route path="/upload" element={<Upload/>}/>
+<<<<<<< Updated upstream
                     <Route path="/create-job" element={<CreateJob/>}/>
+=======
+                    <Route path="/applications" element={<Applications />}/>
+                    <Route path="/jobs" element={<Jobs />} />
+                    <Route path="/users" element={<User />} />
+                    <Route path="/jobseekerhome" element={<JobCards />}/>
+>>>>>>> Stashed changes
                 </Routes>
             </div>
         </Router>
