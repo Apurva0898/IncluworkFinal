@@ -7,6 +7,7 @@ import {
     RadioGroup, FormLabel
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { format, isValid, parseISO } from 'date-fns';
 import { useSelector } from "react-redux";
 import { AppState } from "../../store";
@@ -144,8 +145,7 @@ const EmployerHome: React.FC = () => {
                             </CardContent>
                             <CardActions>
                                 <Button variant="Rounded" startIcon={<DeleteIcon />} onClick={() => handleDeleteJob(job.jobId)}/>
-                                {/*<Button size="small" onClick={() => handleDeleteJob(job.jobId)}>Delete</Button>*/}
-                                <Button size="small" onClick={() => handleEditJob(job)}>Edit</Button>
+                                <Button startIcon={<EditIcon />} onClick={() => handleEditJob(job)}></Button>
                             </CardActions>
                         </Card>
                     ))
