@@ -14,6 +14,19 @@ const accommodationFacilitiesEnum = [
   'Wheelchair Accessible Workspace', 'Accessible Communication Tools', 'Customized Work Arrangements', 'Supportive Networks and Communities',
   'Collaborative Task Management Tools', 'Ergonomic Keyboards', 'Rest Areas and Quiet Workspaces', 'Telecommuting Facilities', 'Individualized Accommodative Facilities'
 ];
+
+const jobTitlesEnum = [
+  'Braille Transcriptionist', 'Customer Service Representative',
+  'Blindness Rehabilitation Specialist', 'Educator', 'Graphic Designer',
+  'Administrative Assistant', 'Content Creator', 'Data Entry Specialist',
+  'Transcriptionist', 'Life Skills Trainer', 'Assistive Technology Specialist',
+  'Rehabilitation Counselor', 'Virtual Assistant', 'Copywriter',
+  'Accessibility Consultant', 'Online Tutor', 'Telecommuting Software Engineer',
+  'Social Media Manager', 'Marketing Coordinator', 'Office Assistant',
+  'Library Assistant', 'Food Service Worker', 'Web Designer',
+  'Freelance Writer', 'Educational Assistant', 'Human Resources Assistant',
+  'Consultant'
+];
  
 const jobSchema = new mongoose.Schema({
   jobId: {
@@ -21,7 +34,8 @@ const jobSchema = new mongoose.Schema({
   },
   title: {
     type: String,
-    required: true
+    required: true,
+    enum : jobTitlesEnum
   },
   employerId: {
     type: mongoose.Schema.Types.ObjectId,

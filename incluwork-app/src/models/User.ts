@@ -17,4 +17,33 @@ export interface LoginResponse {
     user: User;
     token: string;
 }
+
+export interface EmployerSignUpData {
+    name: string;
+    email: string;
+    password: string;
+    contactNumber: string;
+    companyName: string;
+    companyProfile: string;
+    accommodationFacilities: string[];
+}
+
+export interface JobSeekerSignUpData {
+    name: string;
+    email: string;
+    contactNumber: string;
+    password: string;
+    skills: string[];
+    experience: number;
+    challenges : string;
+    resumeURL: string;
+    medicalproofURL : string;
+}
+export interface SignupResponse {
+    user: User;
+    token: string;
+    message: string;
+}
+
+export type SignUpData = EmployerSignUpData | JobSeekerSignUpData;
   
