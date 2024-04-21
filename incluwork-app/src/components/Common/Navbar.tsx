@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import {useDispatch} from "react-redux";
+import {logout} from "../../store/authSlice.ts";
 
 const Navbar = () => {
     const location = useLocation();
@@ -8,30 +10,41 @@ const Navbar = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userType, setUserType] = useState('');
 
+
     useEffect(() => {
         const token = localStorage.getItem('token');
-        const type = localStorage.getItem('type'); // Assuming you store user type as 'type' in localStorage
+        const type = localStorage.getItem('type');
         setIsAuthenticated(!!token);
         setUserType(type);
     }, [location]);
 
+
+
+    const dispatch = useDispatch();
+
+
     const handleLogout = () => {
-        localStorage.clear();
         setIsAuthenticated(false);
-        setUserType('');
-        navigate('/login');
+        dispatch(logout())
+            .unwrap()
+            .then(() => {
+                navigate('/login'); // Redirect to login page after logout
+            })
+            .catch((error: { message: any; }) => {
+                console.error('Logout failed:', error.message);
+            });
     };
 
     const renderButtons = () => {
         if (location.pathname === '/upload') {
-            return null; // Do not render any buttons on /upload page
+            return null; // Do not render any buttons on the /upload page
         }
 
         if (!isAuthenticated) {
-            // Return either 'Login' or 'Signup' button based on the current path
+            // Check the current path to conditionally render the Login or Signup button
             if (location.pathname === '/signup') {
                 return <Button color="inherit" component={Link} to="/login">Login</Button>;
-            } else if (location.pathname !== '/login') {
+            } else if (location.pathname === '/login') {
                 return <Button color="inherit" component={Link} to="/signup">Signup</Button>;
             }
         } else {
@@ -70,6 +83,7 @@ const Navbar = () => {
             }
         }
     };
+
 
     return (
         <AppBar position="static" sx={{ backgroundColor: '#1976d2' }}>

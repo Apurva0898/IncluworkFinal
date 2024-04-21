@@ -1,4 +1,6 @@
 export interface User {
+    medicalProof: boolean;
+    resume: boolean;
     id: string;
     name: string;
     email: string;
