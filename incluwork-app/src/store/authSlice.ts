@@ -129,10 +129,7 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload.message || 'Failed to register';
       })
-<<<<<<< Updated upstream
-=======
       
->>>>>>> Stashed changes
       //Login reducers
         .addCase(login.pending, (state) => {
           state.isLoading = true;
