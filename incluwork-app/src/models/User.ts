@@ -1,4 +1,5 @@
 export interface User {
+    accommodationFacilities: never[];
     medicalProof: boolean;
     resume: boolean;
     id: string;
@@ -18,6 +19,8 @@ export interface LoginCredentials {
 export interface LoginResponse {
     user: User;
     token: string;
+    id:string;
+    type:string;
 }
 
 export interface EmployerSignUpData {
@@ -40,11 +43,14 @@ export interface JobSeekerSignUpData {
     challenges : string;
     resumeURL: string;
     medicalproofURL : string;
+    accommodationFacilities:string[];
 }
 export interface SignupResponse {
     user: User;
     token: string;
-    message: string;
+    id:string;
+    type:string;
+    message:string;
 }
 
 export type SignUpData = EmployerSignUpData | JobSeekerSignUpData;
