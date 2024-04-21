@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Employer from "./Employer.js";
 
-const challengesEnum = ['Visual Impairment', 'Hearing Impairment', 'Speech Impairment', 'Dual Sensory Impairment ', 'Vestibular Impairment', 'Paralysis', 'Arthritis', 'Down Syndrome', 'Ehlers-Danlos Syndrome', 'Orthopedic Disabilities'];
+const challengesEnum = ['Visual Impairment', 'Hearing Impairment', 'Speech Impairment', 'Dual Sensory Impairment', 'Vestibular Impairment', 'Paralysis', 'Arthritis', 'Down Syndrome', 'Ehlers-Danlos Syndrome', 'Orthopedic Disabilities'];
 const skillsEnum = [
     'Proficiency in Braille', 'Attention to Detail', 'Keyboarding Skills',
     'Knowledge of Accessibility Standards', 'Communication Skills',
