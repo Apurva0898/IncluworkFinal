@@ -59,3 +59,17 @@ export const updateApplicationStatus = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+// Delete job by ID
+export const deleteJobApplication = async (req, res) => {
+    try {
+        // Check if the user type is jobseeker
+        if (req.user.type !== 'jobseeker') {
+            return res.status(403).send({ error: "Access denied: User is not a job seeker"});
+        }
+        
+        await jobApplicationService.deleteJobApplication(req.params.id);
+        return res.status(204).send(); 
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+}

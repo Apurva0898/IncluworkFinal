@@ -3,6 +3,9 @@ import JobSeeker from './JobSeeker.js';
 import Job from './Job.js';
 
 const applicationSchema = new mongoose.Schema({
+  applicationId: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
   jobId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
