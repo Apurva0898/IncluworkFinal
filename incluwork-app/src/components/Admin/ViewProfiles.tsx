@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, Typography, Button, Grid, Container } from '@mui/material';
+import {Card, CardContent, Typography, Button, Grid, Container, IconButton, Box} from '@mui/material';
+import {downloadMedicalProof} from "../../services/employerService.ts";
+import {FaDownload} from "react-icons/fa";
+import {fetchJobSeekersByType, updateJobSeekerProfileStatus} from "../../services/adminService.ts";
 
 // Define the TypeScript interfaces for the types of data we expect to handle
 interface EducationDetail {
@@ -28,36 +31,31 @@ interface JobSeeker {
 // Component to display individual job seeker details in a card
 const JobSeekerCard: React.FC<{ jobseeker: JobSeeker, onUpdate: () => void }> = ({ jobseeker, onUpdate }) => {
     const handleStatusChange = async (status: string) => {
-        const token = localStorage.getItem('token');
-        try {
-            const response = await fetch(`http://localhost:3000/incluwork/users/${jobseeker.userId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ status: status })
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update status');
-            }
-
-            await response.json();
-            onUpdate(); // Call the onUpdate callback to trigger a refresh in the parent component
-        } catch (error) {
-            console.error('Error updating user status:', error);
-        }
+        await updateJobSeekerProfileStatus(jobseeker.userId,status);
+        onUpdate();
     };
 
     return (
-        <Card style={{ display: 'flex', justifyContent: 'space-between', margin: 8, width: '100%' }}>
-            <CardContent style={{ flexGrow: 1 }}>
-                <Typography variant="h5">{jobseeker.name}</Typography>
-                <Typography color="textSecondary">{jobseeker.email}</Typography>
-                <Typography color="textSecondary">{jobseeker.contactNumber}</Typography>
-                <Typography>Skills: {jobseeker.skills.join(', ')}</Typography>
-                <Typography>Challenges: {jobseeker.challenges.join(', ')}</Typography>
+        <Card sx={{ display: 'flex', justifyContent: 'space-between', margin: 2, width: '90%', boxShadow: 3 }}>
+            <CardContent sx={{ flexGrow: 1,width: '70%' }}>
+                <Typography variant="h5" component="div" gutterBottom>
+                    <Box component="span" sx={{ fontWeight: 'bold',marginBottom:'10px' }}>Name:</Box> {jobseeker.name}
+                </Typography>
+                <Typography color="textSecondary" gutterBottom>
+                    <Box component="span" sx={{ fontWeight: 'bold',marginBottom:'10px' }}>Email:</Box> {jobseeker.email}
+                </Typography>
+                <Typography color="textSecondary" gutterBottom>
+                    <Box component="span" sx={{ fontWeight: 'bold',marginBottom:'10px' }}>Contact:</Box> {jobseeker.contactNumber}
+                </Typography>
+                <Typography paragraph>
+                    <Box component="span" sx={{ fontWeight: 'bold',marginBottom:'10px' }}>Skills:</Box> {jobseeker.skills.join(', ')}
+                </Typography>
+                <Typography paragraph>
+                    <Box component="span" sx={{ fontWeight: 'bold',marginBottom:'10px' }}>Challenges:</Box> {jobseeker.challenges.join(', ')}
+                </Typography>
+                <IconButton onClick={() => downloadMedicalProof(jobseeker.medicalProof)} color="primary" aria-label="download medical proof">
+                    <FaDownload />
+                </IconButton>
             </CardContent>
             <Grid container direction="column" style={{ padding: 16 }} alignItems="flex-end">
                 <Button color="primary" onClick={() => handleStatusChange('verified')} style={{ marginBottom: 8 }}>Accept</Button>
@@ -73,27 +71,16 @@ const JobSeekersList: React.FC = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3000/incluwork/admin/getUsers?type=jobseeker', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                console.error("Failed to fetch");
-                return;
+            try {
+                const jobseekers = await fetchJobSeekersByType('jobseeker');
+                setJobseekers(jobseekers);
+            } catch (error) {
+                console.error('Failed to load jobseekers:', error);
             }
-
-            const data = await response.json();
-            const filteredJobseekers = data.filter(user => user.status?.toLowerCase() === 'pending');
-            setJobseekers(filteredJobseekers);
         };
 
         fetchData();
-    }, [refresh]); // Dependency on refresh to re-trigger the effect
+    }, [refresh]);  // Dependency on refresh to re-trigger the effect
 
     const handleUpdate = () => {
         setRefresh(!refresh); // Toggle the refresh state to re-fetch data
