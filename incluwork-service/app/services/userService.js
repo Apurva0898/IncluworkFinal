@@ -15,6 +15,7 @@ export const fetchAllUsers = async () => {
     }
 };
 
+
 export const fetchAllJobs = async () => {
     try {
         const jobs = await Job.find(); // Excludes password and __v from results
@@ -138,6 +139,7 @@ export const patchUserById = async (userId, data) => {
         throw new Error(`Error updating user by userId: ${error.message}`);
     }
 };
+
  // Rest API implementations for job seeker profile
 
 // Fetching a job seeker profile
