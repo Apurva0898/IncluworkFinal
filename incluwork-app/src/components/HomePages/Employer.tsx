@@ -12,6 +12,8 @@ import { format, isValid, parseISO } from 'date-fns';
 import { useSelector } from "react-redux";
 import { AppState } from "../../store";
 import {JobTitles, Skills, Cities} from "../../constants/enums.ts";
+import {User} from "../../models/User.ts";
+import {fetchUserById} from "../../services/userService.ts";
 
 export interface Job {
     accessibilityFeatures: string[];
@@ -33,9 +35,16 @@ const EmployerHome: React.FC = () => {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [currentJob, setCurrentJob] = useState<Job | null>(null);
     let { user } = useSelector((state: AppState) => state.auth);
-
+    const [accommodationFacilities, setAccommodationFacilities] = useState<string[]>([]);
 
     useEffect(() => {
+        const loadData=async ()=> {
+            const token = localStorage.getItem('token');
+            const user: User = await fetchUserById(localStorage.getItem('userId'));
+            setAccommodationFacilities(user.accommodationFacilities);
+            console.log(user);
+        }
+        loadData();
         fetchJobs();
     }, []);
 
@@ -230,7 +239,7 @@ const EmployerHome: React.FC = () => {
                                     })}
                                     renderValue={(selected) => selected.join(', ')}
                                 >
-                                    {user.accommodationFacilities.map((facility) => (
+                                    {accommodationFacilities.map((facility) => (
                                         <MenuItem key={facility} value={facility}>{facility}</MenuItem>
                                     ))}
                                 </Select>
