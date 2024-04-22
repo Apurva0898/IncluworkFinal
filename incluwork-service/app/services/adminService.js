@@ -73,6 +73,7 @@ export const fetchAllUsers = async () => {
     }
 };
 
+//get all jobs for admin
 export const getAllJobs = async () => {
     try {
         // Retrieve all jobs from the database
@@ -95,9 +96,10 @@ export const getAllJobs = async () => {
     }
 };
 
+//get all application dor admin
 export const getAllApplications = async () => {
     try {
-        const applications = await Application.find({id});
+        const applications = await Application.find();
         return applications;
     } catch (error) {
         throw new Error(`Failed to retrieve applications: ${error.message}`);

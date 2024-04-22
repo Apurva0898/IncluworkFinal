@@ -36,7 +36,10 @@ export const getJoblistingApplications = async (req, res) => {
         }
 
         const employerId = req.user.id;
-        const applications = await jobApplicationService.getJoblistingApplications(employerId);
+        const keywords = req.query.keywords; // Fetch keywords from query parameters
+        
+        // Call the service function to fetch applications
+        const applications = await jobApplicationService.getJoblistingApplications(employerId, keywords);
         res.json(applications);
     } catch (error) {
         res.status(404).json({ error: error.message });

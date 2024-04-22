@@ -1,5 +1,6 @@
 import Application from '../models/Application.js';
 import Job from '../models/Job.js';
+import User from '../models/User.js';
 import mongoose from "mongoose";
 
 export const createjobApplication = async (jobseekerid,applicationData) => {
@@ -55,12 +56,36 @@ export const getJobApplicationsByUserId = async (jobseekerId) => {
     }
 };
 
-// Get all applications submitted to an Employer's jobs
-export const getJoblistingApplications = async (employerId) => {
+// Get all applications submitted to an Employer's jobs based on filters
+export const getJoblistingApplications = async (employerId, keywords = null) => {
     try {
-        // Fetch applications submitted to jobs posted by the employer
-        const applications = await Application.find({ employerId });
-        
+        // Construct query object with employerId
+        const query = { employerId };
+
+        // Construct an array to hold conditions for the $or operator
+        const orConditions = [];
+
+        // If keywords are provided, search for both job titles and job seeker names
+        if (keywords) {
+            // Search for jobs with matching titles
+            const jobs = await Job.find({ title: { $regex: new RegExp(keywords, 'i') } });
+            const jobIds = jobs.map(job => job._id);
+            orConditions.push({ jobId: { $in: jobIds } });
+
+            // Search for users with matching names
+            const users = await User.find({ name: { $regex: new RegExp(keywords, 'i') } });
+            const userIds = users.map(user => user._id);
+            orConditions.push({ userId: { $in: userIds } });
+        }
+
+        // If any conditions are added to $or, add $or to the query object
+        if (orConditions.length > 0) {
+            query.$or = orConditions;
+        }
+
+        // Fetch applications submitted to jobs posted by the employer with optional filters
+        const applications = await Application.find(query);
+
         if (applications.length === 0) {
             throw new Error('No applications found for this employer');
         }
@@ -73,10 +98,10 @@ export const getJoblistingApplications = async (employerId) => {
             applicationDate: application.applicationDate,
             status: application.status
         }));
-        
+
         return applicationList;
     } catch (error) {
-        throw new Error('Could not fetch applications');
+        throw new Error(`Could not fetch applications ${error.message}`);
     }
 }
 

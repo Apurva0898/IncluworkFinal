@@ -3,15 +3,18 @@ import {
   fetchApplications,
   fetchAllJobs,
   downloadResume,
-  downloadMedicalProof
+  downloadMedicalProof,
+  updateJobListing
 } from '../../services/employerService.ts';
 import { fetchUserById, updateApplicationStatus } from '../../services/userService.ts';
 import { ApplicationData } from "../../models/Application";
 import { JobData } from "../../models/Job";
 import { User } from "../../models/User";
-
-import { FaDownload, FaCheck, FaTimes } from "react-icons/fa"; // Importing icons
-import { Button } from "@mui/material";
+import { FaDownload, FaCheck, FaTimes } from "react-icons/fa";
+import { Button, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
+import InputAdornment from '@mui/material/InputAdornment';
 
 interface ApplicationWithDetails extends ApplicationData {
     userName: string;
@@ -22,70 +25,134 @@ interface ApplicationWithDetails extends ApplicationData {
 
 const JobApplications: React.FC = () => {
     const [applications, setApplications] = useState<ApplicationWithDetails[]>([]);
-    const [updateCount, setUpdateCount] = useState(0); // State to trigger useEffect after updating status
+    const [jobs, setJobs] = useState<JobData[]>([]);
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
 
     useEffect(() => {
-        const loadData = async () => {
-            try {
-                const jobs: JobData[] = await fetchAllJobs();
-                const applicationData: ApplicationData[] = await fetchApplications();
-                const applicationsWithDetails = await Promise.all(applicationData.map(async app => {
-                    const user: User = await fetchUserById(app.userId);
+        loadData(searchKeyword);
+    }, [searchKeyword]);
 
-                    const job = jobs.find(j => j.jobId === app.jobId);
-                    return {
-                        ...app,
-                        userName: user.name,
-                        jobTitle: job ? job.title : "No Job Title",
-                        resumeURL: user.resume,
-                        medicalProofURL: user.medicalProof
-                    };
-                }));
-                setApplications(applicationsWithDetails);
-            } catch (error) {
-                console.error("Failed to fetch data:", error);
-            }
-        };
+    const loadData = async (keywords: string) => {
+        try {
+            const fetchedJobs: JobData[] = await fetchAllJobs();
+            setJobs(fetchedJobs);
+            const applicationData: ApplicationData[] = await fetchApplications(keywords);
+            const applicationsWithDetails = await Promise.all(applicationData.map(async app => {
+                const user: User = await fetchUserById(app.userId);
+                const job = fetchedJobs.find(j => j.jobId === app.jobId);
+                return {
+                    ...app,
+                    userName: user.name,
+                    jobTitle: job ? job.title : "No Job Title",
+                    resumeURL: user.resume,
+                    medicalProofURL: user.medicalProof
+                };
+            }));
+            setApplications(applicationsWithDetails);
+        } catch (error) {
+            console.error("Failed to fetch data:", error);
+        }
+    };
 
-        loadData();
-    }, [updateCount]); // Depend on updateCount to refresh data on status update
-
-    const handleStatusUpdate = async (applicationId: string, newStatus: 'offered' | 'rejected') => {
-
+    const handleStatusUpdate = async (applicationId: string, newStatus: 'offered' | 'rejected' | 'accepted', jobId?: string) => {
         try {
             const response = await updateApplicationStatus(applicationId, newStatus);
-            if (response) {
-                setUpdateCount(count => count + 1); // Increment updateCount to trigger data refresh
+            if (response && jobId) {
+                const jobIndex = jobs.findIndex(j => j.jobId === jobId);
+                if (jobIndex !== -1 && newStatus === 'offered' && jobs[jobIndex].maxPositions > 0) {
+                    const updatedJob = await updateJobListing(jobId, jobs[jobIndex].maxPositions - 1);
+                    const newJobs = [...jobs];
+                    newJobs[jobIndex] = { ...newJobs[jobIndex], maxPositions: updatedJob.maxPositions };
+                    setJobs(newJobs);
+                    
+                    if (updatedJob.maxPositions === 0) {
+                        setModalMessage('All positions for this job are now filled.');
+                        setModalOpen(true);
+                    }
+                }
+                // Update the application locally to reflect the change
+                const newApplications = applications.map(app => app.applicationId === applicationId ? { ...app, status: newStatus } : app);
+                setApplications(newApplications);
             }
         } catch (error) {
             console.error("Failed to update status:", error);
         }
     };
 
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchKeyword(event.target.value);
+    };
+
+    const clearSearch = () => {
+        setSearchKeyword('');
+    };
+
+    const handleCloseModal = () => {
+        setModalOpen(false);
+    };
+
     return (
-        <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '20px' }}>
-            {applications.map((app) => (
-                <div key={app.applicationId} style={{ 
-                    border: '1px solid #ccc', 
-                    padding: '20px', 
-                    width: 'calc(50% - 10px)', 
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)', 
+        <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+            <TextField
+                variant="outlined"
+                placeholder="Search…"
+                value={searchKeyword}
+                onChange={handleSearchChange}
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon />
+                        </InputAdornment>
+                    ),
+                    endAdornment: (
+                        <IconButton onClick={clearSearch}>
+                            <CloseIcon />
+                        </IconButton>
+                    )
+                }}
+                style={{ marginBottom: '20px', width: '300px' }}
+            />
+            <Dialog open={modalOpen} onClose={handleCloseModal}>
+                <DialogTitle>{"Notification"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {modalMessage}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseModal} color="primary" autoFocus>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '20px' }}>
+            {applications.map((app) => {
+            // Find the job corresponding to the current application.
+            const job = jobs.find(j => j.jobId === app.jobId);
+
+            return (
+                <div key={app.applicationId} style={{
+                    border: '1px solid #ccc',
+                    padding: '20px',
+                    width: 'calc(50% - 10px)',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                     borderRadius: '8px',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center'
-                }}>  
+                }}>
                     <div style={{ flexGrow: 1 }}>
                         <h3 style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <span style={{ fontSize: '25px' }}>Applicant: {app.userName}</span>
-                            <div style={{ 
-                                padding: '6px 12px', 
-                                backgroundColor: app.status === 'offered' ? 'green' : app.status === 'rejected' ? 'red' : 'none',
-
-                                color: 'white', 
+                            <div style={{
+                                padding: '6px 12px',
+                                backgroundColor: app.status === 'accepted' ? 'green' : app.status === 'offered' ? 'brown' : app.status === 'rejected' ? 'red' : 'none',
+                                color: 'white',
                                 borderRadius: '5px',
                                 display: app.status === 'pending' ? 'none' : 'inline-block',
-                                fontSize: '14px'  // Keeping the font size standard for status indicators
+                                fontSize: '14px'
                             }}>
                                 {app.status.toUpperCase()}
                             </div>
@@ -93,7 +160,7 @@ const JobApplications: React.FC = () => {
                         <p>Job Title: {app.jobTitle}</p>
                         <p>Application Date: {new Date(app.applicationDate).toLocaleDateString()}</p>
                         <div style={{ marginTop: '20px' }}>
-                            <Button onClick={() => downloadResume(emp.resume)}
+                            <Button onClick={() => downloadResume(app.resumeURL)}
                                 startIcon={<FaDownload />}
                                 variant="contained"
                                 color="primary"
@@ -101,7 +168,7 @@ const JobApplications: React.FC = () => {
                                 style={{ marginRight: '10px' }}>
                                 Download Resume
                             </Button>
-                            <Button onClick={() => downloadMedicalProof(emp.medicalProof)}
+                            <Button onClick={() => downloadMedicalProof(app.medicalProofURL)}
                                 startIcon={<FaDownload />}
                                 variant="contained"
                                 color="primary"
@@ -111,19 +178,23 @@ const JobApplications: React.FC = () => {
                         </div>
                     </div>
                     <div>
-                        {app.status === 'pending' || app.status === 'applied' ? (
+                        {['pending', 'applied'].includes(app.status) && (!job || job.maxPositions > 0) ? (
                             <div style={{ display: 'flex' }}>
-                                <button onClick={() => handleStatusUpdate(app.applicationId, 'offered')} style={{ backgroundColor: 'green', color: 'white', marginRight: '10px', padding: '10px' }}>
+                                <Button onClick={() => handleStatusUpdate(app.applicationId, 'offered', app.jobId)}
+                                    style={{ backgroundColor: 'brown', color: 'white', marginRight: '10px', padding: '10px' }}>
                                     <FaCheck /> Offer
-                                </button>  
-                                <button onClick={() => handleStatusUpdate(app.applicationId, 'rejected')} style={{ backgroundColor: 'red', color: 'white', padding: '10px' }}>
+                                </Button>
+                                <Button onClick={() => handleStatusUpdate(app.applicationId, 'rejected')}
+                                    style={{ backgroundColor: 'red', color: 'white', padding: '10px' }}>
                                     <FaTimes /> Reject
-                                </button>
+                                </Button>
                             </div>
-                        ) : null}
+                            ) : null}
+                        </div>
                     </div>
-                </div>
-            ))}
+                    );
+                })}
+            </div>
         </div>
     );
 };
