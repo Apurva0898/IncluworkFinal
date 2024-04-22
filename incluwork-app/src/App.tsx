@@ -17,6 +17,8 @@ import ViewProfiles from './components/Admin/ViewProfiles.tsx'
 import JobCards from './components/JobSeeker/JobseekerHome.tsx';
 import JobApplications from './components/Employer/JobListingApplications.tsx';
 import Upload from './components/SignUp/JobseekerUpload.tsx';
+import ApplicationsView from './components/JobSeeker/Jobapplications.tsx';
+
 
 //Employer imports
 import CreateJob from "./components/Employer/CreateJob.tsx";
@@ -42,6 +44,7 @@ function App() {
                     <Route path="/jobseekerhome" element={<JobCards />}/>
                     <Route path="/viewapplications" element={<JobApplications />} />
                     <Route path="/verifyprofiles" element={<ViewProfiles/>}/>
+                    <Route path="/jobapplications" element={<ApplicationsView/>}/>
                 </Routes>
             </div>
         </Router>

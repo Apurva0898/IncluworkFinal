@@ -1,5 +1,5 @@
 import { Employer } from "../models/Employer.ts";
-import { User } from "../models/User";
+
 
 const API_BASE_URL = `http://localhost:3000/incluwork`;
 
@@ -117,3 +117,4 @@ export const fetchUserById = async (userId: string): Promise<User> => {
     }
     return response.json();
 };
+
