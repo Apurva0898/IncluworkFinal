@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { AppState } from "../../store";
 import {JobTitles, Skills, Cities} from "../../constants/enums.ts";
 
-interface Job {
+export interface Job {
     accessibilityFeatures: string[];
     jobId: string;
     title: string;
