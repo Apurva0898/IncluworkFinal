@@ -122,19 +122,6 @@ const Navbar = () => {
 
 
     return (
-
-        <AppBar position="static" sx={{ backgroundColor: '#1976d2' }}>
-            <Toolbar>
-                <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                    INCLU-WORK
-                </Typography>
-                {renderButtons()}
-                {isAuthenticated && (
-                    <Button color="inherit" onClick={handleLogout}>Logout</Button>
-                )}
-            </Toolbar>
-        </AppBar>
-
         <>
             {verificationDialogOpen ? (
                 <Dialog open={verificationDialogOpen} disableBackdropClick disableEscapeKeyDown>
@@ -163,7 +150,7 @@ const Navbar = () => {
                 <AppBar position="static" sx={{ backgroundColor: '#1976d2' }}>
                     <Toolbar>
                         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                            Welcome
+                            INCLU-WORK
                         </Typography>
                         {renderButtons()}
                         {isAuthenticated && (
