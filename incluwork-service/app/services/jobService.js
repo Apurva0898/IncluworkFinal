@@ -1,6 +1,8 @@
+import mongoose from "mongoose";
 import Job from './../models/Job.js';
 import JobSeeker from './../models/JobSeeker.js';
 import Mapping from './../models/Mapping.js';
+import Application from './../models/Application.js';
 
 export const createJob = async (employerId, jobData) => {
     try {
@@ -136,6 +138,10 @@ export const fetchJobsForJobSeeker = async (jobSeekerId) => {
             title: { $in: suitableJobTitles }
         });
 
+        // Get applications for the current job seeker to mark applied jobs
+        const applications = await Application.find({ userId: new mongoose.Types.ObjectId(jobSeekerId) });
+        const appliedJobIds = new Set(applications.map(app => app.jobId.toString()));
+
         // Transform each job object to format it correctly by renaming _id to jobId
         const formattedJobs = jobs.map(job => ({
             jobId: job._id,
@@ -149,7 +155,8 @@ export const fetchJobsForJobSeeker = async (jobSeekerId) => {
             acceptedCandidates: job.acceptedCandidates,
             salary: job.salary,
             dateOfJoining: job.dateOfJoining,
-            dateOfPosting: job.dateOfPosting
+            dateOfPosting: job.dateOfPosting,
+            isApplied: appliedJobIds.has(job._id.toString())  // Check if job was applied to
         }));
 
         return formattedJobs;
