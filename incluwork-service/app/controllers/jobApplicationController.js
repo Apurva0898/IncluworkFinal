@@ -37,9 +37,25 @@ export const getJoblistingApplications = async (req, res) => {
 
         const employerId = req.user.id;
         const applications = await jobApplicationService.getJoblistingApplications(employerId);
-        
         res.json(applications);
     } catch (error) {
         res.status(404).json({ error: error.message });
     }
 }
+
+export const updateApplicationStatus = async (req, res) => {
+    try {
+        // Check if the user type is employer
+        if (req.user.type !== 'employer') {
+            return res.status(403).send({ error: "Access denied: User is not an employer"});
+        }
+        
+        const applicationId = req.params.applicationId;
+        const { status } = req.body;
+        const updatedApplication = await jobApplicationService.updateApplicationStatus(applicationId, status);
+        res.json(updatedApplication);
+    } catch (error) {
+        console.error('Error updating application status:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

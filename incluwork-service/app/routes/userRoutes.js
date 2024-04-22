@@ -6,6 +6,8 @@ const router = express.Router();
 
 //Route to get all users
 router.get("/users", jwtAuth, userController.getAllUsers);
+// Route to get a user by userId
+router.get('/users/:userId', jwtAuth, userController.getUserById);
 
 // Routes for job seeker profile
 // Get the job seeker profile of the logged in user

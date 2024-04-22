@@ -10,6 +10,17 @@ export const getAllUsers = async (req, res) => {
     }
 };
  
+// Get a user by userId
+export const getUserById = async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const user = await userService.getUserById(userId);
+      res.json(user);
+    } catch (error) {
+      console.error('Error getting user by userId:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+};
  
 //Controller functions for job seeker profile
  
