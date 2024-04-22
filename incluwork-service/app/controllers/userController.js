@@ -9,7 +9,45 @@ export const getAllUsers = async (req, res) => {
         res.status(500).json({ message: "Error retrieving users", error: err });
     }
 };
+
+export const getAllJobs = async (req, res) => {
+    try {
+        const jobs = await userService.fetchAllJobs();
+        res.json(jobs);
+    } catch (err) {
+        res.status(500).json({ message: "Error retrieving users", error: err });
+    }
+};
  
+// Get a user by userId
+export const getUserById = async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const user = await userService.getUserById(userId);
+      res.json(user);
+    } catch (error) {
+      console.error('Error getting user by userId:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const updateUser = async (req, res) => {
+    const { userId } = req.params;
+    const data = req.body;
+
+    try {
+        const updatedUser = await userService.patchUserById(userId, data);
+        res.json({
+            message: 'User updated successfully',
+            data: updatedUser
+        });
+    } catch (error) {
+        res.status(400).json({
+            message: 'Error updating user',
+            error: error.message
+        });
+    }
+};
  
 //Controller functions for job seeker profile
  

@@ -7,17 +7,17 @@ const challengesEnum = [
     'Orthopedic Disabilities'
 ];
 
-const accommodationFacilitiesEnum = [
+const accommodationFacilitiesEnum=[
     'Screen reading software', 'Magnification tools', 'Audio Navigation Guides','Braille Display',
     'Tactile Markings', 'Assistive Listening Devices', 'Captioning Software', 'Accessible Communication Tools',
     'Sign Language Interpreters', 'Visual Cues and Graphical Representation Software', 'Visual Communication Aids',
     'Speech Generating Devices', 'Text-to-Speech Software', 'Communication Applications', 'Assistive Technology Devices',
-    'Tactile Graphics Software', 'Remote Collaboration Tools', 'Ergonomic Workspace Setup', 'Collaborative Project Management Tools', 
+    'Tactile Graphics Software', 'Remote Collaboration Tools', 'Ergonomic Workspace Setup', 'Collaborative Project Management Tools',
     'Accessible Communication Platforms', 'Visual Cues for Orientation', 'Accessible Software Development Tools',
-    'Accessible Transportation Facilities', 'Flexible Attendance Policies', 'Ergonomic Workstation Setup', 
+    'Accessible Transportation Facilities', 'Flexible Attendance Policies', 'Ergonomic Workstation Setup',
     'Voice-controlled Technology Devices', 'Assistive Aids', 'Flexible Work Arrangements', 'Voice-controlled Project Management Tools',
     'Supportive Workstations and Equipment', 'Virtual Assistive Devices', 'Individualized Support Plans',
-    'Wheelchair Accessible Workspace', 'Accessible Communication Tools', 'Customized Work Arrangements', 'Supportive Networks and Communities',
+    'Wheelchair Accessible Workspace', 'Customized Work Arrangements', 'Supportive Networks and Communities',
     'Collaborative Task Management Tools', 'Ergonomic Keyboards', 'Rest Areas and Quiet Workspaces', 'Telecommuting Facilities', 'Individualized Accommodative Facilities'
 ];
 
@@ -37,13 +37,13 @@ const jobTitlesEnum = [
 const skillsEnum = [
     'Proficiency in Braille', 'Attention to Detail', 'Keyboarding Skills',
     'Knowledge of Accessibility Standards', 'Communication Skills',
-    'Adaptive Technology Proficiency', 'Proficiency in Sign Language', 'Creativity', 
-    'Organizational Skills', 'Expertise in Accessibility Software', 'Knowledge of Visual Storytelling Techniques',
+    'Adaptive Technology Proficiency', 'Proficiency in Sign Language', 'Creativity',
+    'Organizational Skills', 'Knowledge of Visual Storytelling Techniques',
     'Proficiency in Speech Recognition Software', 'Problem Solving Skills', 'Team Management Skills', 'Expertise in Accessibility Software',
-    'Familiar with Sensory-aware Counseling Techniques', 'Tech Savviness', 'Flexibility', 'Adaptability', 'Accessibility Knowledge', 
-    'Technical Proficiency', 'Continuous Learning Skills', 'Tech Literacy', 'Visual Design Skills', 
-    'Strategic Thinking Skills', 'Team Collaboration Skills', 'Analytical Skills', 'Customer Care Skills', 
-    'Critical Thinking', 'Accessibility Awareness', 'Excellent Communication and Interpersonal Skills', 'Knowledge of Company Policies and Procedures', 
+    'Familiar with Sensory-aware Counseling Techniques', 'Tech Savviness', 'Flexibility', 'Adaptability', 'Accessibility Knowledge',
+    'Technical Proficiency', 'Continuous Learning Skills', 'Tech Literacy', 'Visual Design Skills',
+    'Strategic Thinking Skills', 'Team Collaboration Skills', 'Analytical Skills', 'Customer Care Skills',
+    'Critical Thinking', 'Accessibility Awareness', 'Excellent Communication and Interpersonal Skills', 'Knowledge of Company Policies and Procedures',
     'Industry Expertise', 'Networking Abilities', 'Time Management Skills'
 ];
 

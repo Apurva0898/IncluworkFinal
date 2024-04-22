@@ -89,7 +89,7 @@ export const fetchAllJobs = async (req, res) => {
         }
 
         const jobseekerId = req.user.id;
-        const jobs = await jobService.fetchJobsForJobSeeker(jobseekerId);
+        const jobs = await jobService.fetchJobsForJobSeeker(jobseekerId,req.query);
         res.json(jobs);
     } catch (error) {
         res.status(500).json({ error: error.message });

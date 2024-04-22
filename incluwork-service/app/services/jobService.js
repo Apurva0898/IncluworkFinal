@@ -1,6 +1,8 @@
+import mongoose from "mongoose";
 import Job from './../models/Job.js';
 import JobSeeker from './../models/JobSeeker.js';
 import Mapping from './../models/Mapping.js';
+import Application from './../models/Application.js';
 
 export const createJob = async (employerId, jobData) => {
     try {
@@ -19,6 +21,7 @@ export const createJob = async (employerId, jobData) => {
 
         return response;
     } catch (error) {
+        console.log(error)
         throw new Error('Could not create job');
     }
 }
@@ -115,7 +118,7 @@ export const deleteJob = async (jobId) => {
 }
 
 // Fetch all jobs as a job seeker based on their specific challenge
-export const fetchJobsForJobSeeker = async (jobSeekerId) => {
+export const fetchJobsForJobSeeker = async (jobSeekerId,params) => {
     try {
         // Find the job seeker based on their ID to get their specific challenge
         const jobSeeker = await JobSeeker.findOne({ userId: jobSeekerId });
@@ -128,12 +131,26 @@ export const fetchJobsForJobSeeker = async (jobSeekerId) => {
         if (!mapping) {
             throw new Error("No job mapping found for the given challenge");
         }
-        const suitableJobTitles = mapping.jobTitles;
+        let suitableJobTitles = mapping.jobTitles;
+
+        let filter = {};
+        if (params && params.keywords) {
+            filter.$or = [
+                { title: { $regex: params.keywords, $options: 'i' } },
+                { location: { $regex: params.keywords, $options: 'i' } }
+            ];
+           // suitableJobTitles = suitableJobTitles.filter(title => title.match(new RegExp(params.keywords, 'i')));
+        }
 
         // Fetch jobs that have titles in the list of suitable job titles obtained from the mapping table
         const jobs = await Job.find({
-            title: { $in: suitableJobTitles }
+            title: { $in: suitableJobTitles },
+            ...filter
         });
+
+        // Get applications for the current job seeker to mark applied jobs
+        const applications = await Application.find({ userId: new mongoose.Types.ObjectId(jobSeekerId) });
+        const appliedJobIds = new Set(applications.map(app => app.jobId.toString()));
 
         // Transform each job object to format it correctly by renaming _id to jobId
         const formattedJobs = jobs.map(job => ({
@@ -148,7 +165,8 @@ export const fetchJobsForJobSeeker = async (jobSeekerId) => {
             acceptedCandidates: job.acceptedCandidates,
             salary: job.salary,
             dateOfJoining: job.dateOfJoining,
-            dateOfPosting: job.dateOfPosting
+            dateOfPosting: job.dateOfPosting,
+            isApplied: appliedJobIds.has(job._id.toString())  // Check if job was applied to
         }));
 
         return formattedJobs;

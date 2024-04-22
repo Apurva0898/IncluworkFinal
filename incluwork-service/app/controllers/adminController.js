@@ -1,18 +1,17 @@
 import * as adminService from "../services/adminService.js";
 import * as userService from "../services/userService.js";
-import * as jobService from '../services/jobService.js';
-import * as applicationService from '../services/jobApplicationService.js';
 
 
+export const getAllUsersFilter = async (req, res) => {
+    const type = req.query.type; // Get the type from the request body
+    try {
+        const Users = await adminService.getAllUsers(type);
+        res.status(200).json(Users);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
 
-export const getAllEmployers = async (req, res) => {
-        try {
-            const employers = await adminService.fetchAllEmployers();
-            res.status(200).json(employers);
-        } catch (error) {
-            res.status(400).json({ error: error.message });
-        }
-    };
 
 
 export const getAllUsers = async (req, res) => {
@@ -43,5 +42,17 @@ export const getAllJobs = async (req, res) => {
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
-    };    
+    };
+
+export const verifyJobseeker = async (req, res) => {
+    console.log("inadmin controller")
+    try {
+        const applications = await adminService.verifyJobseeker(req.user.JSId,req.user.status);
+        res.status(200).json(applications);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 

@@ -5,6 +5,7 @@ import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { pipeline as pipelineCallback } from "stream";
+import JobSeeker from '../models/JobSeeker.js'
 const pipeline = promisify(pipelineCallback);
 
 
@@ -43,18 +44,43 @@ try {
 
 };
 
-// Save resume
- export const saveResume = async (file) => {
-    
-    const fileExtension = path.extname(file.originalname).toLowerCase();
+// Save resume and update the JobSeeker model
+export const saveResume = async (userId, file) => {
+  const fileExtension = path.extname(file.originalname).toLowerCase();
+  try {
+      const response = await saveFile(file, "resume", fileExtension);
+      const modifiedUrl = response.replace('/host', ''); // Remove '/host' from the URL
 
-  return saveFile(file, "resume", fileExtension);
+      // Update the JobSeeker document
+      await JobSeeker.findOneAndUpdate(
+          { userId },
+          { resume: modifiedUrl },
+          { new: true }
+      );
+      return modifiedUrl;
+  } catch (error) {
+      console.error('Error uploading resume:', error);
+      throw error;
+  }
 };
 
-// Save medical proof
-export const saveProof = async (file) => {
-    
-    const fileExtension = path.extname(file.originalname).toLowerCase();
+// Save medical proof and update the JobSeeker model
+export const saveProof = async (userId, file) => {
+  const fileExtension = path.extname(file.originalname).toLowerCase();
+  try {
+      const response = await saveFile(file, "medicalproof", fileExtension);
+      const modifiedUrl = response.replace('/host', ''); // Remove '/host' from the URL
 
-  return saveFile(file, "medicalproof", fileExtension);
+      // Update the JobSeeker document
+      await JobSeeker.findOneAndUpdate(
+          { userId },
+          { medicalProof: modifiedUrl,
+          status:"pending"},
+          { new: true }
+      );
+      return modifiedUrl;
+  } catch (error) {
+      console.error('Error uploading medical proof:', error);
+      throw error;
+  }
 };

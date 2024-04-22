@@ -6,8 +6,7 @@ export const createMapping = async (mappingData) => {
         const mapping = await Mapping.create(mappingData);
         return mapping;
     } catch (error) {
-        console.log(error);
-        throw Error('Failed to create mapping');
+        throw Error(`Failed to create mapping ${error.message}`);
     }
 };
 
