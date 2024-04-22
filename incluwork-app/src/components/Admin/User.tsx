@@ -1,40 +1,70 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Paper, Typography } from '@mui/material';
-import { UserType } from '../../models/User';
+import { Grid, Paper, Typography, useTheme } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+import WorkIcon from '@mui/icons-material/Work';
+import {UserType} from "../../models/User.ts";
 
-// Define the User interface based on the data shape returned from the backend
 interface User {
     id: string;
     name: string;
     email: string;
     type: UserType;
-    contactNumber?: string; // Optional
+    contactNumber?: string;
 }
 
-// Define the UserItem component to display individual user details
 const UserItem: React.FC<{ user: User }> = ({ user }) => {
+    const theme = useTheme();
+
+    // Function to determine the border color based on user type
+    const getBorderColor = (type) => {
+        switch(type) {
+            case 'jobseeker':
+                return theme.palette.error.main; // Red for jobseeker
+            case 'employer':
+                return theme.palette.primary.main; // Blue for employer
+            default:
+                return theme.palette.grey[500]; // Default color
+        }
+    };
+
+    const borderColor = getBorderColor(user.type);
+
     return (
-        <Paper style={{ padding: '16px', marginBottom: '8px' }}>
-            <Typography variant="h6">User ID: {user.id}</Typography>
-            <Typography>Name: {user.name}</Typography>
-            <Typography>Email: {user.email}</Typography>
-            <Typography>Type: {user.type}</Typography>
-            {user.contactNumber && <Typography>Contact Number: {user.contactNumber}</Typography>}
+        <Paper style={{ padding: theme.spacing(2), marginBottom: theme.spacing(2), borderLeft: `4px solid ${borderColor}` }}>
+            <Typography variant="subtitle1" gutterBottom>
+                <AccountCircleIcon color="primary" style={{ verticalAlign: 'bottom', marginRight: theme.spacing(1) }} />
+                {user.name}
+            </Typography>
+            <Typography variant="body2">
+                <EmailIcon fontSize="small" style={{ verticalAlign: 'middle', marginRight: theme.spacing(1) }} />
+                {user.email}
+            </Typography>
+            <Typography variant="body2">
+                <WorkIcon fontSize="small" style={{ verticalAlign: 'middle', marginRight: theme.spacing(1) }} />
+                Type: {user.type}
+            </Typography>
+            {user.contactNumber && (
+                <Typography variant="body2">
+                    <PhoneIcon fontSize="small" style={{ verticalAlign: 'middle', marginRight: theme.spacing(1) }} />
+                    Contact Number: {user.contactNumber}
+                </Typography>
+            )}
         </Paper>
     );
 };
 
-// Define the main Users component
 const Users: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
 
-    // Fetch user data from the backend and set the state
     useEffect(() => {
+        const token=localStorage.getItem('token');
         const fetchData = async () => {
             try {
                 const response = await fetch('http://localhost:3000/incluwork/admin/users', {
                     headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjFjZWM0MTU4ZmM5YmM2M2ViZGM5N2QiLCJpYXQiOjE3MTMxNzI4NTF9.o_CE-nlXYltG_8YdrADVVE-MJkEl9BCGFF6urjbuB2g',
+                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
@@ -56,7 +86,7 @@ const Users: React.FC = () => {
     return (
         <Grid container justifyContent="center" style={{ padding: '20px' }}>
             <Grid item xs={12}>
-                <Typography variant="h4" style={{ marginBottom: '20px' }}>
+                <Typography variant="h4" style={{ marginBottom: '20px', textAlign: 'center' }}>
                     Users
                 </Typography>
             </Grid>
@@ -76,6 +106,3 @@ const Users: React.FC = () => {
 };
 
 export default Users;
-
-
-
