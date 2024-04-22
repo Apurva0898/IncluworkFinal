@@ -31,7 +31,7 @@ const JobApplications: React.FC = () => {
                 const applicationData: ApplicationData[] = await fetchApplications();
                 const applicationsWithDetails = await Promise.all(applicationData.map(async app => {
                     const user: User = await fetchUserById(app.userId);
-                    console.log(user);
+
                     const job = jobs.find(j => j.jobId === app.jobId);
                     return {
                         ...app,
@@ -51,6 +51,7 @@ const JobApplications: React.FC = () => {
     }, [updateCount]); // Depend on updateCount to refresh data on status update
 
     const handleStatusUpdate = async (applicationId: string, newStatus: 'offered' | 'rejected') => {
+
         try {
             const response = await updateApplicationStatus(applicationId, newStatus);
             if (response) {
@@ -80,6 +81,7 @@ const JobApplications: React.FC = () => {
                             <div style={{ 
                                 padding: '6px 12px', 
                                 backgroundColor: app.status === 'offered' ? 'green' : app.status === 'rejected' ? 'red' : 'none',
+
                                 color: 'white', 
                                 borderRadius: '5px',
                                 display: app.status === 'pending' ? 'none' : 'inline-block',
