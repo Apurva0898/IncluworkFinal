@@ -12,6 +12,7 @@ import { JobData } from "../../models/Job";
 import { User } from "../../models/User";
 
 import { FaDownload, FaCheck, FaTimes } from "react-icons/fa"; // Importing icons
+import { Button } from "@mui/material";
 
 interface ApplicationWithDetails extends ApplicationData {
     userName: string;
@@ -92,13 +93,22 @@ const JobApplications: React.FC = () => {
                         </h3>
                         <p>Job Title: {app.jobTitle}</p>
                         <p>Application Date: {new Date(app.applicationDate).toLocaleDateString()}</p>
-                        <div>
-                            <button onClick={() => downloadResume(app.resumeURL)} style={{ backgroundColor: 'blue', color: 'white', marginRight: '10px' }}>
-                                <FaDownload /> Download Resume
-                            </button>
-                            <button onClick={() => downloadMedicalProof(app.medicalProofURL)} style={{ backgroundColor: 'blue', color: 'white' }}>
-                                <FaDownload /> Download Medical Proof
-                            </button>
+                        <div style={{ marginTop: '20px' }}>
+                            <Button onClick={() => downloadResume(emp.resume)}
+                                startIcon={<FaDownload />}
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                style={{ marginRight: '10px' }}>
+                                Download Resume
+                            </Button>
+                            <Button onClick={() => downloadMedicalProof(emp.medicalProof)}
+                                startIcon={<FaDownload />}
+                                variant="contained"
+                                color="primary"
+                                size="small">
+                                Download Medical Proof
+                            </Button>
                         </div>
                     </div>
                     <div>
