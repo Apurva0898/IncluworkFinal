@@ -72,3 +72,11 @@ export const getJoblistingApplications = async (employerId) => {
     }
 }
 
+export const updateApplicationStatus = async (applicationId, status) => {
+    try {
+      const updatedApplication = await Application.findByIdAndUpdate(applicationId, { status }, { new: true });
+      return updatedApplication;
+    } catch (error) {
+      throw new Error('Error updating application status');
+    }
+  };
