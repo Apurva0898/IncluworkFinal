@@ -1,5 +1,4 @@
 import { Employer } from "../models/Employer.ts";
-import {User} from "../models/User.ts";
 import {Job} from "../components/HomePages/Employer.tsx";
 
 
@@ -28,8 +27,9 @@ export const getEmployerData = async (_userId: string, token: string): Promise<E
     }
 };
 
-export const fetchApplications = async () => {
-    const response = await fetch(`${API_BASE_URL}/applications`, {
+export const fetchApplications = async (keywords = '') => {
+    const url = `${API_BASE_URL}/applications?keywords=${encodeURIComponent(keywords)}`;
+    const response = await fetch(url, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -106,7 +106,6 @@ export async function fetchAccommodationFacilities(): Promise<any[]> {
         return [];
     }
 };
-
 
 // Function to create a job listing
 export const createJobListing = async (formData: any): Promise<void> => {
@@ -196,4 +195,25 @@ export const updateJob = async (currentJob: Job | null) => {
     } catch (error) {
         console.error('Error updating job:', error);
     }
+};
+
+export const updateJobListing = async (jobId: string, decrement: number): Promise<any> => {
+    const response = await fetch(`${API_BASE_URL}/joblistings/${jobId}`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            maxPositions: decrement
+        })
+    });
+
+    console.log("resp after patch", response);
+
+    if (!response.ok) {
+        throw new Error('Failed to update job listing');
+    }
+
+    return response.json();
 };
