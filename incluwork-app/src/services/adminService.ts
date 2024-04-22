@@ -41,3 +41,48 @@ export const fetchJobSeekersByType = async (type: string): Promise<JobSeeker[]> 
     const data = await response.json();
     return data.filter((user: JobSeeker) => user.status?.toLowerCase() === 'pending');
 };
+
+
+export const fetchData = async () => {
+    try {
+        const token=localStorage.getItem('token');
+        console.log(token);
+        const response = await fetch('http://localhost:3000/incluwork/admin/applications', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+
+        return response.json();
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};
+
+export const getAllJobs= async()=>{
+    try{
+        const token=localStorage.getItem('token');
+        console.log(token);
+        const response = await fetch('http://localhost:3000/incluwork/admin/jobs', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+
+        return response.json();
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};

@@ -12,6 +12,7 @@ router.get("/admin/getUsers", jwtAuth, adminController.getAllUsersFilter);
 
 //Route to get all users
 router.get("/admin/users", jwtAuth, userController.getAllUsers);
+router.get("/admin/jobs", jwtAuth, userController.getAllJobs);
 
 router.get('/admin/jobs', jwtAuth,adminController.getAllJobs);
 router.get('/admin/applications', jwtAuth,adminController.getAllApplications);
