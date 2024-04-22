@@ -134,10 +134,10 @@ const EmployerHome: React.FC = () => {
         <Container component="main" maxWidth="false" style={{ padding: '20px' }}>  {/* Remove maxWidth limit and add padding */}
             <Typography variant="h4" gutterBottom>Employer Dashboard</Typography>
             <Typography variant="h6" style={{ marginBottom: '20px' }}>Your Jobs</Typography> {/* Add margin below the header */}
-            <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}> {/* Adjust justifyContent */}
+            <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}> {/* Adjust justifyContent */}
                 {jobs.length > 0 ? (
                     jobs.map(job => (
-                        <Card key={job.jobId} style={{ width: '30%', margin: '10px 0' }}> {/* Adjust width and margin of cards */}
+                        <Card key={job.jobId} style={{ width: '30%', margin: '10px 20px' }}> {/* Adjust width and margin of cards */}
                             <CardContent>
                                 <Typography variant="h5" component="div">{job.title}</Typography>
                                 <Typography color="textSecondary">{job.location}</Typography>

@@ -1,3 +1,5 @@
+import {UserType} from "./User.ts";
+
 export interface EducationDetails {
     institutionName: string;
     courseName: string;
@@ -13,4 +15,9 @@ export interface JobSeeker {
     resume?: string;
     medicalProof?: string;
     challenges: string;
+    name: string;
+    email: string;
+    type: UserType;
+    contactNumber?: string;
+    status?:string
 }
