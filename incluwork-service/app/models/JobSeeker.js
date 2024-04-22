@@ -68,6 +68,11 @@ let schema = new mongoose.Schema(
             required: true,
             enum: challengesEnum,
         },
+        status:{
+            type:String,
+            enum: ["incomplete", "pending","verified"],
+            default:"incomplete"
+        }
     },
 
     {collation: {locale: "en"},

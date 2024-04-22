@@ -11,6 +11,7 @@ import Unauthorized from './components/Common/Unauthorized.tsx';
 import Applications from './components/Admin/Applications.tsx';
 import User from './components/Admin/User.tsx';
 import Jobs from './components/Admin/Jobs.tsx';
+import ViewProfiles from './components/Admin/ViewProfiles.tsx'
 
 //JobSeeker imports
 import JobCards from './components/JobSeeker/JobseekerHome.tsx';
@@ -42,6 +43,7 @@ function App() {
                     <Route path="/users" element={<User />} />
                     <Route path="/jobseekerhome" element={<JobCards />}/>
                     <Route path="/viewapplications" element={<JobApplications />} />
+                    <Route path="/verifyprofiles" element={<ViewProfiles/>}/>
                     <Route path="/jobapplications" element={<ApplicationsView/>}/>
                 </Routes>
             </div>

@@ -40,6 +40,7 @@ export const createUser = async (data) => {
                 medicalProof: data.medicalProof,
                 resume: data.resume,
                 challenges: data.challenges,
+                status:"incomplete",
             });
 
         await userDetails.save();
