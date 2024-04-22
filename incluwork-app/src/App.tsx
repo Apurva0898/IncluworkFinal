@@ -47,11 +47,8 @@ function App() {
                     <Route path="/viewapplications" element={<JobApplications />} />
                     <Route path="/verifyprofiles" element={<ViewProfiles/>}/>
                     <Route path="/jobapplications" element={<ApplicationsView/>}/>
-<<<<<<< Updated upstream
                     <Route path="/employees" element={<EmployeesComponent />} />
-=======
                     <Route path="/joboffers" element={<JobOffers/>}/>
->>>>>>> Stashed changes
                 </Routes>
             </div>
         </Router>
