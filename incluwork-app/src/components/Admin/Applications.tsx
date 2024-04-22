@@ -67,6 +67,10 @@ const Applications: React.FC = () => {
 
 
     return (
+        <div>
+            <Typography variant="h4" style={{marginBottom: '20px', marginTop:'20px', textAlign: 'center'}}>
+                Job Applications
+            </Typography>
         <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '20px' }}>
             {applications.map((app) => (
                 <div key={app.applicationId} style={{
@@ -116,6 +120,7 @@ const Applications: React.FC = () => {
                     </div>
                 </div>
             ))}
+        </div>
         </div>
     );
 };
