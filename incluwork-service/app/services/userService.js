@@ -15,6 +15,16 @@ export const fetchAllUsers = async () => {
     }
 };
 
+export const fetchAllJobs = async () => {
+    try {
+        const jobs = await Job.find(); // Excludes password and __v from results
+        return jobs;
+    } catch (err) {
+        console.error("Failed to retrieve users:", err);
+        throw err;
+    }
+};
+
 export const getUserById = async (userId) => {
     try {
       // Fetch user by userId

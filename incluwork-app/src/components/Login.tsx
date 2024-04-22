@@ -26,7 +26,10 @@ const LoginForm = () => {
                 navigate('/jobseeker');
             } else if (user.type === 'jobseeker') {
                 navigate('/upload');
-            } else {
+            } else if (user.type==='admin'){
+                navigate('/applications')
+            }
+            else {
                 navigate(`/${user.type}`);
             }
         } else if (isError) {
