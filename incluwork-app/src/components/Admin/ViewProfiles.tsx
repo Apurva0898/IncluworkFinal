@@ -88,6 +88,7 @@ const JobSeekersList: React.FC = () => {
 
     return (
         <Container maxWidth="md">
+            <h1>Verify Job Seekers Medical Proof</h1>
             <Grid container spacing={2}>
                 {jobseekers.map(jobseeker => (
                     <Grid item xs={12} key={jobseeker.id}>
