@@ -32,6 +32,9 @@ const LoginForm = () => {
         } else if (isError) {
             console.error('Login Error:', message);
         }
+        else{
+            localStorage.clear();
+        }
     }, [user, isSuccess, isError, navigate, message]);
 
     return (

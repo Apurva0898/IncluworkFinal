@@ -4,7 +4,6 @@ import authService from '../services/authService';
 import jobSeekerService from '../services/jobSeekerService';
 import employerService from "../services/employerService.ts";
 import { User, LoginCredentials } from '../models/User';
-import { Employer } from '../models/Employer.ts';
 
 interface AuthState {
   user: User | null;
