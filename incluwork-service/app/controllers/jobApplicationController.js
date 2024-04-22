@@ -45,9 +45,9 @@ export const getJoblistingApplications = async (req, res) => {
 
 export const updateApplicationStatus = async (req, res) => {
     try {
-        // Check if the user type is employer
-        if (req.user.type !== 'employer') {
-            return res.status(403).send({ error: "Access denied: User is not an employer"});
+        // Check if the user type is employer or job seeker
+        if (req.user.type !== 'employer' && req.user.type !== 'jobseeker') {
+            return res.status(403).send({ error: "Access denied: Not a valid user"});
         }
         
         const applicationId = req.params.applicationId;

@@ -4,7 +4,7 @@ import { User } from "../models/User";
 const API_BASE_URL = `http://localhost:3000/incluwork`;
 
 export const getEmployerData = async (_userId: string, token: string): Promise<Employer | null> => {
-    const url = `${API_BASE_URL}/employers`;
+    const url = "http://localhost:3000/incluwork/employers";
 
     try {
         const response = await fetch(url, {
@@ -96,14 +96,12 @@ export const downloadFile = async (fileUrl: string, fileName: string): Promise<v
     window.URL.revokeObjectURL(downloadUrl); // Free up memory
 };
 
-// Convenience functions for specific downloads
 export const downloadResume = (resumeURL: string): Promise<void> => {
     return downloadFile(`${resumeURL}`, 'Resume.pdf');
 };
 
 export const downloadMedicalProof = (medicalProofURL: string): Promise<void> => {
     return downloadFile(`${medicalProofURL}`, 'MedicalProof.pdf');
-};
 
 export const fetchUserById = async (userId: string): Promise<User> => {
     const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
