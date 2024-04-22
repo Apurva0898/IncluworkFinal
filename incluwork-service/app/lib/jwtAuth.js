@@ -9,7 +9,7 @@ const jwtAuth = (req, res, next) => {
       res.status(401).json({ error: "Unauthorized Access" });
       return;
     }
-    
+
     // Modifying the user object attached to the request
     // Renaming _id to id and converting it to a string
     req.user = {

@@ -102,6 +102,7 @@ export const downloadResume = (resumeURL: string): Promise<void> => {
 
 export const downloadMedicalProof = (medicalProofURL: string): Promise<void> => {
     return downloadFile(`${medicalProofURL}`, 'MedicalProof.pdf');
+}
 
 export const fetchUserById = async (userId: string): Promise<User> => {
     const response = await fetch(`${API_BASE_URL}/users/${userId}`, {

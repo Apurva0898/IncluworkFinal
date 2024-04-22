@@ -21,6 +21,24 @@ export const getUserById = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+export const updateUser = async (req, res) => {
+    const { userId } = req.params;
+    const data = req.body;
+
+    try {
+        const updatedUser = await userService.patchUserById(userId, data);
+        res.json({
+            message: 'User updated successfully',
+            data: updatedUser
+        });
+    } catch (error) {
+        res.status(400).json({
+            message: 'Error updating user',
+            error: error.message
+        });
+    }
+};
  
 //Controller functions for job seeker profile
  
