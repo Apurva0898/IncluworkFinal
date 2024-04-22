@@ -10,6 +10,12 @@ const createToken = (id) => jwt.sign({ _id: id }, jwtSecretKey);
 
 export const createUser = async (data) => {
     try {
+        // Check if user with the same email already exists
+        const existingUser = await User.findOne({ email: data.email });
+        if (existingUser) {
+            throw new Error('Email is already in use');
+        }
+
         let user = new User({
             email: data.email,
             name: data.name,
@@ -34,16 +40,24 @@ export const createUser = async (data) => {
                 medicalProof: data.medicalProof,
                 resume: data.resume,
                 challenges: data.challenges,
+                status:"incomplete",
             });
 
         await userDetails.save();
 
-        return { token: createToken(user._id), type: user.type };
+        return { token: createToken(user._id), type: user.type,id:user._id };
     } catch (err) {
-        console.error(err);
-        throw err;
+        // Check if the error message is 'Email is already in use'
+        if (err.message === 'Email is already in use') {
+            // Return a specific error message for duplicate email
+            throw new Error('Email is already in use');
+        } else {
+            // For other errors, rethrow the original error
+            throw err;
+        }
     }
 };
+
 
 export const loginUser = (email, password) => {
     return new Promise((resolve, reject) => {
@@ -55,7 +69,7 @@ export const loginUser = (email, password) => {
                 return reject({ status: 401, message: info.message });
             }
 
-            return resolve({ token: createToken(user._id), type: user.type });
+            return resolve({ token: createToken(user._id), type: user.type,id:user._id });
         })({ body: { email, password } }); // Mock req object for passport
     });
 };

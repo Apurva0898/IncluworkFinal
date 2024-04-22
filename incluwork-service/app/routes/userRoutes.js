@@ -1,22 +1,25 @@
 import express from "express";
-import * as userController from "../controllers/usercontroller.js";
+import * as userController from "../controllers/userController.js";
 import jwtAuth from "../lib/jwtAuth.js";
-
 
 const router = express.Router();
 
 //Route to get all users
 router.get("/users", jwtAuth, userController.getAllUsers);
+// Route to get a user by userId
+router.get('/users/:userId', jwtAuth, userController.getUserById);
 
 // Routes for job seeker profile
-// Route to get all job seekers
+// Get the job seeker profile of the logged in user
 router.get('/jobseekers',jwtAuth, userController.getJobSeekerProfile);
 
-// Route to update a job seeker's profile
-router.patch('/jobseekers',jwtAuth, userController.updateJobSeeker);
+// Update the job seeker profile of the logged in user
+router.patch('/jobseekers',jwtAuth, userController.updateJobSeekerProfile);
 
-// Route to delete a job seeker
-router.delete('/jobseekers',jwtAuth, userController.deleteJobSeeker);
+router.patch('/users/:userId', jwtAuth, userController.updateUser);
+
+// Delete the job seeker profile of the logged in user
+router.delete('/jobseekers',jwtAuth, userController.deleteJobSeekerProfile);
 
 // Routes for employer profile
 // Get the employer profile of the authenticated user

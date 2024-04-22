@@ -1,7 +1,6 @@
 import { postRatings,getRatings } from '../services/ratingsServices.js';
 
 export const postJobRatings = async (req, res) => {
-    console.log('444');
     try {
         const { jobId, jobSeekerId, rating } = req.body;
         const postedRating = await postRatings(jobId,jobSeekerId,rating);

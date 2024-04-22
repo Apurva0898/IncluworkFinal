@@ -1,9 +1,12 @@
+
 import User from "../models/User.js";
 import JobSeeker from "../models/JobSeeker.js";
+import Employer from "../models/Employer.js";
+import Job from "../models/Job.js";
+import Application from "../models/Application.js";
 
 export const fetchAllUsers = async () => {
     try {
-        // You might want to filter out sensitive fields
         const users = await User.find({}, '-password -__v'); // Excludes password and __v from results
         return users;
     } catch (err) {
@@ -11,8 +14,7 @@ export const fetchAllUsers = async () => {
         throw err;
     }
 };
-<<<<<<< Updated upstream
-=======
+
 
 export const fetchAllJobs = async () => {
     try {
@@ -137,49 +139,124 @@ export const patchUserById = async (userId, data) => {
         throw new Error(`Error updating user by userId: ${error.message}`);
     }
 };
->>>>>>> Stashed changes
+
  // Rest API implementations for job seeker profile
 
 // Fetching a job seeker profile
 export const findJobSeekerById = async (id) => {
-    const jobSeeker = await JobSeeker.findOne({ userId: id });
-    if (!jobSeeker ) {
-        return null;  // Ensures that the job seeker's user ID matches the ID from the token
-    }
-    // Fetch the associated user information
+
+    try{
+
+         // Fetch the associated user information
     const user = await User.findById(id);
     if (!user) {
-        return null;  // Optionally handle this differently if user should always exist
+        throw new Error('User not found'); 
     }
+    
+    //Fetch job seeker associated with the user
+    const jobSeeker = await JobSeeker.findOne({ userId: id });
+    if (!jobSeeker ) {
+        throw new Error('Profile not found for this user'); // Ensures that the job seeker's user ID matches the ID from the token
+    }
+    
 
-    // Combine the information into a single object at the same level
-    const combinedDetails = {
-        ...jobSeeker.toObject(),  // Convert MongoDB model to a plain object
-        name: user.name,           // Directly adding user fields to the top level
+    // Combining the information into a single object at the same level
+    const combinedUserDetails = {
+        id: user.id,
+        name: user.name,
         email: user.email,
         contactNumber: user.contactNumber,
-        type: user.type
+        type: user.type,
+        education: jobSeeker.education.map(edu => ({
+            institutionName: edu.institutionName,
+            courseName: edu.courseName,
+            startYear: edu.startYear,
+            endYear: edu.endYear
+        })),
+        skills: jobSeeker.skills,
+        resume: jobSeeker.resume,
+        medicalProof: jobSeeker.medicalProof,
+        challenges: jobSeeker.challenges,
+        status: jobSeeker.status
     };
 
-    // Remove  redundant or sensitive fields 
-    delete combinedDetails.userId;  
-    delete combinedDetails.__v;  // Remove version key
-    delete combinedDetails.userId;  // Optional: Remove if you don't want to expose this
+      return combinedUserDetails;
 
+    } catch (error) {
+        throw error; // Rethrow the error to be handled by the calling function
+    }
+   
+};
 
-    return combinedDetails;
+ 
+// Updating job seeker profile
+ export const updateJobSeekerProfile = async (id, updateData) => {
+    const userDataFields = ['name', 'contactNumber'];  // Fields that belong to the User model
+    const jobSeekerDataFields = ['education', 'skills', 'resume', 'medicalProof', 'challenges'];  // Fields that belong to the JobSeeker model
+    
+    const userData = {};
+    userDataFields.forEach(field => {
+        if (updateData[field] !== undefined) userData[field] = updateData[field];
+    });
+
+    const jobSeekerData = {};
+    jobSeekerDataFields.forEach(field => {
+        if (updateData[field] !== undefined) jobSeekerData[field] = updateData[field];
+    });
+
+    // Update User if there's any user data to update
+    if (Object.keys(userData).length > 0) {
+        await User.findByIdAndUpdate(id, userData, { new: true });
+    }
+
+    // Update JobSeeker if there's any job seeker data to update
+    let updatedJobSeeker = null;
+    if (Object.keys(jobSeekerData).length > 0) {
+        updatedJobSeeker = await JobSeeker.findOneAndUpdate({ userId: id }, jobSeekerData, { new: true });
+    }
+
+    // Fetch the latest full records to include in the response
+    const updatedUser = await User.findById(id);
+
+    // Merge updated information
+    const jobSeekerProfile = {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        contactNumber: updatedUser.contactNumber,
+        education: updatedJobSeeker?.education,
+        skills: updatedJobSeeker?.skills,
+        resume: updatedJobSeeker?.resume,
+        medicalProof: updatedJobSeeker?.medicalProof,
+        challenges: updatedJobSeeker?.challenges,
+        status: updatedJobSeeker?.status
+    };
+
+    return jobSeekerProfile;
 
 };
  
-// Updating job seeker profile
- export const updateJobSeekerById = async (id, updateData) => {
-     return await JobSeeker.findByIdAndUpdate(id, updateData, { new: true });
- };
- 
 // Deleting a job seeker profile
- export const deleteJobSeekerById = async (id) => {
-     return await JobSeeker.findByIdAndDelete(id);
- };
+export const deleteJobSeeker = async (id) => {
+    try {
+        const deletedJobSeeker = await JobSeeker.findOneAndDelete({ userId: id});
+        if (!deletedJobSeeker) {
+            throw new Error('Job seeker not found');
+        }
+
+        // Deleting the user associated with the job seeker
+
+        const deletedUser = await User.findByIdAndDelete(id);
+        if (!deletedUser) {
+            throw new Error('User not found');
+        }
+
+        // Delete all applications associated with the job seeker
+        const deletedApplications = await Application.deleteMany({ userId: id });
+       
+    } catch (error) {
+        throw error; // Rethrow the error to be handled by the caller
+    }
+};
  
  
  export const findEmployerById = async (id) => {
@@ -250,19 +327,38 @@ export const findJobSeekerById = async (id) => {
   
      return employerProfile;
  };
-  
- export const deleteEmployer = async (id) => {
-     try {
-         const deletedEmployer = await Employer.findOneAndDelete({ userId: id });
-         if (!deletedEmployer) {
-             throw new Error('Employer not found');
-         }
-  
-         const deletedUser = await User.findByIdAndDelete(id);
-         if (!deletedUser) {
-             throw new Error('User not found');
-         }
-     } catch (error) {
-         throw error; // Rethrow the error to be handled by the caller
-     }
- };
+
+export const deleteEmployer = async (employerId) => {
+    try {
+        // Find the employer by userId
+        const employer = await Employer.findOne({ userId: employerId });
+
+        if (!employer) {
+            throw new Error('Employer not found');
+        }
+
+        // Find all jobs associated with the employer
+        const jobs = await Job.find({ employerId });
+
+        // Delete all job applications associated with those jobs
+        const jobIds = jobs.map(job => job._id);
+        await Application.deleteMany({ jobId: { $in: jobIds } });
+
+        // Delete all jobs associated with the employer
+        await Job.deleteMany({ employerId });
+
+        // Delete the employer
+        await Employer.findOneAndDelete({ userId: employerId });
+
+        // Delete the associated user
+        const deletedUser = await User.deleteOne({ _id: employerId });
+
+        if (!deletedUser) {
+            throw new Error('User not found');
+        }
+
+        return { message: "Employer profile and the associated jobs and job applications are deleted successfully" };
+    } catch (error) {
+        throw new Error('Could not delete employer profile');
+    }
+}
