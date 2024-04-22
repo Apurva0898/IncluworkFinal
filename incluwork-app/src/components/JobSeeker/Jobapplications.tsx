@@ -40,8 +40,6 @@ const ApplicationsView: React.FC = () => {
 
                 const applicationDetails = await Promise.all(apps.map(async app => {
                     const job = jobs.find(j => j.jobId === app.jobId);
-                    console.log('job----'+job);
-                    console.log(app.employerId);
                     const employer: User = await fetchUserById(app.employerId);
                     
                     return {
@@ -70,17 +68,12 @@ const ApplicationsView: React.FC = () => {
 
     // Delete button click
     const handleDeleteClick = (applicationId: string) => {
-        console.log('application id for deletion', applicationId);
+
         setSelectedApplicationId(applicationId);
         setOpenDialog(true);
     };
 
-     // This useEffect will react whenever selectedApplicationId changes
-     useEffect(() => {
-        if (selectedApplicationId !== null) {
-            console.log('Selected Application ID:', selectedApplicationId);
-        }
-    }, [selectedApplicationId]);
+
  
     // To hit the delete endpoint on confirmation
     const handleDeleteConfirm = async () => {

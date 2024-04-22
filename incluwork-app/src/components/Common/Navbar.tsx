@@ -65,6 +65,7 @@ const Navbar = () => {
                         <>
                             <Button color="inherit" component={Link} to="/jobseekerhome">Home</Button>
                             <Button color="inherit" component={Link} to="/jobapplications">Applications</Button>
+                            <Button color="inherit" component={Link} to="/joboffers">Job Offers</Button>
                             <Button color="inherit" component={Link} to="/profile">Profile</Button>
                             <Button color="inherit" component={Link} to="/feedback">Feedback</Button>
                         </>

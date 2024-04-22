@@ -43,20 +43,7 @@ export const fetchApplications = async () => {
     return response.json();
 };
 
-export const updateApplicationStatus = async (applicationId: string, status: string) => {
-    const response = await fetch(`${API_BASE_URL}/applications/${applicationId}/status`, {
-        method: 'PATCH',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status }),
-    });
-    if (!response.ok) {
-        throw new Error('Failed to update application status');
-    }
-    return response.json();
-};
+
 
 // Fetch all jobs
 export const fetchAllJobs = async () => {
