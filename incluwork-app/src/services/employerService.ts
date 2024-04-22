@@ -1,4 +1,7 @@
 import { Employer } from "../models/Employer.ts";
+import {User} from "../models/User.ts";
+import {Job} from "../components/HomePages/Employer.tsx";
+
 
 const API_BASE_URL = `http://localhost:3000/incluwork`;
 
@@ -40,20 +43,7 @@ export const fetchApplications = async () => {
     return response.json();
 };
 
-export const updateApplicationStatus = async (applicationId: string, status: string) => {
-    const response = await fetch(`${API_BASE_URL}/applications/${applicationId}/status`, {
-        method: 'PATCH',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status }),
-    });
-    if (!response.ok) {
-        throw new Error('Failed to update application status');
-    }
-    return response.json();
-};
+
 
 // Fetch all jobs
 export const fetchAllJobs = async () => {
@@ -115,4 +105,95 @@ export async function fetchAccommodationFacilities(): Promise<any[]> {
         console.error('Error fetching accommodation facilities:', error);
         return [];
     }
-}
+};
+
+
+// Function to create a job listing
+export const createJobListing = async (formData: any): Promise<void> => {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch(`${API_BASE_URL}/joblistings`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(formData)
+        });
+        if (!response.ok) throw new Error('Failed to create job');
+
+        await response.json();  // Assuming we might need the response data for something
+    } catch (error) {
+        console.error('Error creating job:', error);
+        throw error;  // Re-throw the error to handle it further up the call stack
+    }
+};
+
+export const deleteJobListing = async (jobId: string): Promise<void> => {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch(`${API_BASE_URL}/joblistings/${jobId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete job');
+        }
+
+        await response.json();
+    } catch (error) {
+        console.error('Error deleting job:', error);
+        throw error; // Re-throw the error to handle it further up the call stack
+    }
+};
+
+export const fetchjobs = async (): Promise<Job[]> => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        throw new Error("Authentication token is missing");
+    }
+
+    const response = await fetch(`${API_BASE_URL}/joblistings`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch jobs');
+    }
+
+    return await response.json() as Promise<Job[]>;
+};
+
+export const updateJob = async (currentJob: Job | null) => {
+    if (!currentJob) return;
+    const token = localStorage.getItem('token');
+    const url = `${API_BASE_URL}/joblistings/${currentJob.jobId}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(currentJob)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update job');
+        }
+
+        const updatedJob = await response.json() as Job;
+        return updatedJob;
+    } catch (error) {
+        console.error('Error updating job:', error);
+    }
+};

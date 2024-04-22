@@ -29,8 +29,8 @@ export const getJobSeekerData = async (userId: string, token: string): Promise<J
 
 
 // Service code to fetch all jobs 
-export const fetchAllJobs = async () => {
-    const url = `${BASE_URL}/jobs`;
+export const fetchAllJobs = async (query) => {
+    const url = `${BASE_URL}/jobs?keywords=${query}`;
 
     try {
         const response = await fetch(url, {

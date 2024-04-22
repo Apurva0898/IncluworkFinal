@@ -45,7 +45,7 @@ const Navbar = () => {
             // Check the current path to conditionally render the Login or Signup button
             if (location.pathname === '/signup') {
                 return <Button color="inherit" component={Link} to="/login">Login</Button>;
-            } else if (location.pathname === '/login') {
+            } else if (location.pathname === '/login' || '/') {
                 return <Button color="inherit" component={Link} to="/signup">Signup</Button>;
             }
         } else {
@@ -65,6 +65,7 @@ const Navbar = () => {
                         <>
                             <Button color="inherit" component={Link} to="/jobseekerhome">Home</Button>
                             <Button color="inherit" component={Link} to="/jobapplications">Applications</Button>
+                            <Button color="inherit" component={Link} to="/joboffers">Job Offers</Button>
                             <Button color="inherit" component={Link} to="/profile">Profile</Button>
                             <Button color="inherit" component={Link} to="/feedback">Feedback</Button>
                         </>

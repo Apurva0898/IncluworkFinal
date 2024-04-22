@@ -97,7 +97,7 @@ export const getAllJobs = async () => {
 
 export const getAllApplications = async () => {
     try {
-        const applications = await Application.find({id});
+        const applications = await Application.find();
         return applications;
     } catch (error) {
         throw new Error(`Failed to retrieve applications: ${error.message}`);

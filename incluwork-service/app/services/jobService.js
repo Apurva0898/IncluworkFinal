@@ -118,7 +118,7 @@ export const deleteJob = async (jobId) => {
 }
 
 // Fetch all jobs as a job seeker based on their specific challenge
-export const fetchJobsForJobSeeker = async (jobSeekerId) => {
+export const fetchJobsForJobSeeker = async (jobSeekerId,params) => {
     try {
         // Find the job seeker based on their ID to get their specific challenge
         const jobSeeker = await JobSeeker.findOne({ userId: jobSeekerId });
@@ -131,11 +131,21 @@ export const fetchJobsForJobSeeker = async (jobSeekerId) => {
         if (!mapping) {
             throw new Error("No job mapping found for the given challenge");
         }
-        const suitableJobTitles = mapping.jobTitles;
+        let suitableJobTitles = mapping.jobTitles;
+
+        let filter = {};
+        if (params && params.keywords) {
+            filter.$or = [
+                { title: { $regex: params.keywords, $options: 'i' } },
+                { location: { $regex: params.keywords, $options: 'i' } }
+            ];
+           // suitableJobTitles = suitableJobTitles.filter(title => title.match(new RegExp(params.keywords, 'i')));
+        }
 
         // Fetch jobs that have titles in the list of suitable job titles obtained from the mapping table
         const jobs = await Job.find({
-            title: { $in: suitableJobTitles }
+            title: { $in: suitableJobTitles },
+            ...filter
         });
 
         // Get applications for the current job seeker to mark applied jobs
