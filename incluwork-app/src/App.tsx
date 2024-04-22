@@ -15,14 +15,14 @@ import ViewProfiles from './components/Admin/ViewProfiles.tsx'
 
 //JobSeeker imports
 import JobCards from './components/JobSeeker/JobseekerHome.tsx';
-import JobApplications from './components/Employer/JobListingApplications.tsx';
 import Upload from './components/SignUp/JobseekerUpload.tsx';
 import ApplicationsView from './components/JobSeeker/Jobapplications.tsx';
 
 
 //Employer imports
 import CreateJob from "./components/Employer/CreateJob.tsx";
-
+import JobApplications from './components/Employer/JobListingApplications.tsx';
+import EmployeesComponent from './components/Employer/Employees.tsx';
 
 function App() {
     return (
@@ -45,6 +45,7 @@ function App() {
                     <Route path="/viewapplications" element={<JobApplications />} />
                     <Route path="/verifyprofiles" element={<ViewProfiles/>}/>
                     <Route path="/jobapplications" element={<ApplicationsView/>}/>
+                    <Route path="/employees" element={<EmployeesComponent />} />
                 </Routes>
             </div>
         </Router>
