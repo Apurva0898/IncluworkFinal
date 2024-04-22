@@ -14,21 +14,21 @@ export default defineConfig({
                 enabled: true
             },
             manifest: {
-                name: "incluwork",
+                name: "incluwork-app",
                 short_name: "incluwork",
-                start_url: ".",  // Changed for clarity
+                start_url: "./",
                 display: "standalone",
                 background_color: "#fff",
                 description: "Job portal for Differently able people.",
                 theme_color: "#ffffff",
                 "icons": [
                     {
-                        "src": "images/pwa-512x512.png",
+                        "src": "public/images/pwa-512x512.svg",
                         "sizes": "168x168",
                         "type": "image/png"
                     },
                     {
-                        "src": "images/pwa-192x192.png",
+                        "src": "public/images/pwa-192x192.png",
                         "sizes": "192x192",
                         "type": "image/png"
                     }
