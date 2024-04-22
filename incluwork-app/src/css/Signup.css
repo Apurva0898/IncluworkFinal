@@ -67,3 +67,19 @@
     margin: 10px 0;
 }
 
+.docs-upload{
+display: flex;
+}
+
+.upload-title{
+    display: flex;
+    justify-content: center;
+    margin: 30px;
+}
+.upload-button{
+    display: flex;
+    justify-content: center;
+}
+.upload-button > button{
+    padding: 15px 30px;
+}

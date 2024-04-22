@@ -1,35 +1,18 @@
 import mongoose from "mongoose";
 
-const accommodationFacilitiesEnum = [
-    'Screen Reading Software',
-    'Magnification Tools',
-    'Braille Display',
-    'Large Print Materials',
-    'Tactile Markings',
-    'Auditory Cues',
-    'Sign Language Interpreter',
-    'Video Relay Services',
-    'Closed Captioning',
-    'Vibrating Devices',
-    'Text-based Communication Tools',
-    'Speech Recognition Software',
-    'Alternative Communication Devices',
-    'Haptic Communication Methods',
-    'Assistive Technology Devices',
-    'Ergonomic Equipment',
-    'Adjustable Workstations',
-    'Adaptive Technology Devices',
-    'Accessible Workspaces',
-    'Ergonomic Chairs',
-    'Adaptive Equipment',
-    'Visual Schedules',
-    'Task Checklists',
-    'Supportive Seating',
-    'Adjustable Equipment',
-    'Wheelchair Accessible Workspace',
-    'Ergonomic Keyboards',
+const accommodationFacilitiesEnum=[
+    'Screen reading software', 'Magnification tools', 'Audio Navigation Guides','Braille Display',
+    'Tactile Markings', 'Assistive Listening Devices', 'Captioning Software', 'Accessible Communication Tools',
+    'Sign Language Interpreters', 'Visual Cues and Graphical Representation Software', 'Visual Communication Aids',
+    'Speech Generating Devices', 'Text-to-Speech Software', 'Communication Applications', 'Assistive Technology Devices',
+    'Tactile Graphics Software', 'Remote Collaboration Tools', 'Ergonomic Workspace Setup', 'Collaborative Project Management Tools',
+    'Accessible Communication Platforms', 'Visual Cues for Orientation', 'Accessible Software Development Tools',
+    'Accessible Transportation Facilities', 'Flexible Attendance Policies', 'Ergonomic Workstation Setup',
+    'Voice-controlled Technology Devices', 'Assistive Aids', 'Flexible Work Arrangements', 'Voice-controlled Project Management Tools',
+    'Supportive Workstations and Equipment', 'Virtual Assistive Devices', 'Individualized Support Plans',
+    'Wheelchair Accessible Workspace', 'Customized Work Arrangements', 'Supportive Networks and Communities',
+    'Collaborative Task Management Tools', 'Ergonomic Keyboards', 'Rest Areas and Quiet Workspaces', 'Telecommuting Facilities', 'Individualized Accommodative Facilities'
 ];
-
 const schema = new mongoose.Schema(
     {
         userId: {

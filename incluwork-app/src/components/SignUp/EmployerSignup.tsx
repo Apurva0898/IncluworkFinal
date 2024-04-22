@@ -42,7 +42,7 @@ const RegisterForm = () => {
     const [companyName, setCompanyName] = useState('')
     const [companyProfile, setCompanyProfile] = useState('')
     const [accommodationFacilities, setAccommodationFacilities] = useState<string[]>([]);
-
+    const navigate = useNavigate();
     const handleChange = (event: SelectChangeEvent<string | string[]>) => {
         const value = event.target.value;
         // Ensure to handle null or undefined values
@@ -55,50 +55,50 @@ const RegisterForm = () => {
         }
     };
     const handleClick = () => {
-        const navigate = useNavigate();
+
 
         // Redirect to the desired page
-        navigate('/../success');
+        navigate('/login');
     };
-    function handleSubmit(event:React.FormEvent<HTMLFormElement>) {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         const formData = {
             name,
             email,
             password,
-            type:"employer",
+            type: 'employer',
             contactNumber,
             companyName,
             companyProfile,
-            accommodationFacilities
+            accommodationFacilities,
         };
 
-        fetch('http://localhost:3000/incluwork/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
+        try {
+            const response = await fetch('http://localhost:3000/incluwork/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
             });
 
-        const navigate = useNavigate();
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
 
-        // Redirect to the desired page
-        navigate('/../success');
-    }
+            const data = await response.json();
+
+            // Store the token in localStorage or session storage for future use
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('type', data.type);
+            localStorage.setItem('userId', data.id);
+            // Redirect to the success page or any other page as needed
+            navigate('/employer');
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
 
     return (
