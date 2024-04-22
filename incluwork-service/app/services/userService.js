@@ -15,6 +15,65 @@ export const fetchAllUsers = async () => {
         throw err;
     }
 };
+
+export const getUserById = async (userId) => {
+    try {
+      // Fetch user by userId
+      const user = await User.findOne({ _id: userId });
+      if (!user) {
+        throw new Error('User not found');
+      }
+  
+      // Convert user to plain JavaScript object and remove sensitive fields
+      const userData = {
+        userId: user._id, // Rename _id to userId
+        name: user.name,
+        email: user.email,
+        type: user.type,
+        contactNumber: user.contactNumber,
+      };
+  
+      // Fetch additional data based on userType
+      let additionalData;
+      switch (userData.type) {
+        case 'jobseeker':
+          additionalData = await JobSeeker.findOne({ userId: userId });
+          if (!additionalData) {
+            throw new Error('JobSeeker data not found');
+          }
+          // Construct jobseeker data
+          additionalData = {
+            education: additionalData.education,
+            skills: additionalData.skills,
+            resume: additionalData.resume,
+            medicalProof: additionalData.medicalProof,
+            challenges: additionalData.challenges,
+          };
+          break;
+        case 'employer':
+          additionalData = await Employer.findOne({ userId: userId });
+          if (!additionalData) {
+            throw new Error('Employer data not found');
+          }
+          // Construct employer data
+          additionalData = {
+            companyName: additionalData.companyName,
+            companyProfile: additionalData.companyProfile,
+            inclusivityRating: additionalData.inclusivityRating,
+            accommodationFacilities: additionalData.accommodationFacilities,
+          };
+          break;
+        default:
+          throw new Error('Invalid user type');
+      }
+  
+      // Return combined user data with additional data
+      return { ...userData, ...additionalData };
+    } catch (error) {
+      throw new Error(`Error getting user by userId: ${error.message}`);
+    }
+};
+
  // Rest API implementations for job seeker profile
 
 // Fetching a job seeker profile

@@ -3,6 +3,9 @@ import JobSeeker from './JobSeeker.js';
 import Job from './Job.js';
 
 const applicationSchema = new mongoose.Schema({
+  applicationId: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
   jobId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -30,7 +33,7 @@ const applicationSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
-    enum: ['pending','applied', 'accepted', 'rejected', 'withdrawn'],
+    enum: ['pending','applied', 'offered', 'accepted', 'rejected', 'withdrawn'],
     default: 'pending'
   }
 },

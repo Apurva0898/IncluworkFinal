@@ -6,8 +6,6 @@ import Employer from './components/HomePages/Employer.tsx';
 import Jobseeker from './components/HomePages/Jobseeker.tsx';
 import Navbar from "./components/Common/Navbar.tsx";
 import Unauthorized from './components/Common/Unauthorized.tsx';
-import Upload from './components/SignUp/JobseekerUpload.tsx';
-import CreateJob from "./components/Employer/CreateJob.tsx";
 
 //Admin imports
 import Applications from './components/Admin/Applications.tsx';
@@ -16,10 +14,11 @@ import Jobs from './components/Admin/Jobs.tsx';
 
 //JobSeeker imports
 import JobCards from './components/JobSeeker/JobseekerHome.tsx';
-
+import JobApplications from './components/Employer/JobListingApplications.tsx';
+import Upload from './components/SignUp/JobseekerUpload.tsx';
 
 //Employer imports
-
+import CreateJob from "./components/Employer/CreateJob.tsx";
 
 
 function App() {
@@ -40,6 +39,7 @@ function App() {
                     <Route path="/jobs" element={<Jobs />} />
                     <Route path="/users" element={<User />} />
                     <Route path="/jobseekerhome" element={<JobCards />}/>
+                    <Route path="/viewapplications" element={<JobApplications />} />
                 </Routes>
             </div>
         </Router>

@@ -1,5 +1,6 @@
 import Application from '../models/Application.js';
 import Job from '../models/Job.js';
+import mongoose from "mongoose";
 
 export const createjobApplication = async (jobseekerid,applicationData) => {
     try {
@@ -69,6 +70,35 @@ export const getJoblistingApplications = async (employerId) => {
         return applicationList;
     } catch (error) {
         throw new Error('Could not fetch applications');
+    }
+}
+
+export const updateApplicationStatus = async (applicationId, status) => {
+    try {
+      const updatedApplication = await Application.findByIdAndUpdate(applicationId, { status }, { new: true });
+      return updatedApplication;
+    } catch (error) {
+      throw new Error('Error updating application status');
+    }
+  };
+export const deleteJobApplication = async (applicationId) => {
+    try {
+        const isValidObjectId = mongoose.Types.ObjectId.isValid(applicationId);
+        if (!isValidObjectId) {
+            throw new Error('Invalid application ID');
+        }
+
+        
+        const application = await Application.findByIdAndDelete(applicationId);
+        console.log(application);
+        if (!application) {
+            throw new Error('Application not found');
+            
+        }
+        return application;
+    } catch (error) {
+        
+        throw new Error('Could not delete Application');
     }
 }
 
