@@ -49,7 +49,6 @@ export const getJobApplicationsByUserId = async (jobseekerId) => {
             return app;
         });
         
-        console.log(renamedApplications);
         return renamedApplications;
     } catch (error) {
         throw new Error("Error retrieving job applications");
@@ -98,7 +97,6 @@ export const deleteJobApplication = async (applicationId) => {
 
         
         const application = await Application.findByIdAndDelete(applicationId);
-        console.log(application);
         if (!application) {
             throw new Error('Application not found');
             

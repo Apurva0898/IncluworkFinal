@@ -17,12 +17,14 @@ import ViewProfiles from './components/Admin/ViewProfiles.tsx'
 import JobCards from './components/JobSeeker/JobseekerHome.tsx';
 import Upload from './components/SignUp/JobseekerUpload.tsx';
 import ApplicationsView from './components/JobSeeker/Jobapplications.tsx';
+import JobOffers from './components/JobSeeker/Joboffers.tsx';
 
 
 //Employer imports
 import CreateJob from "./components/Employer/CreateJob.tsx";
 import JobApplications from './components/Employer/JobListingApplications.tsx';
 import EmployeesComponent from './components/Employer/Employees.tsx';
+
 
 function App() {
     return (
@@ -45,7 +47,11 @@ function App() {
                     <Route path="/viewapplications" element={<JobApplications />} />
                     <Route path="/verifyprofiles" element={<ViewProfiles/>}/>
                     <Route path="/jobapplications" element={<ApplicationsView/>}/>
+<<<<<<< Updated upstream
                     <Route path="/employees" element={<EmployeesComponent />} />
+=======
+                    <Route path="/joboffers" element={<JobOffers/>}/>
+>>>>>>> Stashed changes
                 </Routes>
             </div>
         </Router>

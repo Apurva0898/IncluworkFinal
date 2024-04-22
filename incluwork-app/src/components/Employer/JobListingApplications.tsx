@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
   fetchApplications,
-  updateApplicationStatus,
   fetchAllJobs,
   downloadResume,
   downloadMedicalProof
 } from '../../services/employerService.ts';
-import { fetchUserById } from '../../services/userService.ts';
+import { fetchUserById, updateApplicationStatus } from '../../services/userService.ts';
 import { ApplicationData } from "../../models/Application";
 import { JobData } from "../../models/Job";
 import { User } from "../../models/User";
