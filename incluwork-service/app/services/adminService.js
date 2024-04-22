@@ -106,6 +106,21 @@ export const getAllApplications = async () => {
     }
 };
 
+
+//Controller function for deleting all applications
+export const removeAllApplications = async (req: Request, res: Response) => {
+    try {
+        const result = await deleteAllApplications();
+        res.json({
+            message: 'All applications have been deleted',
+            result
+        });
+    } catch (error) {
+        res.status(500).json({ error: `Failed to delete applications: ${error.message}` });
+    }
+};
+
+
 export const verifyJobseeker = async (userId,status) => {
     try {
         console.log("in admin service")
@@ -122,3 +137,4 @@ export const verifyJobseeker = async (userId,status) => {
         throw new Error(`Failed to set the status: ${error.message}`);
     }
 };
+
