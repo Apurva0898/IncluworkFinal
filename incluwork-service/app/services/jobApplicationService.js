@@ -1,5 +1,6 @@
 import Application from '../models/Application.js';
 import Job from '../models/Job.js';
+import mongoose from "mongoose";
 
 export const createjobApplication = async (jobseekerid,applicationData) => {
     try {
@@ -40,8 +41,16 @@ export const createjobApplication = async (jobseekerid,applicationData) => {
 export const getJobApplicationsByUserId = async (jobseekerId) => {
     try {
         // Find all job applications where the userId matches the logged-in user's ID
-        const jobApplications = await Application.find({ userId: jobseekerId});
-        return jobApplications;
+        const jobApplications = await Application.find({ userId: jobseekerId}).lean();
+        
+        const renamedApplications = jobApplications.map(app => {
+            app.applicationId = app._id.toString(); // Convert ObjectId to string and assign to applicationId
+            delete app._id; // Delete the original _id field
+            return app;
+        });
+        
+        console.log(renamedApplications);
+        return renamedApplications;
     } catch (error) {
         throw new Error("Error retrieving job applications");
     }
@@ -80,3 +89,24 @@ export const updateApplicationStatus = async (applicationId, status) => {
       throw new Error('Error updating application status');
     }
   };
+export const deleteJobApplication = async (applicationId) => {
+    try {
+        const isValidObjectId = mongoose.Types.ObjectId.isValid(applicationId);
+        if (!isValidObjectId) {
+            throw new Error('Invalid application ID');
+        }
+
+        
+        const application = await Application.findByIdAndDelete(applicationId);
+        console.log(application);
+        if (!application) {
+            throw new Error('Application not found');
+            
+        }
+        return application;
+    } catch (error) {
+        
+        throw new Error('Could not delete Application');
+    }
+}
+

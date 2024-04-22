@@ -1,9 +1,18 @@
 
 .CardContent {
+    padding : 20px;
     display: flex;
-    flex-direction: column;  /* Aligns content vertically */
+    flex-direction: column;  /* Aligning content vertically */
     justify-content: space-around;  /* Distributes spacing evenly */
 }
 .Chip {
-    margin: 4px;  /* Adds space around each chip */
+    margin: 4px;  /* Adding space around each chip */
+}
+
+.Typography--margin {
+    margin-bottom: 10px;  /* Adding space below each Typography component */
+}
+
+.Section-spacing {
+    margin-bottom: 20px;  /* Adding more space between sections */
 }

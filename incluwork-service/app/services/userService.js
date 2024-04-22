@@ -7,7 +7,6 @@ import Application from "../models/Application.js";
 
 export const fetchAllUsers = async () => {
     try {
-        // You might want to filter out sensitive fields
         const users = await User.find({}, '-password -__v'); // Excludes password and __v from results
         return users;
     } catch (err) {
@@ -74,6 +73,61 @@ export const getUserById = async (userId) => {
     }
 };
 
+export const patchUserById = async (userId, data) => {
+    try {
+        // Fetch the user by userId
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        // Update basic user fields if they are in the data object
+        user.name = data.name || user.name;
+        user.email = data.email || user.email;
+        user.contactNumber = data.contactNumber || user.contactNumber;
+
+        // Save the updated user
+        await user.save();
+
+        // Update additional data based on userType
+        let additionalDataModel;
+        let additionalDataUpdates = {};
+
+        switch (user.type) {
+            case 'jobseeker':
+                additionalDataModel = JobSeeker;
+                if (data.education) additionalDataUpdates.education = data.education;
+                if (data.skills) additionalDataUpdates.skills = data.skills;
+                if (data.resume) additionalDataUpdates.resume = data.resume;
+                if (data.medicalProof) additionalDataUpdates.medicalProof = data.medicalProof;
+                if (data.challenges) additionalDataUpdates.challenges = data.challenges;
+                if (data.status) additionalDataUpdates.status = data.status;
+                break;
+            case 'employer':
+                additionalDataModel = Employer;
+                if (data.companyName) additionalDataUpdates.companyName = data.companyName;
+                if (data.companyProfile) additionalDataUpdates.companyProfile = data.companyProfile;
+                if (data.inclusivityRating) additionalDataUpdates.inclusivityRating = data.inclusivityRating;
+                if (data.accommodationFacilities) additionalDataUpdates.accommodationFacilities = data.accommodationFacilities;
+                break;
+            default:
+                throw new Error('Invalid user type');
+        }
+
+        // Find and update the additional data
+        const additionalData = await additionalDataModel.findOneAndUpdate({ userId: userId }, additionalDataUpdates, { new: true });
+
+        if (!additionalData) {
+            throw new Error(`${user.type} data not found`);
+        }
+
+        // Return the updated data
+        return { ...user.toObject(), ...additionalData.toObject() };
+    } catch (error) {
+        console.error('Error updating user:', error);
+        throw new Error(`Error updating user by userId: ${error.message}`);
+    }
+};
  // Rest API implementations for job seeker profile
 
 // Fetching a job seeker profile
@@ -110,7 +164,8 @@ export const findJobSeekerById = async (id) => {
         skills: jobSeeker.skills,
         resume: jobSeeker.resume,
         medicalProof: jobSeeker.medicalProof,
-        challenges: jobSeeker.challenges
+        challenges: jobSeeker.challenges,
+        status: jobSeeker.status
     };
 
       return combinedUserDetails;
@@ -160,7 +215,8 @@ export const findJobSeekerById = async (id) => {
         skills: updatedJobSeeker?.skills,
         resume: updatedJobSeeker?.resume,
         medicalProof: updatedJobSeeker?.medicalProof,
-        challenges: updatedJobSeeker?.challenges
+        challenges: updatedJobSeeker?.challenges,
+        status: updatedJobSeeker?.status
     };
 
     return jobSeekerProfile;

@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {useDispatch} from "react-redux";
 import {logout} from "../../store/authSlice.ts";
+import { User } from '../../models/User';
 
 const Navbar = () => {
     const location = useLocation();
@@ -55,7 +56,7 @@ const Navbar = () => {
                         <>
                             <Button color="inherit" component={Link} to="/users">Users</Button>
                             <Button color="inherit" component={Link} to="/jobs">Jobs</Button>
-                            <Button color="inherit" component={Link} to="/verify-profiles">Verify Profiles</Button>
+                            <Button color="inherit" component={Link} to="/verifyprofiles">Verify Profiles</Button>
                             <Button color="inherit" component={Link} to="/applications">Applications</Button>
                         </>
                     );
@@ -89,7 +90,7 @@ const Navbar = () => {
         <AppBar position="static" sx={{ backgroundColor: '#1976d2' }}>
             <Toolbar>
                 <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                    My Website
+                    Welcome 
                 </Typography>
                 {renderButtons()}
                 {isAuthenticated && (

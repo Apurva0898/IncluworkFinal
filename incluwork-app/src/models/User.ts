@@ -1,5 +1,5 @@
 export interface User {
-    accommodationFacilities: never[];
+    accommodationFacilities: string[];
     medicalProof: boolean;
     resume: boolean;
     id: string;

@@ -74,7 +74,8 @@ export const saveProof = async (userId, file) => {
       // Update the JobSeeker document
       await JobSeeker.findOneAndUpdate(
           { userId },
-          { medicalProof: modifiedUrl },
+          { medicalProof: modifiedUrl,
+          status:"pending"},
           { new: true }
       );
       return modifiedUrl;

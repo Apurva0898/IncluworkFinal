@@ -21,7 +21,7 @@ export const getJobApplications = async (req, res) => {
     try {
         const jobseekerId = req.user.id; 
         const jobApplications = await jobApplicationService.getJobApplicationsByUserId(jobseekerId);
-        res.status(200).json({ success: true, data: jobApplications });
+        res.status(200).json( jobApplications );
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
@@ -45,9 +45,9 @@ export const getJoblistingApplications = async (req, res) => {
 
 export const updateApplicationStatus = async (req, res) => {
     try {
-        // Check if the user type is employer
-        if (req.user.type !== 'employer') {
-            return res.status(403).send({ error: "Access denied: User is not an employer"});
+        // Check if the user type is employer or job seeker
+        if (req.user.type !== 'employer' && req.user.type !== 'jobseeker') {
+            return res.status(403).send({ error: "Access denied: Not a valid user"});
         }
         
         const applicationId = req.params.applicationId;
@@ -59,3 +59,17 @@ export const updateApplicationStatus = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+// Delete job by ID
+export const deleteJobApplication = async (req, res) => {
+    try {
+        // Check if the user type is jobseeker
+        if (req.user.type !== 'jobseeker') {
+            return res.status(403).send({ error: "Access denied: User is not a job seeker"});
+        }
+        
+        await jobApplicationService.deleteJobApplication(req.params.id);
+        return res.status(204).send(); 
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+}

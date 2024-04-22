@@ -18,9 +18,10 @@ import {
   
   } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {signup } from './../../store/authSlice';
 import './../../css/Signup.css';
+import {Skills} from "../../constants/enums.ts";
 
 // import {findJobSeekerById,findEmployerById} from '../../../../incluwork-service/app/services/userService'
 
@@ -43,18 +44,6 @@ const JobSeekerSignup = () => {
         'Visual Impairment', 'Hearing Impairment', 'Speech Impairment', 'Dual Sensory Impairment', 'Vestibular Impairment', 'Paralysis', 'Arthritis', 'Down Syndrome', 'Ehlers-Danlos Syndrome', 'Orthopedic Disabilities'
     ];
 
-    const skillsEnum = [
-        'Proficiency in Braille', 'Attention to Detail', 'Keyboarding Skills',
-        'Knowledge of Accessibility Standards', 'Communication Skills',
-        'Adaptive Technology Proficiency', 'Proficiency in Sign Language', 'Creativity',
-        'Organizational Skills', 'Knowledge of Visual Storytelling Techniques',
-        'Proficiency in Speech Recognition Software', 'Problem Solving Skills', 'Team Management Skills', 'Expertise in Accessibility Software',
-        'Familiar with Sensory-aware Counseling Techniques', 'Tech Savviness', 'Flexibility', 'Adaptability', 'Accessibility Knowledge',
-        'Technical Proficiency', 'Continuous Learning Skills', 'Tech Literacy', 'Visual Design Skills',
-        'Strategic Thinking Skills', 'Team Collaboration Skills', 'Analytical Skills', 'Customer Care Skills',
-        'Critical Thinking', 'Accessibility Awareness', 'Excellent Communication and Interpersonal Skills', 'Knowledge of Company Policies and Procedures',
-        'Industry Expertise', 'Networking Abilities', 'Time Management Skills'
-    ];
 
 
 
@@ -115,7 +104,6 @@ const JobSeekerSignup = () => {
 
     return (
         <div className="signup-form">
-            <h1>Job Seeker Signup</h1>
             <form onSubmit={handleSubmit}>
                 <TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} fullWidth margin="normal" />
                 <TextField label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} fullWidth margin="normal" />
@@ -182,7 +170,7 @@ const JobSeekerSignup = () => {
                  <Dialog onClose={() => setDialogOpen(false)} open={dialogOpen}>
                     <DialogTitle>Skills</DialogTitle>
                     <List>
-                        {skillsEnum.map(skill => (
+                        {Object.values(Skills).map(skill => (
                             <ListItem
                                 key={skill}
                                 dense

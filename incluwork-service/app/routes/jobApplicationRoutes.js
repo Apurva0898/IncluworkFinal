@@ -9,5 +9,6 @@ router.post("/jobapplications",jwtAuth, jobApplicationController.createjobApplic
 router.get("/jobapplications",jwtAuth, jobApplicationController.getJobApplications);
 router.get("/applications",jwtAuth, jobApplicationController.getJoblistingApplications);
 router.patch('/applications/:applicationId/status', jwtAuth, jobApplicationController.updateApplicationStatus);
+router.delete("/jobapplications/:id", jwtAuth, jobApplicationController.deleteJobApplication);
 
 export default router;

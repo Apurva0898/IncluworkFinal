@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import {
   fetchApplications,
   updateApplicationStatus,
-  fetchUserById,
   fetchAllJobs,
   downloadResume,
   downloadMedicalProof
 } from '../../services/employerService.ts';
+import { fetchUserById } from '../../services/userService.ts';
 import { ApplicationData } from "../../models/Application";
 import { JobData } from "../../models/Job";
 import { User } from "../../models/User";
@@ -31,6 +31,7 @@ const JobApplications: React.FC = () => {
                 const applicationData: ApplicationData[] = await fetchApplications();
                 const applicationsWithDetails = await Promise.all(applicationData.map(async app => {
                     const user: User = await fetchUserById(app.userId);
+
                     const job = jobs.find(j => j.jobId === app.jobId);
                     return {
                         ...app,
@@ -49,7 +50,8 @@ const JobApplications: React.FC = () => {
         loadData();
     }, [updateCount]); // Depend on updateCount to refresh data on status update
 
-    const handleStatusUpdate = async (applicationId: string, newStatus: 'accepted' | 'rejected') => {
+    const handleStatusUpdate = async (applicationId: string, newStatus: 'offered' | 'rejected') => {
+
         try {
             const response = await updateApplicationStatus(applicationId, newStatus);
             if (response) {
@@ -78,7 +80,8 @@ const JobApplications: React.FC = () => {
                             <span style={{ fontSize: '25px' }}>Applicant: {app.userName}</span>
                             <div style={{ 
                                 padding: '6px 12px', 
-                                backgroundColor: app.status === 'accepted' ? 'green' : app.status === 'rejected' ? 'red' : 'none',
+                                backgroundColor: app.status === 'offered' ? 'green' : app.status === 'rejected' ? 'red' : 'none',
+
                                 color: 'white', 
                                 borderRadius: '5px',
                                 display: app.status === 'pending' ? 'none' : 'inline-block',
@@ -101,8 +104,8 @@ const JobApplications: React.FC = () => {
                     <div>
                         {app.status === 'pending' || app.status === 'applied' ? (
                             <div style={{ display: 'flex' }}>
-                                <button onClick={() => handleStatusUpdate(app.applicationId, 'accepted')} style={{ backgroundColor: 'green', color: 'white', marginRight: '10px', padding: '10px' }}>
-                                    <FaCheck /> Accept
+                                <button onClick={() => handleStatusUpdate(app.applicationId, 'offered')} style={{ backgroundColor: 'green', color: 'white', marginRight: '10px', padding: '10px' }}>
+                                    <FaCheck /> Offer
                                 </button>  
                                 <button onClick={() => handleStatusUpdate(app.applicationId, 'rejected')} style={{ backgroundColor: 'red', color: 'white', padding: '10px' }}>
                                     <FaTimes /> Reject

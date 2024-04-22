@@ -14,7 +14,7 @@ interface JobFormData {
     employerId: string;
     location: string;
     jobType: string;
-    accommodationFacilities: string[];
+    accessibilityFeatures: string[];
     requiredSkills: string[];
     maxPositions: number;
     salary: number;
@@ -30,7 +30,7 @@ const JobCreationForm: React.FC = () => {
         employerId: '',
         location: '',
         jobType: 'full-time',
-        accommodationFacilities: [],
+        accessibilityFeatures: [],
         requiredSkills: [],
         maxPositions: 0,
         salary: 0,
@@ -43,11 +43,11 @@ const JobCreationForm: React.FC = () => {
 
     useEffect(() => {
         if (user) {
-            setFormData(f => ({
-                ...f,
-                employerId: user.id,
-                accommodationFacilities: user.accommodationFacilities || []
-            }));
+            // setFormData(f => ({
+            //     ...f,
+            //     employerId: user.id,
+            //     accommodationFacilities: user.accommodationFacilities || []
+            // }));
         }
     }, [user]);
 
@@ -56,9 +56,11 @@ const JobCreationForm: React.FC = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleAccommodationFacilitiesChange = (event: SelectChangeEvent<string[]>) => {
+    const handleAccessibilityFeaturesChange = (event: SelectChangeEvent<string[]>) => {
         const { value } = event.target;
-        setFormData(prev => ({ ...prev, accommodationFacilities: typeof value === 'string' ? value.split(',') : value }));
+
+        setFormData(prev => ({ ...prev, accessibilityFeatures: typeof value === 'string' ? value.split(',') : value }));
+
     };
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
         const { name, value } = event.target;
@@ -67,6 +69,7 @@ const JobCreationForm: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        console.log("in submit",formData.accessibilityFeatures)
 
 
         const url = `http://localhost:3000/incluwork/joblistings`;
@@ -96,7 +99,7 @@ const JobCreationForm: React.FC = () => {
             employerId: user.id,  // Keep the employer ID constant
             location: '',
             jobType: 'full-time',
-            accommodationFacilities: [],
+            accessibilityFeatures: [],
             requiredSkills: [],
             maxPositions: 0,
             salary: 0,
@@ -171,11 +174,11 @@ const JobCreationForm: React.FC = () => {
                     <Select
                         multiple
                         name="accommodationFacilities"
-                        value={formData.accommodationFacilities}
-                        onChange={handleAccommodationFacilitiesChange}
+                        value={formData.accessibilityFeatures}
+                        onChange={handleAccessibilityFeaturesChange}
                         renderValue={(selected) => selected.join(', ')}
                     >
-                        {formData.accommodationFacilities.map(feature => (
+                        {user.accommodationFacilities.map(feature => (
                             <MenuItem key={feature} value={feature}>{feature}</MenuItem>
                         ))}
                     </Select>
@@ -245,7 +248,7 @@ const JobCreationForm: React.FC = () => {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => setOpenDialog(false)}>Add more jobs</Button>
-                        <Button onClick={() => window.location.href = '/view-jobs'} autoFocus>View Jobs</Button>
+                        <Button onClick={() => window.location.href = '/employer'} autoFocus>View Jobs</Button>
                     </DialogActions>
                 </Dialog>
             </form>

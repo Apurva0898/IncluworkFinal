@@ -12,14 +12,15 @@ import { format, isValid, parseISO } from 'date-fns';
 import { useSelector } from "react-redux";
 import { AppState } from "../../store";
 import {JobTitles, Skills, Cities} from "../../constants/enums.ts";
+
 interface Job {
-    accommodationFacilities: string[];
+    accessibilityFeatures: string[];
     jobId: string;
     title: string;
     location: string;
     description?: string;
     jobType: string;
-    skills: string[];
+    requiredSkills: string[];
     salary: number;
     dateOfJoining: string;
     dateOfPosting: string;
@@ -31,7 +32,8 @@ const EmployerHome: React.FC = () => {
     const [jobs, setJobs] = useState<Job[]>([]);
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [currentJob, setCurrentJob] = useState<Job | null>(null);
-    const { user } = useSelector((state: AppState) => state.auth);
+    let { user } = useSelector((state: AppState) => state.auth);
+
 
     useEffect(() => {
         fetchJobs();
@@ -55,12 +57,14 @@ const EmployerHome: React.FC = () => {
             });
 
             if (!response.ok) {
+
                 throw new Error('Failed to fetch jobs');
             }
 
             const data = await response.json() as Job[];
             setJobs(data);
         } catch (error) {
+            console.log(error)
             console.error('Error fetching jobs:', error);
         }
     };
@@ -137,13 +141,16 @@ const EmployerHome: React.FC = () => {
                             <CardContent>
                                 <Typography variant="h5" component="div">{job.title}</Typography>
                                 <Typography color="textSecondary">{job.location}</Typography>
-                                <Typography variant="subtitle1">Job Type: {job.jobType}</Typography>
-                                <Typography variant="subtitle1">Salary: ${job.salary.toLocaleString()}</Typography>
+                                <Typography variant="subtitle1"><span style={{ fontWeight: 'bold' }}>Job Type:</span> {job.jobType}</Typography>
+                                <Typography variant="subtitle1"><span style={{ fontWeight: 'bold' }}>Salary: </span>${job.salary.toLocaleString()}</Typography>
+                                <Typography variant="subtitle1"><span style={{ fontWeight: 'bold' }}>Skills: </span>{job.requiredSkills.toLocaleString()}</Typography>
+                                <Typography variant="subtitle1"><span style={{ fontWeight: 'bold' }}>Accessibility Features: </span>{job.accessibilityFeatures.toLocaleString()}</Typography>
                                 <Typography variant="subtitle1">
-                                    Posted: {job.dateOfPosting && isValid(parseISO(job.dateOfPosting)) ? format(parseISO(job.dateOfPosting), 'PPP') : 'Date not available'}
+                                  <span
+                                      style={{fontWeight: 'bold'}}>  Posted: </span>{job.dateOfPosting && isValid(parseISO(job.dateOfPosting)) ? format(parseISO(job.dateOfPosting), 'PPP') : 'Date not available'}
                                 </Typography>
                             </CardContent>
-                            <CardActions>
+                            <CardActions style={{ justifyContent: 'space-between' }}>
                                 <Button variant="Rounded" startIcon={<DeleteIcon />} onClick={() => handleDeleteJob(job.jobId)}/>
                                 <Button startIcon={<EditIcon />} onClick={() => handleEditJob(job)}></Button>
                             </CardActions>
@@ -199,7 +206,7 @@ const EmployerHome: React.FC = () => {
                                 <InputLabel>Skills</InputLabel>
                                 <Select
                                     multiple
-                                    value={Array.isArray(currentJob.skills) ? currentJob.skills : []}
+                                    value={Array.isArray(currentJob.requiredSkills) ? currentJob.requiredSkills : []}
                                     onChange={(e) => setCurrentJob({
                                         ...currentJob,
                                         skills: typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value
@@ -216,10 +223,10 @@ const EmployerHome: React.FC = () => {
                                 <InputLabel>Accommodation Facilities</InputLabel>
                                 <Select
                                     multiple
-                                    value={Array.isArray(currentJob.accommodationFacilities) ? currentJob.accommodationFacilities : []}
+                                    value={Array.isArray(currentJob.accessibilityFeatures) ? currentJob.accessibilityFeatures : []}
                                     onChange={(e) => setCurrentJob({
                                         ...currentJob,
-                                        accommodationFacilities: typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value
+                                        accessibilityFeatures: typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value
                                     })}
                                     renderValue={(selected) => selected.join(', ')}
                                 >
@@ -254,11 +261,12 @@ const EmployerHome: React.FC = () => {
                                 fullWidth
                                 label="Date of Joining"
                                 type="date"
-                                InputLabelProps={{shrink: true}}
-                                value={currentJob.dateOfJoining}
+                                InputLabelProps={{ shrink: true }}
+                                value={currentJob.dateOfJoining ? currentJob.dateOfJoining.split('T')[0] : ''}
                                 onChange={(e) => setCurrentJob({...currentJob, dateOfJoining: e.target.value})}
                                 margin="dense"
                             />
+
                         </form>
                     </DialogContent>
                     <DialogActions>
