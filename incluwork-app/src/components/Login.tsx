@@ -14,6 +14,7 @@ const Login: React.FC = () => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
     };
 
+<<<<<<< Updated upstream
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -21,6 +22,23 @@ const Login: React.FC = () => {
             console.log(response.data);
         } catch (error) {
             console.error('Login error', error);
+=======
+    useEffect(() => {
+        if (isSuccess && user) {
+            // Logic to handle navigation based on user type and jobseeker's data
+            if (user.type === 'jobseeker' && user.resume && user.medicalProof) {
+                navigate('/jobseeker');
+            } else if (user.type === 'jobseeker') {
+                navigate('/upload');
+            } else if (user.type==='admin'){
+                navigate('/applications')
+            }
+            else {
+                navigate(`/${user.type}`);
+            }
+        } else if (isError) {
+            console.error('Login Error:', message);
+>>>>>>> Stashed changes
         }
     };
 

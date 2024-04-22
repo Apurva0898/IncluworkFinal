@@ -9,6 +9,15 @@ export const getAllUsers = async (req, res) => {
         res.status(500).json({ message: "Error retrieving users", error: err });
     }
 };
+
+export const getAllJobs = async (req, res) => {
+    try {
+        const jobs = await userService.fetchAllJobs();
+        res.json(jobs);
+    } catch (err) {
+        res.status(500).json({ message: "Error retrieving users", error: err });
+    }
+};
  
  
 //Controller functions for job seeker profile
