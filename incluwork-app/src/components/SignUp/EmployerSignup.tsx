@@ -2,38 +2,9 @@ import React, {useState} from 'react';
 import {TextField, Button, MenuItem, InputLabel, FormControl, Select, SelectChangeEvent} from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import './../../css/Signup.css';
+import {AccommodationFacilities} from "../../constants/enums.ts";
 
 
-
-const accommodationFacilitiesEnum = [
-    'Screen Reading Software',
-    'Magnification Tools',
-    'Braille Display',
-    'Large Print Materials',
-    'Tactile Markings',
-    'Auditory Cues',
-    'Sign Language Interpreter',
-    'Video Relay Services',
-    'Closed Captioning',
-    'Vibrating Devices',
-    'Text-based Communication Tools',
-    'Speech Recognition Software',
-    'Alternative Communication Devices',
-    'Haptic Communication Methods',
-    'Assistive Technology Devices',
-    'Ergonomic Equipment',
-    'Adjustable Workstations',
-    'Adaptive Technology Devices',
-    'Accessible Workspaces',
-    'Ergonomic Chairs',
-    'Adaptive Equipment',
-    'Visual Schedules',
-    'Task Checklists',
-    'Supportive Seating',
-    'Adjustable Equipment',
-    'Wheelchair Accessible Workspace',
-    'Ergonomic Keyboards',
-];
 const RegisterForm = () => {
     const [name, setName] = useState('')
     const [contactNumber, setContactNumber] = useState('')
@@ -180,7 +151,7 @@ const RegisterForm = () => {
                         onChange={handleChange}
                         renderValue={(selected: string[]) => selected.join(', ')} // Use join on selected, which is an array
                     >
-                        {accommodationFacilitiesEnum.map((facility: string) => (
+                        {Object.values(AccommodationFacilities).map((facility: string) => (
                             <MenuItem key={facility} value={facility}>
                                 {facility}
                             </MenuItem>
