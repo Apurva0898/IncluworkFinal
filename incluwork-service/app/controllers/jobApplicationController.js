@@ -21,7 +21,7 @@ export const getJobApplications = async (req, res) => {
     try {
         const jobseekerId = req.user.id; 
         const jobApplications = await jobApplicationService.getJobApplicationsByUserId(jobseekerId);
-        res.status(200).json({ success: true, data: jobApplications });
+        res.status(200).json( jobApplications );
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
