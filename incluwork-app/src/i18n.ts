@@ -6,13 +6,17 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 i18n
     .use(HttpBackend)
-    .use(LanguageDetector)
     .use(initReactI18next)
+    .use(LanguageDetector)
     .init({
+        lng: 'en',  //if u want to change language change here
         fallbackLng: 'en',
-        debug: true,
-        react: {
-            useSuspense: false // depending on your project, you might need to adjust this
+        ns: ['common'], // common.json should be there in each lang folder
+        backend : {
+            loadPath:'/i18n/{{lng}}/{{ns}}.json'
+        },
+        interpolation: {
+            escapeValue: false
         }
     });
 
