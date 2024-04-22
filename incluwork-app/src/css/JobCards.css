@@ -38,3 +38,66 @@
     background-color: #fff; /* White background */
     box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow */
 }
+
+
+
+/* Job Cards container */
+.job-cards-container {
+    padding: 20px 10%;
+}
+
+/* Centered typography for the title */
+.jobs-title {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+/* Search box styling */
+.search-box {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+/* Job card styling */
+.job-card {
+    max-width: 800px;
+    margin: auto;
+}
+
+.job-card-content {
+    padding: 20px;
+}
+
+.typography-margin {
+    margin-bottom: 1rem;
+}
+
+.section-spacing {
+    margin-bottom: 1rem;
+}
+
+.chip {
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Button box at the bottom of each card */
+.button-box {
+    padding: 2rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Styles for when a job is applied */
+.applied-chip {
+    background-color: green;
+    color: white;
+    border-radius: 20px;
+}
+
+/* Loading progress style */
+.loading-progress {
+    display: block;
+    margin: auto;
+}

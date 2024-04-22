@@ -96,8 +96,15 @@ const JobOffers: React.FC = () => {
     if (error) return <div>{error}</div>;
 
     return (
-        <div style={{ padding: '20px 10%' , height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+         
+        <div style={{ padding: '20px 10%' }}>
+        {/* // <div style={{ padding: '20px 10%' , height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}> */}
+            
             {confettiRunning && <Confetti />}
+
+            <Typography variant="h4" component="h1" gutterBottom sx={{ textAlign: 'center', marginBottom: 3 }}>
+                  Job Offers
+            </Typography>
             <Grid container spacing={4} justifyContent="center">
                 {jobOffers.length > 0 ? (
                     jobOffers.map((offer) => (

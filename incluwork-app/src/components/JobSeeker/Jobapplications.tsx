@@ -93,6 +93,9 @@ const ApplicationsView: React.FC = () => {
     return (
         <div style={{ padding: '20px 10%' }}>  
         {/* // Adjusted padding for centering */}
+        <Typography variant="h4" component="h1" gutterBottom sx={{ textAlign: 'center', marginBottom: 3 }}>
+                Applications
+         </Typography>  
             <Grid container spacing={4} justifyContent="center">
                 {applications.map(app => (
                     <Grid item key={app.applicationId} xs={12}>
@@ -103,7 +106,7 @@ const ApplicationsView: React.FC = () => {
                                 <Typography variant="body2" color="textSecondary">Location: {app.location}</Typography>
                                 <Typography variant="body2">Salary: ${app.salary}</Typography>
                                 <Typography variant="body2">Date of Joining: {new Date(app.dateOfJoining).toLocaleDateString()}</Typography>
-                                <Typography variant="body2">Accessibility: {app.accessibilityFeatures.join(", ")}</Typography>
+                                <Typography variant="body2">Accessibility Features: {app.accessibilityFeatures.join(", ")}</Typography>
                                 <Typography component="div" variant="body2" color="textSecondary">
                                     Application Status: {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
                                 </Typography>
