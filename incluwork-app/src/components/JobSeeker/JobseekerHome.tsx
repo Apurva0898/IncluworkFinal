@@ -9,7 +9,6 @@ import './../../css/JobCards.css'
 
 const JobCards: React.FC = () => {
     const [jobs, setJobs] = useState<JobData[]>([]);  // Use the imported JobData type for state
-    const [appliedJobIds, setAppliedJobIds] = useState(new Set());
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -37,7 +36,8 @@ const JobCards: React.FC = () => {
         try {
             const result = await applyToJob(jobId);
             console.log('Application Result:', result);
-            setAppliedJobIds(new Set([...appliedJobIds, jobId])); // Update the set of applied job IDs
+            // Update the isApplied status for the applied job
+            setJobs(jobs.map(job => job.jobId === jobId ? { ...job, isApplied: true } : job));
             alert('Applied successfully!'); // Alert or handle UI update
         } catch (error) {
             console.error('Failed to apply:', error);
@@ -53,20 +53,20 @@ const JobCards: React.FC = () => {
              {jobs.map((job) => (
                  <Grid item key={job.jobId} xs={12}>
                      <Card raised style={{ maxWidth: 800, margin: 'auto' }}>
-                         <CardContent>
-                             <Typography variant="h5" component="h2">{job.title}</Typography>
-                             <Typography color="textSecondary" gutterBottom>{job.location} - {job.jobType}</Typography>
-                             <Typography variant="body2" color="textSecondary">Salary: ${job.salary.toLocaleString()}</Typography>
-                             <Typography variant="body2" color="textSecondary">
+                         <CardContent style={{ padding: '20px' }}>
+                             <Typography variant="h5" component="h2" className="Typography--margin">{job.title}</Typography>
+                             <Typography color="textSecondary" gutterBottom className="Typography--margin">{job.location} - {job.jobType}</Typography>
+                             <Typography variant="body2" color="textSecondary" className="Typography--margin">Salary: ${job.salary.toLocaleString()}</Typography>
+                             <Typography variant="body2" color="textSecondary" className="Typography--margin Section--spacing">
                                  Positions Available: {job.maxPositions}
                              </Typography>
-                             <Typography variant="body2" component="p">
+                             <Typography variant="body2" component="p" className="Typography--margin Section--spacing">
                                  Skills Required:
                                  {job.requiredSkills.map((skill, index) => (
                                      <Chip key={index} label={skill} color="primary" size="small" />
                                  ))}
                              </Typography>
-                             <Typography variant="body2" component="p">
+                             <Typography variant="body2" component="p" className="Typography--margin">
                                  Accessibility Features:
                                  {job.accessibilityFeatures.map((feature, index) => (
                                      <Chip key={index} label={feature} size="small" />
@@ -74,13 +74,13 @@ const JobCards: React.FC = () => {
                              </Typography>
                          </CardContent>
                          <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
-                             {appliedJobIds.has(job.jobId) ? (
-                                 <Chip label="Applied" color="success" style={{ backgroundColor: 'green', color: 'white', borderRadius: '20px' }} />
-                             ) : (
-                                 <Button variant="contained" color="primary" endIcon={<SendIcon />} onClick={() => handleApply(job.jobId)}>
-                                     Apply
-                                 </Button>
-                             )}
+                         {job.isApplied ? (
+                                    <Chip label="Applied" color="success" style={{ backgroundColor: 'green', color: 'white', borderRadius: '20px' }} />
+                                ) : (
+                                    <Button variant="contained" color="primary" endIcon={<SendIcon />} onClick={() => handleApply(job.jobId)}>
+                                        Apply
+                                    </Button>
+                                )}
                          </Box>
                      </Card>
                  </Grid>

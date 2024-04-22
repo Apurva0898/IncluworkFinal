@@ -41,8 +41,16 @@ export const createjobApplication = async (jobseekerid,applicationData) => {
 export const getJobApplicationsByUserId = async (jobseekerId) => {
     try {
         // Find all job applications where the userId matches the logged-in user's ID
-        const jobApplications = await Application.find({ userId: jobseekerId});
-        return jobApplications;
+        const jobApplications = await Application.find({ userId: jobseekerId}).lean();
+        
+        const renamedApplications = jobApplications.map(app => {
+            app.applicationId = app._id.toString(); // Convert ObjectId to string and assign to applicationId
+            delete app._id; // Delete the original _id field
+            return app;
+        });
+        
+        console.log(renamedApplications);
+        return renamedApplications;
     } catch (error) {
         throw new Error("Error retrieving job applications");
     }

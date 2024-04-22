@@ -16,6 +16,8 @@ import Jobs from './components/Admin/Jobs.tsx';
 import JobCards from './components/JobSeeker/JobseekerHome.tsx';
 import JobApplications from './components/Employer/JobListingApplications.tsx';
 import Upload from './components/SignUp/JobseekerUpload.tsx';
+import ApplicationsView from './components/JobSeeker/Jobapplications.tsx';
+
 
 //Employer imports
 import CreateJob from "./components/Employer/CreateJob.tsx";
@@ -40,6 +42,7 @@ function App() {
                     <Route path="/users" element={<User />} />
                     <Route path="/jobseekerhome" element={<JobCards />}/>
                     <Route path="/viewapplications" element={<JobApplications />} />
+                    <Route path="/jobapplications" element={<ApplicationsView/>}/>
                 </Routes>
             </div>
         </Router>
