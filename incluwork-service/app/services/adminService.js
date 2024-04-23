@@ -138,3 +138,16 @@ export const verifyJobseeker = async (userId,status) => {
     }
 };
 
+//updating
+export const updateJob = async (jobId, jobData) => {
+    try {
+        const updatedJob = await Job.findByIdAndUpdate(jobId, jobData, { new: true });
+        if (!updatedJob) {
+            throw new Error(`Job not found with ID: ${jobId}`);
+        }
+        return updatedJob;
+    } catch (error) {
+        throw new Error(`Failed to update job: ${error.message}`);
+    }
+};
+
