@@ -216,3 +216,16 @@ export const deleteJob = async (jobId) => {
         throw new Error(`Failed to delete job: ${error.message}`);
     }
 };
+
+//deleting jobseeker
+export const deleteJobSeeker = async (jobSeekerId) => {
+    try {
+        const deletedJobSeeker = await JobSeeker.findByIdAndDelete(jobSeekerId);
+        if (!deletedJobSeeker) {
+            throw new Error(`Job seeker not found with ID: ${jobSeekerId}`);
+        }
+        return deletedJobSeeker;
+    } catch (error) {
+        throw new Error(`Failed to delete job seeker: ${error.message}`);
+    }
+};
