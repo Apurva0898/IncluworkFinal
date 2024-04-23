@@ -151,3 +151,18 @@ export const updateJob = async (jobId, jobData) => {
     }
 };
 
+//updating application
+
+export const updateApplication = async (applicationId, applicationData) => {
+    try {
+        const updatedApplication = await Application.findByIdAndUpdate(applicationId, applicationData, { new: true });
+        if (!updatedApplication) {
+            throw new Error(`Application not found with ID: ${applicationId}`);
+        }
+        return updatedApplication;
+    } catch (error) {
+        throw new Error(`Failed to update application: ${error.message}`);
+    }
+};
+
+
