@@ -190,3 +190,16 @@ export const updateEmployer = async (employerId, employerData) => {
         throw new Error(`Failed to update employer: ${error.message}`);
     }
 };
+
+//updating user
+export const updateUser = async (userId, userData) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(userId, userData, { new: true });
+        if (!updatedUser) {
+            throw new Error(`User not found with ID: ${userId}`);
+        }
+        return updatedUser;
+    } catch (error) {
+        throw new Error(`Failed to update user: ${error.message}`);
+    }
+};
