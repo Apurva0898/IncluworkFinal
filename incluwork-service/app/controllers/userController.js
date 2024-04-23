@@ -73,8 +73,10 @@ export const getJobSeekerProfile = async (req, res) => {
  
 //Updating a job seeker profile
 export const updateJobSeekerProfile = async (req, res) => {
+    console.log('inside controller ',req.body);
     const id = req.user.id; // Using user ID from JWT
     const updateData = req.body;
+    
     
     // Check if the user type is jobseeker
     if (req.user.type !== 'jobseeker') {

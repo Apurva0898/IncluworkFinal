@@ -40,8 +40,7 @@ export const login = createAsyncThunk(
         }
         if (response.type === 'employer') {
           const employerData = await employerService.getEmployerData(response.id, token);
-          console.log("employerData");
-          console.log(employerData);
+        
           return { id: response.id, type: response.type, ...employerData };
         }
 

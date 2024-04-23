@@ -29,7 +29,7 @@ export const getJobSeekerData = async (userId: string, token: string): Promise<J
 
 
 // Service code to fetch all jobs 
-export const fetchAllJobs = async (query) => {
+export const fetchAllJobs = async (query='') => {
     const url = `${BASE_URL}/jobs?keywords=${query}`;
 
     try {
@@ -121,6 +121,97 @@ export const deleteJobApplication = async (applicationId: string): Promise<boole
         return false;
     }
 };
+
+// Function to fetch jobseeker details
+export const fetchJobSeekerDetails = async () => {
+    const url = `${BASE_URL}/jobseekers`;
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Assuming the token is stored in localStorage
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch jobseeker details');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching jobseeker details:', error);
+        throw error;
+    }
+};
+
+// Function to update jobseeker details
+export const updateJobSeekerDetails = async (updateData) => {
+    console.log("Updating with data:", updateData); 
+    
+    const url = `${BASE_URL}/jobseekers`;
+    try {
+        const response = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify(updateData)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to update jobseeker details');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error updating jobseeker details:', error);
+        throw error;
+    }
+};
+
+// Function to delete jobseeker
+export const deleteJobSeeker = async () => {
+    const url = `${BASE_URL}/jobseekers`;
+   
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            },
+        });
+        
+        if(response.status===204)
+            {
+                 console.log('Profile deleted successfully, nothing to return');
+                 return;
+            }
+       //If response is not ok     
+       throw new Error('Failed to delete jobseeker profile');
+};
+
+// To upload resume
+export const uploadResume = async (file: File): Promise<void> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const response = await fetch(`${BASE_URL}/resume`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        console.log('Resume uploaded successfully');
+    } catch (error) {
+        console.error('Failed to upload resume:', error);
+        throw error;
+    }
+};
+
 export default {
     getJobSeekerData
 };
