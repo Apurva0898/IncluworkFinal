@@ -136,7 +136,6 @@ const JobApplications: React.FC = () => {
                 <div key={app.applicationId} style={{
                     border: '1px solid #ccc',
                     padding: '20px',
-                    width: 'calc(50% - 10px)',
                     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                     borderRadius: '8px',
                     display: 'flex',
