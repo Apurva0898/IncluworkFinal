@@ -106,6 +106,8 @@ export const getAllApplications = async () => {
     }
 };
 
+
+
 export const verifyJobseeker = async (userId,status) => {
     try {
         console.log("in admin service")

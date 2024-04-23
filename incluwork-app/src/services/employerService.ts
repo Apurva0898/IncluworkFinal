@@ -209,11 +209,68 @@ export const updateJobListing = async (jobId: string, decrement: number): Promis
         })
     });
 
-    console.log("resp after patch", response);
-
     if (!response.ok) {
         throw new Error('Failed to update job listing');
     }
 
     return response.json();
+};
+
+export const getEmployerProfile = async (): Promise<any> => {
+    const response = await fetch(`${API_BASE_URL}/employers`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    });
+
+    console.log("Response after GET", response);
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch employer profile');
+    }
+
+    return response.json();
+};
+
+export const updateEmployerProfile = async (profileData: any): Promise<any> => {
+    console.log(profileData);
+    const response = await fetch(`${API_BASE_URL}/employers`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(profileData)
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to update employer profile');
+    }
+
+    return response.json();
+};
+
+export const deleteEmployerProfile = async (): Promise<any> => {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+        throw new Error('No token found');
+    }
+
+    const response = await fetch(`${API_BASE_URL}/employers`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    });
+
+    // Check if the response is OK and specifically handle the 204 No Content response
+    if (response.status === 204) {
+        console.log('Profile deleted successfully, no content to return.');
+        return; // Early return to skip any further processing
+    }
+
+    // If response is not OK, and it is not a 204 (handled above), throw an error
+    throw new Error('Failed to delete employer profile');
 };

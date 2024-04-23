@@ -10,7 +10,8 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
-
+.idea/
+.vite/
 # Dependency directories
 node_modules/
 jspm_packages/

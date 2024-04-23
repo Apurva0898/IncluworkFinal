@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { AppBar,Box, Toolbar, Typography, Button, Dialog, DialogTitle, DialogContent, DialogContentText } from '@mui/material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { User } from '../../models/User';
 import { fetchUserById } from './../../services/userService';
 
 import { ArrowBack as ArrowBackIcon } from '@mui/icons-material';
+import {useTranslation} from "react-i18next";
 
 
 const Navbar = () => {
@@ -17,8 +18,6 @@ const Navbar = () => {
     const [userType, setUserType] = useState('');
     const [userDetails, setUserDetails] = useState(null);
     const [verificationDialogOpen, setVerificationDialogOpen] = useState(false);
-
-
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -111,7 +110,7 @@ const Navbar = () => {
                             <Button color="inherit" component={Link} to="/create-job">Create Job</Button>
                             <Button color="inherit" component={Link} to="/viewapplications">View Applications</Button>
                             <Button color="inherit" component={Link} to="/employees">Employees</Button>
-                            <Button color="inherit" component={Link} to="/profile">Profile</Button>
+                            <Button color="inherit" component={Link} to="/empprofile">Profile</Button>
                         </>
                     );
                 default:
@@ -149,8 +148,8 @@ const Navbar = () => {
             ) : (
                 <AppBar position="static" sx={{ backgroundColor: '#1976d2' }}>
                     <Toolbar>
-                        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                            Welcome
+                        <Typography variant="h6" sx={{flexGrow: 1}}>
+                            INCLU-WORK
                         </Typography>
                         {renderButtons()}
                         {isAuthenticated && (
@@ -158,8 +157,9 @@ const Navbar = () => {
                         )}
                     </Toolbar>
                 </AppBar>
-                   )}
-         </>
+            )}
+        </>
+
     );
 };
 
