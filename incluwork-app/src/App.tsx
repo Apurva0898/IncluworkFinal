@@ -25,6 +25,7 @@ import JobOffers from './components/JobSeeker/Joboffers.tsx';
 import CreateJob from "./components/Employer/CreateJob.tsx";
 import JobApplications from './components/Employer/JobListingApplications.tsx';
 import EmployeesComponent from './components/Employer/Employees.tsx';
+import EmployerProfile from './components/Employer/EmployerProfile.tsx';
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
                     <Route path="/jobapplications" element={<ApplicationsView/>}/>
                     <Route path="/employees" element={<EmployeesComponent />} />
                     <Route path="/joboffers" element={<JobOffers/>}/>
+                    <Route path="/empprofile" element={<EmployerProfile/>}/>
                 </Routes>
             </div>
         </Router>
