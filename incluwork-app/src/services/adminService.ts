@@ -46,7 +46,7 @@ export const fetchJobSeekersByType = async (type: string): Promise<JobSeeker[]> 
 export const fetchData = async () => {
     try {
         const token=localStorage.getItem('token');
-        console.log(token);
+      
         const response = await fetch('http://localhost:3000/incluwork/admin/applications', {
             headers: {
                 'Authorization': `Bearer ${token}`,

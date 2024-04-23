@@ -46,7 +46,7 @@ export const getAllUsers = async (type) => {
                     } : {};
                     break;
                 default:
-                    console.log('Invalid user type for user:', userData.userId);
+                    
                     additionalData = {}; // Skip processing for invalid types
             }
 
@@ -110,7 +110,7 @@ export const getAllApplications = async () => {
 
 export const verifyJobseeker = async (userId,status) => {
     try {
-        console.log("in admin service")
+        
          const js=await  JobSeeker.findOne(userId);
         const updatedJobSeeker = await JobSeeker.findOneAndUpdate(
             { userId },

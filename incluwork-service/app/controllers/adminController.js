@@ -45,7 +45,7 @@ export const getAllJobs = async (req, res) => {
     };
 
 export const verifyJobseeker = async (req, res) => {
-    console.log("inadmin controller")
+   
     try {
         const applications = await adminService.verifyJobseeker(req.user.JSId,req.user.status);
         res.status(200).json(applications);

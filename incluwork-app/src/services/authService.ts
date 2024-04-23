@@ -17,7 +17,7 @@ const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
     throw new Error(errorData.message || 'Failed to log in');
   }
   const data: LoginResponse = await response.json();
-  console.log(data);
+
 
   return data;
 };
@@ -37,7 +37,7 @@ const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
   }
   
   const data: SignupResponse = await response.json();
-  console.log(data);
+ 
 
   return data;
 };

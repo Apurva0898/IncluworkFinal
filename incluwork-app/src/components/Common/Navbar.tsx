@@ -24,7 +24,6 @@ const Navbar = () => {
         const type = localStorage.getItem('type');
         if (token) {
             const decoded = jwtDecode(token);
-            console.log('User details',decoded);
             setUserDetails(decoded);
             const userId = decoded._id; // Replace 'sub' with the actual key used in your JWT for user ID
             if (userId) {
@@ -56,7 +55,7 @@ const Navbar = () => {
     const dispatch = useDispatch();
 
 
-    const handleLogout = () => {
+     const handleLogout = () => {
         setIsAuthenticated(false);
         dispatch(logout())
             .unwrap()
@@ -99,8 +98,8 @@ const Navbar = () => {
                             <Button color="inherit" component={Link} to="/jobseekerhome">Home</Button>
                             <Button color="inherit" component={Link} to="/jobapplications">Applications</Button>
                             <Button color="inherit" component={Link} to="/joboffers">Job Offers</Button>
-                            <Button color="inherit" component={Link} to="/profile">Profile</Button>
-                            <Button color="inherit" component={Link} to="/feedback">Feedback</Button>
+                            <Button color="inherit" component={Link} to="/jobseekerprofile">Profile</Button>
+                          
                         </>
                     );
                 case 'employer':

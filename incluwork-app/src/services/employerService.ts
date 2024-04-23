@@ -39,7 +39,7 @@ export const fetchApplications = async (keywords = '') => {
     if (!response.ok) {
         throw new Error('Failed to fetch applications');
     }
-    console.log(response);
+    
     return response.json();
 };
 
@@ -62,7 +62,7 @@ export const fetchAllJobs = async () => {
 };
 
 export const downloadFile = async (fileUrl: string, fileName: string): Promise<void> => {
-    console.log(`url == ${API_BASE_URL}${fileUrl}`);
+   
     const response = await fetch(`${API_BASE_URL}${fileUrl}`, {
         method: 'GET',
         headers: {
@@ -208,6 +208,8 @@ export const updateJobListing = async (jobId: string, decrement: number): Promis
             maxPositions: decrement
         })
     });
+
+    
 
     if (!response.ok) {
         throw new Error('Failed to update job listing');

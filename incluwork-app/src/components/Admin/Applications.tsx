@@ -38,7 +38,7 @@ const Applications: React.FC = () => {
         const loadData = async () => {
         try {
             const jobs:Job[]=await  getAllJobs();
-            console.log(jobs);
+
             const applicationData: ApplicationData[] = await  fetchData();
             const applicationsWithDetails =await  Promise.all(applicationData.map(async app => {
                 const user: User = await fetchUserById(app.userId);
