@@ -110,7 +110,7 @@ const Navbar = () => {
                             <Button color="inherit" component={Link} to="/create-job">Create Job</Button>
                             <Button color="inherit" component={Link} to="/viewapplications">View Applications</Button>
                             <Button color="inherit" component={Link} to="/employees">Employees</Button>
-                            <Button color="inherit" component={Link} to="/profile">Profile</Button>
+                            <Button color="inherit" component={Link} to="/empprofile">Profile</Button>
                         </>
                     );
                 default:
