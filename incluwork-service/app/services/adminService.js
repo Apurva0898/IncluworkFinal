@@ -203,3 +203,16 @@ export const updateUser = async (userId, userData) => {
         throw new Error(`Failed to update user: ${error.message}`);
     }
 };
+
+//delete 
+export const deleteJob = async (jobId) => {
+    try {
+        const deletedJob = await Job.findByIdAndDelete(jobId);
+        if (!deletedJob) {
+            throw new Error(`Job not found with ID: ${jobId}`);
+        }
+        return deletedJob;
+    } catch (error) {
+        throw new Error(`Failed to delete job: ${error.message}`);
+    }
+};
