@@ -8,6 +8,8 @@ import {
 import { SelectChangeEvent } from '@mui/material/Select';
 import { AppState } from "../../store";
 import {JobTitles,Skills,Cities} from "../../constants/enums.ts";
+import {fetchUserById} from "../../services/userService.ts";
+import {User} from "../../models/User.ts";
 
 interface JobFormData {
     title: string;
@@ -40,16 +42,18 @@ const JobCreationForm: React.FC = () => {
 
     const [openDialog, setOpenDialog] = useState(false);
     const { user } = useSelector((state: AppState) => state.auth);
+    const [accommodationFacilities, setAccommodationFacilities] = useState<string[]>([]);
 
     useEffect(() => {
-        if (user) {
-            // setFormData(f => ({
-            //     ...f,
-            //     employerId: user.id,
-            //     accommodationFacilities: user.accommodationFacilities || []
-            // }));
+        const loadData=async ()=> {
+            const token = localStorage.getItem('token');
+            const user: User = await fetchUserById(localStorage.getItem('userId'));
+            setAccommodationFacilities(user.accommodationFacilities);
+            console.log(user);
         }
-    }, [user]);
+        loadData();
+
+    }, []);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -178,7 +182,7 @@ const JobCreationForm: React.FC = () => {
                         onChange={handleAccessibilityFeaturesChange}
                         renderValue={(selected) => selected.join(', ')}
                     >
-                        {user.accommodationFacilities.map(feature => (
+                        {accommodationFacilities.map(feature => (
                             <MenuItem key={feature} value={feature}>{feature}</MenuItem>
                         ))}
                     </Select>

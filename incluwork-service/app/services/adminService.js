@@ -73,6 +73,7 @@ export const fetchAllUsers = async () => {
     }
 };
 
+//get all jobs for admin
 export const getAllJobs = async () => {
     try {
         // Retrieve all jobs from the database
@@ -95,6 +96,7 @@ export const getAllJobs = async () => {
     }
 };
 
+//get all application dor admin
 export const getAllApplications = async () => {
     try {
         const applications = await Application.find();
@@ -103,6 +105,21 @@ export const getAllApplications = async () => {
         throw new Error(`Failed to retrieve applications: ${error.message}`);
     }
 };
+
+
+//Controller function for deleting all applications
+export const removeAllApplications = async (req: Request, res: Response) => {
+    try {
+        const result = await deleteAllApplications();
+        res.json({
+            message: 'All applications have been deleted',
+            result
+        });
+    } catch (error) {
+        res.status(500).json({ error: `Failed to delete applications: ${error.message}` });
+    }
+};
+
 
 export const verifyJobseeker = async (userId,status) => {
     try {
@@ -118,5 +135,97 @@ export const verifyJobseeker = async (userId,status) => {
     } catch (error) {
         console.log(error);
         throw new Error(`Failed to set the status: ${error.message}`);
+    }
+};
+
+//updating
+export const updateJob = async (jobId, jobData) => {
+    try {
+        const updatedJob = await Job.findByIdAndUpdate(jobId, jobData, { new: true });
+        if (!updatedJob) {
+            throw new Error(`Job not found with ID: ${jobId}`);
+        }
+        return updatedJob;
+    } catch (error) {
+        throw new Error(`Failed to update job: ${error.message}`);
+    }
+};
+
+//updating application
+
+export const updateApplication = async (applicationId, applicationData) => {
+    try {
+        const updatedApplication = await Application.findByIdAndUpdate(applicationId, applicationData, { new: true });
+        if (!updatedApplication) {
+            throw new Error(`Application not found with ID: ${applicationId}`);
+        }
+        return updatedApplication;
+    } catch (error) {
+        throw new Error(`Failed to update application: ${error.message}`);
+    }
+};
+
+//updating jobseker
+export const updateJobSeeker = async (jobSeekerId, jobSeekerData) => {
+    try {
+        const updatedJobSeeker = await JobSeeker.findByIdAndUpdate(jobSeekerId, jobSeekerData, { new: true });
+        if (!updatedJobSeeker) {
+            throw new Error(`Job seeker not found with ID: ${jobSeekerId}`);
+        }
+        return updatedJobSeeker;
+    } catch (error) {
+        throw new Error(`Failed to update job seeker: ${error.message}`);
+    }
+};
+
+//updating employer
+export const updateEmployer = async (employerId, employerData) => {
+    try {
+        const updatedEmployer = await Employer.findByIdAndUpdate(employerId, employerData, { new: true });
+        if (!updatedEmployer) {
+            throw new Error(`Employer not found with ID: ${employerId}`);
+        }
+        return updatedEmployer;
+    } catch (error) {
+        throw new Error(`Failed to update employer: ${error.message}`);
+    }
+};
+
+//updating user
+export const updateUser = async (userId, userData) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(userId, userData, { new: true });
+        if (!updatedUser) {
+            throw new Error(`User not found with ID: ${userId}`);
+        }
+        return updatedUser;
+    } catch (error) {
+        throw new Error(`Failed to update user: ${error.message}`);
+    }
+};
+
+//delete 
+export const deleteJob = async (jobId) => {
+    try {
+        const deletedJob = await Job.findByIdAndDelete(jobId);
+        if (!deletedJob) {
+            throw new Error(`Job not found with ID: ${jobId}`);
+        }
+        return deletedJob;
+    } catch (error) {
+        throw new Error(`Failed to delete job: ${error.message}`);
+    }
+};
+
+//deleting jobseeker
+export const deleteJobSeeker = async (jobSeekerId) => {
+    try {
+        const deletedJobSeeker = await JobSeeker.findByIdAndDelete(jobSeekerId);
+        if (!deletedJobSeeker) {
+            throw new Error(`Job seeker not found with ID: ${jobSeekerId}`);
+        }
+        return deletedJobSeeker;
+    } catch (error) {
+        throw new Error(`Failed to delete job seeker: ${error.message}`);
     }
 };

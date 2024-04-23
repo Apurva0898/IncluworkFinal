@@ -88,9 +88,12 @@ const JobSeekersList: React.FC = () => {
 
     return (
         <Container maxWidth="md">
-            <h1>Verify Job Seekers Medical Proof</h1>
+            <Typography variant="h4" style={{marginBottom: '20px', marginTop:'20px', textAlign: 'center'}}>
+                Verify Job Seekers Medical Proof
+            </Typography>
+
             <Grid container spacing={2}>
-                {jobseekers.map(jobseeker => (
+            {jobseekers.map(jobseeker => (
                     <Grid item xs={12} key={jobseeker.id}>
                         <JobSeekerCard jobseeker={jobseeker} onUpdate={handleUpdate} />
                     </Grid>

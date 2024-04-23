@@ -58,6 +58,7 @@ export const getUserById = async (userId) => {
             resume: additionalData.resume,
             medicalProof: additionalData.medicalProof,
             challenges: additionalData.challenges,
+            status: additionalData.status
           };
           break;
         case 'employer':
